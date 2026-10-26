@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'supervisi' => [
+        'url' => env('SUPERVISI_APP_URL', ''),
+    ],
+
 ];

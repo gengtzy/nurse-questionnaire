@@ -1,5 +1,16 @@
 <x-guest-layout>
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
+        <!-- Back to Portal Link -->
+        <div class="mb-4 flex items-center justify-between">
+            <a href="{{ route('portal') }}" class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#0b6b63] hover:text-[#08524c] px-3 py-1.5 rounded-xl bg-white/80 hover:bg-white border border-[#d2dedc] transition shadow-xs group">
+                <svg class="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                <span>Pilihan Portal Aplikasi</span>
+            </a>
+            <span class="text-[11px] text-[#4a6366] font-mono">SIMONA v1.0</span>
+        </div>
+
         <!-- Eyebrow & Brand Header -->
         <div class="text-center mb-6">
             <div class="flex justify-center mb-3">
