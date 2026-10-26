@@ -5,6 +5,9 @@
  * Prepares writable storage folders in /tmp and forwards execution to Laravel public/index.php.
  */
 
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../public/index.php');
+
 $tmpStorage = '/tmp/storage';
 $subDirs = [
     $tmpStorage . '/framework/views',
