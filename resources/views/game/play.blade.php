@@ -5,26 +5,26 @@
             <!-- Stepper Indicator Alur 5 Langkah -->
             <div class="mb-6 bg-white border border-[#d2dedc] rounded-2xl p-4 shadow-xs">
                 <div class="flex items-center justify-between text-xs font-medium text-[#4a6366] overflow-x-auto gap-2 pb-1">
-                    <!-- Step 1: Login -->
+                    <!-- Step 1: Pre-test -->
                     <div class="flex items-center gap-1.5 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">1. Masuk</span>
+                        <span class="hidden sm:inline">1. Pre-Test</span>
                         <span class="sm:hidden">1</span>
                     </div>
                     <div class="w-6 sm:w-10 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 2: Pre-test -->
-                    <div class="flex items-center gap-1.5 shrink-0 text-[#0b6b63] font-semibold">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">2. Pre-Test</span>
-                        <span class="sm:hidden">2</span>
-                    </div>
-                    <div class="w-6 sm:w-10 h-0.5 bg-[#0b6b63]"></div>
-
-                    <!-- Step 3: Game (Active) -->
+                    <!-- Step 2: Game (Active) -->
                     <div class="flex items-center gap-1.5 shrink-0 text-[#0b6b63] font-bold">
-                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">3</span>
-                        <span>3. Game Stres</span>
+                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">2</span>
+                        <span>2. Game Katarsis</span>
+                    </div>
+                    <div class="w-6 sm:w-10 h-0.5 bg-[#d2dedc]"></div>
+
+                    <!-- Step 3: Kartu Apresiasi -->
+                    <div class="flex items-center gap-1.5 shrink-0 opacity-60">
+                        <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">3</span>
+                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
+                        <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-10 h-0.5 bg-[#d2dedc]"></div>
 
@@ -50,7 +50,7 @@
                 <div>
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fde3d6] text-[#e8501a] text-xs font-semibold tracking-wide uppercase mb-2">
                         <span class="w-2 h-2 rounded-full bg-[#e8501a] animate-ping"></span>
-                        <span>Langkah 3: Katarsis & Relaksasi</span>
+                        <span>Langkah 2: Katarsis & Relaksasi</span>
                     </div>
                     <h1 class="font-marker text-3xl sm:text-4xl text-[#132628] leading-tight transform -rotate-1">
                         Hancurkan Stres
@@ -71,6 +71,24 @@
 
             <!-- Start Panel -->
             <div id="start" class="bg-white border border-[#d2dedc] rounded-2xl p-6 sm:p-7 shadow-sm mb-6">
+                @if ($totalPlayed > 0)
+                    <div class="mb-5 p-4 rounded-xl bg-[#dbeeeb]/70 border border-[#b2ded8] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-2xs">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">✅</span>
+                            <div class="text-xs">
+                                <strong class="text-[#0b6b63] text-sm block">Sesi game telah tercatat ({{ $totalPlayed }}x bermain)</strong>
+                                <span class="text-[#4a6366]">Skor tertinggi Anda: <b class="text-[#0b6b63] font-mono">{{ number_format($bestScore) }} Poin</b>. Anda bisa langsung lanjut ke tahap kartu ucapan atau bermain lagi.</span>
+                            </div>
+                        </div>
+                        <a
+                            href="{{ route('thank-you.create') }}"
+                            class="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-xs font-bold shadow-xs transition active:scale-[0.98]"
+                        >
+                            <span>Lanjut: Kartu Apresiasi &rarr;</span>
+                        </a>
+                    </div>
+                @endif
+
                 <!-- Rank Header -->
                 <div class="flex items-center justify-between gap-2 mb-1">
                     <span class="text-xs font-mono uppercase text-[#4a6366]">Gelar Pejuang Shift:</span>
@@ -100,15 +118,26 @@
                     <div class="grid grid-cols-2 gap-3" id="md"></div>
                 </div>
 
-                <!-- Start Button -->
-                <button
-                    id="go"
-                    type="button"
-                    class="w-full py-4 px-6 rounded-xl bg-[#e8501a] hover:bg-[#d44310] text-white font-marker text-xl shadow-md transition active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
-                >
-                    <span>Mulai Hancurkan Beban!</span>
-                    <span class="text-2xl leading-none">💥</span>
-                </button>
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button
+                        id="go"
+                        type="button"
+                        class="flex-1 py-4 px-6 rounded-xl bg-[#e8501a] hover:bg-[#d44310] text-white font-marker text-xl shadow-md transition active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
+                    >
+                        <span>{{ $totalPlayed > 0 ? 'Main Lagi (Pelepas Penat)' : 'Mulai Hancurkan Beban!' }}</span>
+                        <span class="text-2xl leading-none">💥</span>
+                    </button>
+
+                    @if ($totalPlayed > 0)
+                        <a
+                            href="{{ route('thank-you.create') }}"
+                            class="py-4 px-6 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-sm shadow-md transition active:scale-[0.99] flex items-center justify-center gap-2 text-center"
+                        >
+                            <span>Lanjut Tahap Berikutnya &rarr;</span>
+                        </a>
+                    @endif
+                </div>
             </div>
 
             <!-- Canvas Container (Hidden until started) -->
@@ -117,15 +146,8 @@
                     <canvas id="cv" class="block w-full h-[380px] sm:h-[480px] cursor-crosshair touch-none"></canvas>
                 </div>
 
-                <div class="flex items-center justify-between mt-3">
-                    <span class="text-xs text-[#4a6366]">Sentuh layar secepat mungkin!</span>
-                    <button
-                        id="ex"
-                        type="button"
-                        class="px-4 py-2 rounded-xl border border-[#d2dedc] bg-white text-xs font-bold text-[#132628] hover:bg-gray-100 transition cursor-pointer"
-                    >
-                        Hentikan & Reset
-                    </button>
+                <div class="text-center mt-3">
+                    <span class="text-xs text-[#4a6366]">Sentuh layar secepat mungkin untuk menghancurkan beban stres!</span>
                 </div>
             </div>
 
@@ -144,24 +166,25 @@
     <!-- Game Engine Logic & Audio Synthesis -->
     <script>
     (function(){
-        var KEY = 'hancur_v1';
+        var KEY = 'hancur_user_{{ $user->id }}';
         var G = {
-            tot: {{ $totalSmashed ?? 0 }} * 10,
-            best: {{ $bestScore ?? 0 }},
+            tot: {{ (int) ($totalScore ?? 0) }},
+            best: {{ (int) ($bestScore ?? 0) }},
             snd: 1
         };
 
         try {
+            // Remove legacy shared localStorage key so no dirty state leaks between accounts
+            localStorage.removeItem('hancur_v1');
             var rr = localStorage.getItem(KEY);
             if (rr) {
                 var parsed = JSON.parse(rr);
-                G.best = Math.max(G.best, parsed.best || 0);
-                G.tot = Math.max(G.tot, parsed.tot || 0);
+                if (parsed.snd !== undefined) G.snd = parsed.snd;
             }
         } catch (e) {}
 
         function save() {
-            try { localStorage.setItem(KEY, JSON.stringify(G)); } catch (e) {}
+            try { localStorage.setItem(KEY, JSON.stringify({ snd: G.snd })); } catch (e) {}
         }
 
         function $(i) { return document.getElementById(i); }
@@ -255,6 +278,14 @@
             [12000, 'Legenda Ruang Rawat']
         ];
 
+        function getRankTitle(score) {
+            var idx = 0;
+            RANKS.forEach(function(r, k) {
+                if (score >= r[0]) idx = k;
+            });
+            return RANKS[idx][1];
+        }
+
         function rank() {
             var i = 0;
             RANKS.forEach(function(r, k) { if (G.tot >= r[0]) i = k; });
@@ -264,7 +295,7 @@
         function ui() {
             var i = rank(), n = RANKS[i + 1];
             $('rk').textContent = RANKS[i][1];
-            $('rb').style.width = (n ? Math.min(100, (G.tot - RANKS[i][0]) / (n[0] - RANKS[i][0]) * 100) : 100) + '%';
+            $('rb').style.width = (n ? Math.min(100, Math.max(0, (G.tot - RANKS[i][0]) / (n[0] - RANKS[i][0]) * 100)) : 100) + '%';
             $('rt').textContent = 'Total poin: ' + G.tot + ' · Skor terbaik: ' + G.best + (n ? ' · ' + (n[0] - G.tot) + ' poin lagi menuju gelar ' + n[1] : ' · Peringkat tertinggi tercapai!');
         }
 
@@ -637,7 +668,8 @@
 
         function show(id) {
             ['start', 'gm', 'res'].forEach(function(x) {
-                $(x).classList.toggle('hidden', x !== id && !(id === 'res' && x === 'gm'));
+                var el = $(x);
+                if (el) el.classList.toggle('hidden', x !== id);
             });
         }
 
@@ -655,95 +687,91 @@
         }
 
         $('go').onclick = begin;
-        $('ex').onclick = function() {
-            stop();
-            S = null;
-            ui();
-            show('start');
-        };
 
         function finish() {
             var s = S;
+            if (!s) return;
             var nb = s.score > G.best;
             G.tot += s.score;
             if (nb) G.best = s.score;
             save();
             sfx('gold');
+            stop();
+
+            var durPlayed = Math.max(10, Math.round(s.t || s.dur));
 
             // Send game metrics to Laravel Controller via AJAX
-            try {
-                fetch("{{ route('game.log') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                        "Accept": "application/json"
-                    },
-                    body: JSON.stringify({
-                        score: s.score,
-                        items_smashed: s.sm,
-                        max_combo: s.mx,
-                        duration_seconds: s.dur,
-                        boss_defeated: s.bd ? true : false
-                    })
+            fetch("{{ route('game.log') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    score: s.score,
+                    items_smashed: s.sm,
+                    max_combo: s.mx,
+                    duration_seconds: durPlayed,
+                    boss_defeated: s.bd ? true : false
                 })
-                .then(function(res) { return res.json(); })
-                .then(function(data) {
-                    console.log("Game log saved:", data);
-                })
-                .catch(function(err) {
-                    console.warn("Could not save game log:", err);
-                });
-            } catch (e) {}
+            }).then(function(res) {
+                return res.json();
+            }).catch(function(err) {
+                console.warn("Could not save game log:", err);
+            });
+
+            var sessionRankTitle = getRankTitle(s.score);
+            var q = QU[Math.floor(Math.random() * QU.length)];
+            var r = $('res');
+
+            r.innerHTML =
+                '<div class="text-center">' +
+                    '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fde3d6] text-[#e8501a] text-xs font-bold uppercase mb-2">' +
+                        '<span>' + (nb && s.score > 0 ? '🏆 Rekor Baru!' : '🎉 Sesi Relaksasi Selesai!') + '</span>' +
+                    '</div>' +
+                    '<h2 class="font-marker text-3xl sm:text-4xl text-[#132628] mb-1">Retakmu Jadi Emas</h2>' +
+                    '<div class="font-marker text-lg text-[#e8501a] mb-5">' + sessionRankTitle + '</div>' +
+                '</div>' +
+
+                '<div class="grid grid-cols-3 gap-3 mb-5 text-center">' +
+                    '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
+                        '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#e8501a]">' + s.score + '</b>' +
+                        '<span class="text-xs text-[#4a6366]">Skor Poin</span>' +
+                    '</div>' +
+                    '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
+                        '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#132628]">' + s.sm + '</b>' +
+                        '<span class="text-xs text-[#4a6366]">Dihancurkan</span>' +
+                    '</div>' +
+                    '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
+                        '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#f6b73c]">x' + s.mx + '</b>' +
+                        '<span class="text-xs text-[#4a6366]">Kombo Maks</span>' +
+                    '</div>' +
+                '</div>' +
+
+                '<div class="p-4 rounded-xl bg-[#dbeeeb]/60 border border-[#b2ded8] text-center mb-6">' +
+                    '<p class="text-xs sm:text-sm font-semibold text-[#0b6b63] italic">“' + q + '”</p>' +
+                    '<span class="text-[11px] text-[#0b6b63]/80 font-mono mt-1 block">✓ Data sesi game Anda telah tercatat di database</span>' +
+                '</div>' +
+
+                '<div class="flex flex-col sm:flex-row gap-3 pt-2">' +
+                    '<a href="{{ route("thank-you.create") }}" class="flex-1 py-4 px-6 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-center text-sm shadow-md transition active:scale-[0.98] flex items-center justify-center gap-2">' +
+                        '<span>Lanjut: Kartu Apresiasi Rekan &rarr;</span>' +
+                    '</a>' +
+                    '<button id="ag" type="button" class="py-3 px-5 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] hover:bg-[#f1f5f4] text-xs font-bold text-[#132628] transition cursor-pointer">' +
+                        'Main Lagi' +
+                    '</button>' +
+                '</div>';
 
             setTimeout(function() {
-                if (!S) return;
-                var i = rank(), q = QU[Math.floor(Math.random() * QU.length)];
-                var r = $('res');
+                show('res');
+                r.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                S = null;
 
-                r.innerHTML =
-                    '<div class="text-center">' +
-                        '<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#fde3d6] text-[#e8501a] text-xs font-bold uppercase mb-2">' +
-                            '<span>' + (nb && s.score > 0 ? '🏆 Rekor Baru!' : '🎉 Ronde Selesai') + '</span>' +
-                        '</div>' +
-                        '<h2 class="font-marker text-3xl sm:text-4xl text-[#132628] mb-1">Retakmu Jadi Emas</h2>' +
-                        '<div class="font-marker text-lg text-[#e8501a] mb-5">' + RANKS[i][1] + '</div>' +
-                    '</div>' +
-
-                    '<div class="grid grid-cols-3 gap-3 mb-5 text-center">' +
-                        '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
-                            '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#e8501a]">' + s.score + '</b>' +
-                            '<span class="text-xs text-[#4a6366]">Skor Poin</span>' +
-                        '</div>' +
-                        '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
-                            '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#132628]">' + s.sm + '</b>' +
-                            '<span class="text-xs text-[#4a6366]">Dihancurkan</span>' +
-                        '</div>' +
-                        '<div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc]">' +
-                            '<b class="block font-mono text-2xl sm:text-3xl font-bold text-[#f6b73c]">x' + s.mx + '</b>' +
-                            '<span class="text-xs text-[#4a6366]">Kombo Maks</span>' +
-                        '</div>' +
-                    '</div>' +
-
-                    '<div class="p-4 rounded-xl bg-[#dbeeeb]/60 border border-[#b2ded8] text-center mb-6">' +
-                        '<p class="text-xs sm:text-sm font-semibold text-[#0b6b63] italic">“' + q + '”</p>' +
-                        '<span class="text-[11px] text-[#0b6b63]/80 font-mono mt-1 block">✓ Data sesi game Anda telah dicatat ke sistem</span>' +
-                    '</div>' +
-
-                    '<div class="flex flex-col sm:flex-row gap-3 pt-2">' +
-                        '<a href="{{ route("post-test.create") }}" class="flex-1 py-3.5 px-5 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-center text-sm shadow-md transition active:scale-[0.98] flex items-center justify-center gap-2">' +
-                            '<span>Lanjut ke Kuesioner Akhir (Post-Test)</span>' +
-                            '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>' +
-                        '</a>' +
-                        '<button id="ag" type="button" class="py-3 px-5 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] hover:bg-[#f1f5f4] text-xs font-bold text-[#132628] transition cursor-pointer">' +
-                            'Main Lagi' +
-                        '</button>' +
-                    '</div>';
-
-                r.classList.remove('hidden');
-                $('ag').onclick = begin;
-                r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            }, 1800);
+                $('ag').onclick = function() {
+                    begin();
+                };
+            }, 600);
         }
 
         window.addEventListener('resize', function() {

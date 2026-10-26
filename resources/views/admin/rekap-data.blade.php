@@ -7,7 +7,9 @@
             return this.records.filter(r => {
                 const matchesSearch = this.search === '' ||
                     r.name.toLowerCase().includes(this.search.toLowerCase()) ||
-                    r.role.toLowerCase().includes(this.search.toLowerCase());
+                    r.role.toLowerCase().includes(this.search.toLowerCase()) ||
+                    (r.thank_you_recipient && r.thank_you_recipient.toLowerCase().includes(this.search.toLowerCase())) ||
+                    (r.thank_you_message && r.thank_you_message.toLowerCase().includes(this.search.toLowerCase()));
 
                 if (!matchesSearch) return false;
 
@@ -36,7 +38,11 @@
                     </p>
                 </div>
 
-                <div class="flex items-center gap-2.5 shrink-0">
+                <div class="flex items-center gap-2.5 shrink-0 flex-wrap">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold border border-[#b2ded8]">
+                        <span>💌</span>
+                        <span>{{ $stats['total_thank_you_cards'] ?? 0 }} Kartu Apresiasi Terkirim</span>
+                    </span>
                     <span class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#0b6b63] text-white text-xs font-semibold shadow-2xs">
                         <span class="w-2 h-2 rounded-full bg-white"></span>
                         <span>Akses Kepala Ruangan (Admin)</span>
@@ -279,6 +285,7 @@
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Selisih (&Delta;)</th>
                                 <th class="py-3 px-4 font-bold min-w-[160px]">Rincian Dimensi (EE &bull; DP &bull; PA)</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[130px]">Sesi Mini Game</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[190px]">Kartu Terima Kasih</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[120px] text-center">Waktu Selesai</th>
                             </tr>
                         </thead>
@@ -399,6 +406,22 @@
                                         </template>
                                     </td>
 
+                                    <!-- Kartu Terima Kasih (Rekan) -->
+                                    <td class="py-3 px-3.5">
+                                        <template x-if="r.has_thank_you">
+                                            <div class="text-[11px] space-y-1">
+                                                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#dbeeeb] text-[#0b6b63] font-bold text-[10px] border border-[#b2ded8]">
+                                                    <span>💌 Untuk:</span>
+                                                    <span class="truncate max-w-[140px]" x-text="r.thank_you_recipient"></span>
+                                                </div>
+                                                <div class="text-[#4a6366] text-[10px] leading-tight italic line-clamp-2" :title="r.thank_you_message" x-text="'“' + r.thank_you_message + '”'"></div>
+                                            </div>
+                                        </template>
+                                        <template x-if="!r.has_thank_you">
+                                            <span class="text-[#9db4b2] font-mono">-</span>
+                                        </template>
+                                    </td>
+
                                     <!-- Completed At (WIB) -->
                                     <td class="py-3 px-3.5 text-center text-[11px] font-mono text-[#132628]" x-text="r.completed_at || '-'"></td>
                                 </tr>
@@ -406,7 +429,7 @@
 
                             <!-- Empty Search Result -->
                             <tr x-show="filteredRecords.length === 0">
-                                <td colspan="9" class="py-10 text-center text-[#4a6366]">
+                                <td colspan="10" class="py-10 text-center text-[#4a6366]">
                                     <div class="text-3xl mb-2">🔍</div>
                                     <div class="text-sm font-semibold text-[#132628]">Tidak ada sesi pengisian yang sesuai filter</div>
                                     <p class="text-xs text-[#4a6366] mt-1">Coba sesuaikan kata kunci pencarian atau ubah rentang tanggal.</p>

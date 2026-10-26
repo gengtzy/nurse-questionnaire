@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ThankYouCardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,8 +30,9 @@ Route::middleware('auth')->group(function () {
         $latestPreTest = $user->assessments()->where('type', 'pre_test')->latest()->first();
         $latestPostTest = $user->assessments()->where('type', 'post_test')->latest()->first();
         $latestGame = $user->gameLogs()->latest()->first();
+        $latestThankYou = $user->thankYouCards()->latest()->first();
 
-        return view('dashboard', compact('user', 'latestPreTest', 'latestPostTest', 'latestGame'));
+        return view('dashboard', compact('user', 'latestPreTest', 'latestPostTest', 'latestGame', 'latestThankYou'));
     })->name('dashboard');
 
     // Pre-test Routes (Step 2)
@@ -41,6 +43,10 @@ Route::middleware('auth')->group(function () {
     // Game Routes (Step 3)
     Route::get('/game/play', [GameController::class, 'play'])->name('game.play');
     Route::post('/game/log', [GameController::class, 'storeLog'])->name('game.log');
+
+    // Thank You Card Routes (Tahap Apresiasi Rekan)
+    Route::get('/thank-you', [ThankYouCardController::class, 'create'])->name('thank-you.create');
+    Route::post('/thank-you', [ThankYouCardController::class, 'store'])->name('thank-you.store');
 
     // Post-test Routes (Step 4)
     Route::get('/assessment/post-test', [AssessmentController::class, 'createPostTest'])->name('post-test.create');

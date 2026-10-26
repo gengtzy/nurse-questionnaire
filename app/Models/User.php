@@ -71,4 +71,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Assessment::class)->where('type', 'post_test')->latestOfMany();
     }
+
+    public function thankYouCards(): HasMany
+    {
+        return $this->hasMany(ThankYouCard::class);
+    }
+
+    public function latestThankYouCard(): HasOne
+    {
+        return $this->hasOne(ThankYouCard::class)->latestOfMany();
+    }
 }

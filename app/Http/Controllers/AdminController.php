@@ -141,6 +141,8 @@ class AdminController extends Controller
                 'Game_Beban_Hancur',
                 'Game_Max_Combo',
                 'Game_Status_Boss',
+                'Kartu_Terima_Kasih_Penerima',
+                'Kartu_Terima_Kasih_Pesan',
                 'Post_Total_Skor',
                 'Post_Persen_Burnout',
                 'Post_Kategori',
@@ -177,6 +179,8 @@ class AdminController extends Controller
                     $r['game_smashed'] ?? '',
                     $r['game_combo'] ?? '',
                     isset($r['game_boss']) ? ($r['game_boss'] ? 'Menang' : 'Selesai') : '',
+                    $r['thank_you_recipient'] ?? '',
+                    $r['thank_you_message'] ?? '',
                     $r['post_total'] ?? '',
                     $r['post_percentage'] ?? '',
                     $r['post_category'] ?? '',
@@ -210,6 +214,7 @@ class AdminController extends Controller
             ->with([
                 'assessments' => fn ($q) => $q->where('status', 'completed')->orderBy('completed_at', 'asc'),
                 'gameLogs' => fn ($q) => $q->orderBy('created_at', 'asc'),
+                'thankYouCards' => fn ($q) => $q->orderBy('created_at', 'asc'),
             ])
             ->orderBy('name')
             ->get();
@@ -221,6 +226,7 @@ class AdminController extends Controller
             $preTests = $assessments->where('type', 'pre_test')->values();
             $postTests = $assessments->where('type', 'post_test')->values();
             $gameLogs = $user->gameLogs;
+            $thankYouCards = $user->thankYouCards;
 
             $totalSessions = max($preTests->count(), $postTests->count());
 
@@ -240,6 +246,9 @@ class AdminController extends Controller
                         'has_pre' => false,
                         'has_post' => false,
                         'has_game' => false,
+                        'has_thank_you' => false,
+                        'thank_you_recipient' => null,
+                        'thank_you_message' => null,
 
                         'pre_total' => null,
                         'pre_percentage' => null,
@@ -306,6 +315,20 @@ class AdminController extends Controller
                     $gameLog = $gameLogs->filter(fn($g) => $g->created_at && $g->created_at->gte($preTime))->last();
                 }
 
+                // Match thank you card between game/preTest and postTest
+                $thankYouCard = null;
+                if ($postTest && $postTime) {
+                    $minTime = $preTime ?? $postTime->copy()->subHours(2);
+                    $maxTime = $postTime->copy()->addMinutes(15);
+                    $thankYouCard = $thankYouCards
+                        ->filter(fn($ty) => $ty->created_at && $ty->created_at->gte($minTime) && $ty->created_at->lte($maxTime))
+                        ->last() ?? $thankYouCards->get($i);
+                } elseif ($preTest && $preTime) {
+                    $thankYouCard = $thankYouCards->filter(fn($ty) => $ty->created_at && $ty->created_at->gte($preTime))->last() ?? $thankYouCards->get($i);
+                } else {
+                    $thankYouCard = $thankYouCards->get($i);
+                }
+
                 $sessionCompletedCarbon = $postTime ?? $preTime;
 
                 // Check date range filter
@@ -360,6 +383,7 @@ class AdminController extends Controller
                     'has_pre' => $preTest !== null,
                     'has_post' => $postTest !== null,
                     'has_game' => $gameLog !== null,
+                    'has_thank_you' => $thankYouCard !== null,
 
                     // Pre-test
                     'pre_total' => $preTest?->total_score,
@@ -375,6 +399,10 @@ class AdminController extends Controller
                     'game_smashed' => $gameLog?->items_smashed,
                     'game_combo' => $gameLog?->max_combo,
                     'game_boss' => $gameLog?->boss_defeated,
+
+                    // Thank You Card
+                    'thank_you_recipient' => $thankYouCard?->recipient_name,
+                    'thank_you_message' => $thankYouCard?->message,
 
                     // Post-test
                     'post_total' => $postTest?->total_score,
@@ -420,6 +448,7 @@ class AdminController extends Controller
         $completeCount = 0;
         $preOnlyCount = 0;
         $emptyCount = 0;
+        $thankYouCount = 0;
 
         $sumPrePct = 0;
         $sumPostPct = 0;
@@ -452,6 +481,10 @@ class AdminController extends Controller
                 $gamePlayerCount++;
                 $sumGameScore += $r['game_score'];
             }
+
+            if (!empty($r['has_thank_you'])) {
+                $thankYouCount++;
+            }
         }
 
         $avgPrePct = $completeCount > 0 ? round($sumPrePct / $completeCount, 2) : 0;
@@ -471,6 +504,7 @@ class AdminController extends Controller
             'improved_count' => $improvedCount,
             'improved_percentage' => $completeCount > 0 ? round(($improvedCount / $completeCount) * 100, 1) : 0,
             'avg_game_score' => $avgGameScore,
+            'total_thank_you_cards' => $thankYouCount,
         ];
     }
 }

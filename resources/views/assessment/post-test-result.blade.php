@@ -5,26 +5,26 @@
             <!-- Stepper Indicator -->
             <div class="bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs font-medium text-[#4a6366] overflow-x-auto gap-2 pb-1">
-                    <!-- Step 1: Login -->
+                    <!-- Step 1: Pre-test -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">1. Masuk</span>
+                        <span class="hidden sm:inline">1. Pre-Test</span>
                         <span class="sm:hidden">1</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 2: Pre-test -->
+                    <!-- Step 2: Game -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">2. Pre-Test</span>
+                        <span class="hidden sm:inline">2. Game Katarsis</span>
                         <span class="sm:hidden">2</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 3: Game -->
+                    <!-- Step 3: Kartu Apresiasi -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">3. Game Stres</span>
+                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
                         <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
@@ -255,32 +255,59 @@
             <div class="bg-gradient-to-br from-[#0b6b63] to-[#08524c] rounded-2xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
                 <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
 
-                <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                    <div class="space-y-2">
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                    <div class="space-y-2 max-w-xl">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide uppercase">
-                            <span>✉️ Langkah 5: Pengiriman Data & Laporan Email</span>
+                            <span>✉️ Langkah 5: Salinan Laporan Resmi</span>
                         </div>
-                        <h3 class="font-display text-xl sm:text-2xl font-bold">
-                            Laporan Resmi Siap Dikirim ke Email
-                        </h3>
-                        <p class="text-white/80 text-xs sm:text-sm max-w-lg leading-relaxed">
-                            Seluruh data (Pre-Test, Sesi Game, dan Post-Test) telah otomatis tersimpan aman di database.
-                            @if ($user->email)
-                                Anda dapat mengirimkan salinan laporan resmi ke alamat email Anda: <strong class="text-white underline font-mono">{{ $user->email }}</strong>.
-                            @endif
-                        </p>
+                        @if ($user->email)
+                            <h3 class="font-display text-xl sm:text-2xl font-bold flex items-center gap-2 flex-wrap">
+                                <span>Laporan Resmi Otomatis Terkirim</span>
+                                <span class="text-xs bg-[#2f7d52] text-white px-2.5 py-0.5 rounded-full font-sans font-semibold">✓ Terkirim</span>
+                            </h3>
+                            <p class="text-white/90 text-xs sm:text-sm leading-relaxed">
+                                Seluruh rekapan evaluasi komparasi telah tersimpan permanen di database rumah sakit. Salinan bukti resmi ini telah <strong>otomatis dikirimkan ke email Anda:</strong> <strong class="text-white underline font-mono">{{ $user->email }}</strong> (silakan periksa folder Inbox atau Spam).
+                            </p>
+                        @else
+                            <h3 class="font-display text-xl sm:text-2xl font-bold flex items-center gap-2 flex-wrap">
+                                <span>Hasil Evaluasi Tersimpan di Database</span>
+                                <span class="text-xs bg-white/20 text-white px-2.5 py-0.5 rounded-full font-sans font-semibold">✓ Tersimpan</span>
+                            </h3>
+                            <p class="text-white/90 text-xs sm:text-sm leading-relaxed">
+                                Seluruh rekapan evaluasi komparasi telah tersimpan permanen di database rumah sakit. Akun Anda belum memiliki email terdaftar untuk menerima salinan bukti laporan.
+                            </p>
+                            <!-- Input Email Field -->
+                            <form action="{{ route('assessment.send-email', $assessment->id) }}" method="POST" class="flex flex-col sm:flex-row gap-2 pt-2" onsubmit="const btn = this.querySelector('button'); btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed'); btn.innerHTML = '<span>Mengirim...</span>';">
+                                @csrf
+                                <input
+                                    type="email"
+                                    name="target_email"
+                                    required
+                                    placeholder="Ketik email Anda (cth: nama@gmail.com)"
+                                    class="px-3.5 py-2.5 rounded-xl bg-white text-[#132628] text-xs font-medium placeholder-[#4a6366] border border-transparent focus:border-white focus:outline-none flex-1 shadow-xs"
+                                >
+                                <button
+                                    type="submit"
+                                    class="shrink-0 py-2.5 px-4 rounded-xl bg-white text-[#0b6b63] font-bold text-xs shadow-md hover:bg-[#dbeeeb] transition active:scale-[0.98] cursor-pointer flex items-center justify-center gap-1.5"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                    <span>Kirim ke Email</span>
+                                </button>
+                            </form>
+                        @endif
                     </div>
 
-                    <div class="shrink-0 flex flex-col sm:flex-row gap-3">
+                    <div class="shrink-0 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                         @if ($user->email)
-                            <form action="{{ route('assessment.send-email', $assessment->id) }}" method="POST">
+                            <form action="{{ route('assessment.send-email', $assessment->id) }}" method="POST" onsubmit="const btn = this.querySelector('button'); btn.disabled = true; btn.classList.add('opacity-70', 'cursor-not-allowed'); btn.innerHTML = '<span>Mengirim ulang...</span>';">
                                 @csrf
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl bg-white text-[#0b6b63] font-bold text-xs sm:text-sm shadow-md hover:bg-[#dbeeeb] transition active:scale-[0.98] cursor-pointer"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-5 rounded-xl border border-white/40 bg-white/15 hover:bg-white/25 text-white font-bold text-xs sm:text-sm shadow-xs transition active:scale-[0.98] cursor-pointer"
+                                    title="Klik hanya jika email belum masuk di inbox maupun spam"
                                 >
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                                    <span>Kirim ke Email Saya</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                    <span>Kirim Ulang Email</span>
                                 </button>
                             </form>
                         @endif

@@ -7,6 +7,10 @@
 
         <title>{{ config('app.name', 'Jaga Perawat UBK 2') }} - RSUD Welas Asih</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/png" href="{{ asset('images/logo_welas_asih.png') }}">
+        <link rel="apple-touch-icon" href="{{ asset('images/logo_welas_asih.png') }}">
+
         <!-- Scripts & Styles -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>

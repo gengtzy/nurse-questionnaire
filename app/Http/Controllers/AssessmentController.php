@@ -20,7 +20,7 @@ class AssessmentController extends Controller
     /**
      * Display the Pre-test questionnaire.
      */
-    public function createPreTest(): View|RedirectResponse
+    public function createPreTest(Request $request): View|RedirectResponse
     {
         $user = Auth::user();
 
@@ -29,6 +29,19 @@ class AssessmentController extends Controller
             ->where('status', 'completed')
             ->latest()
             ->first();
+
+        // If user already completed pre-test and didn't explicitly request to retake:
+        // Automatically advance them to the active next stage (Game) or their result, so they never get trapped in an empty form!
+        if ($existingAssessment && ! $request->has('retake')) {
+            $gameLog = GameLog::where('user_id', $user->id)->latest()->first();
+            if (! $gameLog) {
+                return redirect()->route('game.play')
+                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Game Katarsis.');
+            }
+
+            return redirect()->route('pre-test.result', $existingAssessment->id)
+                ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test).');
+        }
 
         $questions = Question::orderBy('number')->get();
 
@@ -148,7 +161,7 @@ class AssessmentController extends Controller
     /**
      * Display the Post-test questionnaire.
      */
-    public function createPostTest(): View|RedirectResponse
+    public function createPostTest(Request $request): View|RedirectResponse
     {
         $user = Auth::user();
 
@@ -170,6 +183,12 @@ class AssessmentController extends Controller
             ->where('status', 'completed')
             ->latest()
             ->first();
+
+        // If post-test is already completed, redirect to the comparison result page!
+        if ($existingPostTest && ! $request->has('retake')) {
+            return redirect()->route('post-test.result', $existingPostTest->id)
+                ->with('info', 'Anda sudah menyelesaikan Post-test. Berikut adalah hasil evaluasi lengkap Anda.');
+        }
 
         $questions = Question::orderBy('number')->get();
 
@@ -285,6 +304,7 @@ class AssessmentController extends Controller
             if (!empty($user->email)) {
                 Mail::to($user->email)->send(new AssessmentReportMail($user, $preTest, $assessment, $gameLog));
                 $emailSent = true;
+                session(['email_report_sent_at_' . $assessment->id => now()->timestamp]);
             }
         } catch (\Throwable $e) {
             Log::warning('Gagal mengirimkan email laporan evaluasi: ' . $e->getMessage());
@@ -342,7 +362,7 @@ class AssessmentController extends Controller
     /**
      * Resend or send report email manually on demand.
      */
-    public function sendEmailReport(Assessment $assessment): RedirectResponse
+    public function sendEmailReport(Request $request, Assessment $assessment): RedirectResponse
     {
         if ($assessment->user_id !== Auth::id()) {
             abort(403, 'Akses tidak diizinkan.');
@@ -356,14 +376,37 @@ class AssessmentController extends Controller
             ->latest()
             ->first();
 
-        if (empty($user->email)) {
-            return back()->with('info', 'Pengguna ini tidak memiliki alamat email terdaftar. Data hasil evaluasi tetap aman tersimpan di database.');
+        $gameLog = GameLog::where('user_id', $user->id)
+            ->latest()
+            ->first();
+
+        // Determine destination email
+        $recipientEmail = $user->email;
+
+        if (empty($recipientEmail)) {
+            $inputEmail = trim((string) $request->input('target_email'));
+            if (!empty($inputEmail) && filter_var($inputEmail, FILTER_VALIDATE_EMAIL)) {
+                $recipientEmail = $inputEmail;
+                // Automatically save this email to user record for future logins/evaluations
+                $user->email = $recipientEmail;
+                $user->save();
+            } else {
+                return back()->with('error', 'Silakan masukkan alamat email yang valid.');
+            }
+        }
+
+        // Anti-spam cooldown: prevent sending duplicate emails within 60 seconds
+        $lastSentTimestamp = session('email_report_sent_at_' . $assessment->id);
+        if ($lastSentTimestamp && (now()->timestamp - $lastSentTimestamp) < 60) {
+            $remaining = 60 - (now()->timestamp - $lastSentTimestamp);
+            return back()->with('info', 'Laporan evaluasi baru saja dikirim ke ' . $recipientEmail . '. Mohon tunggu ' . $remaining . ' detik sebelum mengirim ulang, atau silakan periksa folder Inbox / Spam Anda.');
         }
 
         try {
-            Mail::to($user->email)->send(new AssessmentReportMail($user, $preTest, $assessment, $gameLog));
+            Mail::to($recipientEmail)->send(new AssessmentReportMail($user, $preTest, $assessment, $gameLog));
+            session(['email_report_sent_at_' . $assessment->id => now()->timestamp]);
 
-            return back()->with('success', 'Laporan evaluasi berhasil dikirim ulang ke: ' . $user->email);
+            return back()->with('success', 'Laporan evaluasi berhasil dikirim ke: ' . $recipientEmail);
         } catch (\Throwable $e) {
             Log::error('Error sending email report: ' . $e->getMessage());
 

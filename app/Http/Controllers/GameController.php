@@ -26,9 +26,10 @@ class GameController extends Controller
             ->first();
 
         // Get best game score and total games played
-        $bestScore = GameLog::where('user_id', $user->id)->max('score') ?? 0;
+        $bestScore = (int) (GameLog::where('user_id', $user->id)->max('score') ?? 0);
         $totalPlayed = GameLog::where('user_id', $user->id)->count();
-        $totalSmashed = GameLog::where('user_id', $user->id)->sum('items_smashed');
+        $totalSmashed = (int) GameLog::where('user_id', $user->id)->sum('items_smashed');
+        $totalScore = (int) GameLog::where('user_id', $user->id)->sum('score');
 
         return view('game.play', [
             'user' => $user,
@@ -36,6 +37,7 @@ class GameController extends Controller
             'bestScore' => $bestScore,
             'totalPlayed' => $totalPlayed,
             'totalSmashed' => $totalSmashed,
+            'totalScore' => $totalScore,
         ]);
     }
 

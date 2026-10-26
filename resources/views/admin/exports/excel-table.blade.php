@@ -30,7 +30,8 @@
         .group-identity { background-color: #132628; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-pre { background-color: #0b6b63; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-game { background-color: #e8501a; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
-        .group-post { background-color: #08524c; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
+        .group-thankyou { background-color: #08524c; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
+        .group-post { background-color: #0b6b63; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-delta { background-color: #2f7d52; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-meta { background-color: #4a6366; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         
@@ -67,20 +68,20 @@
     <table>
         <!-- Hospital Title Block -->
         <tr>
-            <td colspan="28" class="title-main">RSUD WELAS ASIH · RUANG UMAR BIN KHATTAB 2</td>
+            <td colspan="30" class="title-main">RSUD WELAS ASIH · RUANG UMAR BIN KHATTAB 2</td>
         </tr>
         <tr>
-            <td colspan="28" class="title-sub">REKAPITULASI MONITORING BURNOUT PERAWAT & AKTIVITAS RELAKSASI MINI GAME</td>
+            <td colspan="30" class="title-sub">REKAPITULASI MONITORING BURNOUT PERAWAT & AKTIVITAS RELAKSASI MINI GAME</td>
         </tr>
         <tr>
-            <td colspan="28" class="title-meta">
+            <td colspan="30" class="title-meta">
                 <strong>Periode Laporan:</strong> {{ $periodLabel }} &nbsp;|&nbsp; 
                 <strong>Waktu Unduh:</strong> {{ $exportDate }} &nbsp;|&nbsp; 
                 <strong>Kepala Ruangan:</strong> Oom Umriah,S.Kep.,Ners
             </td>
         </tr>
         <tr>
-            <td colspan="28" style="border:none; height: 12px;"></td>
+            <td colspan="30" style="border:none; height: 12px;"></td>
         </tr>
 
         <!-- Group Super-Headers -->
@@ -89,8 +90,9 @@
                 <th colspan="5" class="group-identity">1. IDENTITAS & SESI PENGISIAN</th>
                 <th colspan="6" class="group-pre">2. EVALUASI PRE-TEST (SEBELUM)</th>
                 <th colspan="5" class="group-game">3. AKTIVITAS MINI GAME KATARSIS</th>
-                <th colspan="6" class="group-post">4. EVALUASI POST-TEST (SESUDAH)</th>
-                <th colspan="5" class="group-delta">5. KOMPARASI (&Delta;)</th>
+                <th colspan="2" class="group-thankyou">4. KARTU TERIMA KASIH</th>
+                <th colspan="6" class="group-post">5. EVALUASI POST-TEST (SESUDAH)</th>
+                <th colspan="5" class="group-delta">6. KOMPARASI (&Delta;)</th>
                 <th class="group-meta">WAKTU</th>
             </tr>
 
@@ -116,6 +118,10 @@
                 <th class="sub-header" style="width: 75px;">Beban</th>
                 <th class="sub-header" style="width: 65px;">Combo</th>
                 <th class="sub-header" style="width: 80px;">Si Burnout</th>
+
+                <!-- Thank You Card -->
+                <th class="sub-header" style="width: 150px;">Penerima (Rekan)</th>
+                <th class="sub-header" style="width: 260px;">Pesan Apresiasi</th>
 
                 <!-- Post-test -->
                 <th class="sub-header" style="width: 75px;">Skor (/132)</th>
@@ -186,6 +192,10 @@
                     <td class="text-center">{{ isset($r['game_combo']) ? 'x'.$r['game_combo'] : '' }}</td>
                     <td class="text-center">{{ isset($r['game_boss']) ? ($r['game_boss'] ? 'Kalah 💥' : 'Selesai') : '-' }}</td>
 
+                    <!-- Thank You Card -->
+                    <td style="font-weight: 600;">{{ $r['thank_you_recipient'] ?? '-' }}</td>
+                    <td style="font-style: italic;">{{ $r['thank_you_message'] ?? '-' }}</td>
+
                     <!-- Post-Test -->
                     <td class="num-int">{{ $r['post_total'] ?? '' }}</td>
                     <td class="num-dec">{{ $r['post_percentage'] ?? '' }}</td>
@@ -229,20 +239,24 @@
                 <td class="text-center">-</td>
                 <td class="text-center">-</td>
 
-                <!-- Post Mean -->
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(Q{{ $startRow }}:Q{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(R{{ $startRow }}:R{{ $endRow }})</td>
+                <!-- Thank You Card (No numerical mean) -->
                 <td class="text-center">-</td>
+                <td class="text-center">-</td>
+
+                <!-- Post Mean -->
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(S{{ $startRow }}:S{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(T{{ $startRow }}:T{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(U{{ $startRow }}:U{{ $endRow }})</td>
+                <td class="text-center">-</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(V{{ $startRow }}:V{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(W{{ $startRow }}:W{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(X{{ $startRow }}:X{{ $endRow }})</td>
 
                 <!-- Delta Mean -->
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(W{{ $startRow }}:W{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold; background-color: #dff0e5; color: #2f7d52;">=AVERAGE(X{{ $startRow }}:X{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(Y{{ $startRow }}:Y{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(Z{{ $startRow }}:Z{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold; background-color: #dff0e5; color: #2f7d52;">=AVERAGE(Z{{ $startRow }}:Z{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(AA{{ $startRow }}:AA{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AB{{ $startRow }}:AB{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AC{{ $startRow }}:AC{{ $endRow }})</td>
                 <td class="text-center" style="font-size: 8pt; color: #555;">Formula Excel Aktif</td>
             </tr>
         </tbody>

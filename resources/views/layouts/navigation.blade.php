@@ -6,9 +6,7 @@
                 <!-- Logo & Brand -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5">
-                        <div class="w-9 h-9 rounded-xl bg-[#0b6b63] text-white flex items-center justify-center font-display font-bold text-lg shadow-sm">
-                            JP
-                        </div>
+                        <img src="{{ asset('images/logo_welas_asih.png') }}" alt="Logo RSUD Welas Asih" class="w-10 h-10 object-contain shrink-0">
                         <div>
                             <span class="font-display font-bold text-base text-[#132628] leading-tight block">Nurse Recharge</span>
                             <span class="text-[11px] text-[#0b6b63] font-medium tracking-wide block uppercase font-mono">UBK 2 · RSUD Welas Asih</span>

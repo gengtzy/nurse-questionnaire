@@ -32,9 +32,18 @@
                         <!-- Header -->
                         <tr>
                             <td class="header">
-                                <span class="badge badge-header">Ruang Umar Bin Khattab 2 · RSUD Welas Asih</span>
-                                <h1 style="margin: 12px 0 4px; font-size: 24px; font-weight: 700; line-height: 1.2;">Nurse Recharge</h1>
-                                <p style="margin: 0; font-size: 13px; opacity: 0.9;">Laporan Resmi Rekapitulasi Evaluasi Burnout & Relaksasi Perawat</p>
+                                <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                    <tr>
+                                        <td style="vertical-align: middle;">
+                                            <span class="badge badge-header">Ruang Umar Bin Khattab 2 · RSUD Welas Asih</span>
+                                            <h1 style="margin: 10px 0 4px; font-size: 22px; font-weight: 700; line-height: 1.2;">Nurse Recharge</h1>
+                                            <p style="margin: 0; font-size: 13px; opacity: 0.9;">Laporan Resmi Rekapitulasi Evaluasi Burnout & Relaksasi Perawat</p>
+                                        </td>
+                                        <td style="width: 60px; text-align: right; vertical-align: middle;">
+                                            <img src="{{ isset($message) ? $message->embed(public_path('images/logo_welas_asih.png')) : asset('images/logo_welas_asih.png') }}" alt="Logo RSUD Welas Asih" width="56" height="56" style="display: block; border-radius: 8px; margin-left: auto;">
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
                         </tr>
 

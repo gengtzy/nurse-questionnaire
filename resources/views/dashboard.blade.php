@@ -8,14 +8,14 @@
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div>
-                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold tracking-wide uppercase mb-3">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold tracking-wide uppercase mb-2">
                             <span class="w-2 h-2 rounded-full bg-[#0b6b63] animate-pulse"></span>
                             <span>Ruang Umar Bin Khattab 2 · RSUD Welas Asih</span>
                         </div>
                         <h1 class="font-display text-2xl sm:text-3xl font-bold tracking-tight text-[#132628]">
                             Selamat Datang, {{ $user->name }}
                         </h1>
-                        <p class="text-xs sm:text-sm text-[#4a6366] mt-1.5 flex items-center gap-2 flex-wrap">
+                        <p class="text-xs sm:text-sm text-[#4a6366] mt-1 flex items-center gap-2 flex-wrap">
                             <span class="px-2.5 py-0.5 rounded-lg bg-[#f1f5f4] text-[#0b6b63] font-semibold border border-[#d2dedc]">{{ $user->role }}</span>
                             <span>•</span>
                             <span>{{ $user->room }}</span>
@@ -23,19 +23,52 @@
                     </div>
 
                     <div class="shrink-0 flex items-center gap-3">
-                        @if ($latestPreTest)
-                            <a
-                                href="{{ route('pre-test.create') }}"
-                                class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition"
-                            >
-                                <span>Isi Ulang Pre-Test</span>
-                            </a>
-                        @else
+                        @if (! $latestPreTest)
                             <a
                                 href="{{ route('pre-test.create') }}"
                                 class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
                             >
-                                <span>Mulai Kuesioner Awal (Pre-test)</span>
+                                <span>Mulai Tahap 1: Pre-test</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
+                        @elseif (! $latestGame)
+                            <a
+                                href="{{ route('game.play') }}"
+                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#e8501a] hover:bg-[#d44310] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                            >
+                                <span>Lanjut Tahap 2: Main Game Stres 🎮</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
+                        @elseif (! $latestThankYou)
+                            <a
+                                href="{{ route('thank-you.create') }}"
+                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                            >
+                                <span>Lanjut Tahap 3: Kartu Apresiasi 💌</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
+                        @elseif (! $latestPostTest)
+                            <a
+                                href="{{ route('post-test.create') }}"
+                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                            >
+                                <span>Lanjut Tahap 4: Post-test 📝</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
+                        @else
+                            <a
+                                href="{{ route('post-test.result', $latestPostTest->id) }}"
+                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                            >
+                                <span>Lihat Hasil Evaluasi Lengkap 🏆</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
@@ -53,55 +86,88 @@
                         <p class="text-xs text-[#4a6366] mt-0.5">Selesaikan setiap tahapan secara berurutan sesuai alur intervensi</p>
                     </div>
                     <span class="text-xs font-mono text-[#0b6b63] font-bold bg-[#dbeeeb] px-3 py-1 rounded-full">
-                        {{ $latestPreTest ? 'Tahap 2 Selesai' : 'Tahap 2 Menunggu' }}
+                        @if (! $latestPreTest)
+                            Tahap 1: Pre-test Aktif
+                        @elseif (! $latestGame)
+                            Tahap 2: Game Katarsis Aktif
+                        @elseif (! $latestThankYou)
+                            Tahap 3: Kartu Apresiasi Aktif
+                        @elseif (! $latestPostTest)
+                            Tahap 4: Post-test Aktif
+                        @else
+                            Seluruh Tahap Selesai ✓
+                        @endif
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <!-- Step 1 -->
-                    <div class="p-4 rounded-xl border border-[#0b6b63]/30 bg-[#f9fbfa] relative">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="w-7 h-7 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-bold flex items-center justify-center">✓</span>
-                            <span class="text-[10px] font-mono font-bold text-[#0b6b63] uppercase">Selesai</span>
-                        </div>
-                        <h3 class="font-bold text-xs text-[#132628]">1. Masuk / Akun</h3>
-                        <p class="text-[11px] text-[#4a6366] mt-1">Identitas terverifikasi sebagai perawat UBK 2.</p>
-                    </div>
-
-                    <!-- Step 2 -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <!-- Step 1: Pre-test -->
                     <div class="p-4 rounded-xl border {{ $latestPreTest ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' }} relative">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-7 h-7 rounded-full {{ $latestPreTest ? 'bg-[#dbeeeb] text-[#0b6b63]' : 'bg-[#0b6b63] text-white animate-pulse' }} text-xs font-bold flex items-center justify-center">
-                                {{ $latestPreTest ? '✓' : '2' }}
+                                {{ $latestPreTest ? '✓' : '1' }}
                             </span>
-                            <span class="text-[10px] font-mono font-bold {{ $latestPreTest ? 'text-[#0b6b63]' : 'text-[#0b6b63]' }} uppercase">
+                            <span class="text-[10px] font-mono font-bold text-[#0b6b63] uppercase">
                                 {{ $latestPreTest ? 'Selesai' : 'Aktif' }}
                             </span>
                         </div>
-                        <h3 class="font-bold text-xs text-[#132628]">2. Kuesioner Awal</h3>
+                        <h3 class="font-bold text-xs text-[#132628]">1. Kuesioner Awal</h3>
                         @if ($latestPreTest)
                             <p class="text-[11px] text-[#0b6b63] font-semibold mt-1">Skor: {{ $latestPreTest->percentage }}% ({{ $latestPreTest->category }})</p>
                             <a href="{{ route('pre-test.result', $latestPreTest->id) }}" class="text-[11px] text-[#0b6b63] underline font-bold mt-1.5 block">Lihat Hasil &rarr;</a>
                         @else
-                            <p class="text-[11px] text-[#4a6366] mt-1">22 Butir MBI paten untuk mengukur skor awal.</p>
+                            <p class="text-[11px] text-[#4a6366] mt-1">22 Butir instrumen MBI paten untuk mengukur skor awal.</p>
                             <a href="{{ route('pre-test.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Mulai Sekarang &rarr;</a>
                         @endif
                     </div>
 
-                    <!-- Step 3 -->
-                    <div class="p-4 rounded-xl border border-[#d2dedc] bg-[#f1f5f4]/50 relative {{ $latestPreTest ? 'opacity-100' : 'opacity-60' }}">
+                    <!-- Step 2: Mini Game -->
+                    <div class="p-4 rounded-xl border {{ $latestGame ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestPreTest ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="w-7 h-7 rounded-full bg-white border border-[#d2dedc] text-[#4a6366] text-xs font-bold flex items-center justify-center">3</span>
-                            <span class="text-[10px] font-mono text-[#4a6366] uppercase">{{ $latestGame ? 'Selesai' : 'Menunggu' }}</span>
+                            <span class="w-7 h-7 rounded-full {{ $latestGame ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestPreTest ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
+                                {{ $latestGame ? '✓' : '2' }}
+                            </span>
+                            <span class="text-[10px] font-mono font-bold {{ $latestGame ? 'text-[#0b6b63]' : ($latestPreTest ? 'text-[#0b6b63]' : 'text-[#4a6366]') }} uppercase">
+                                {{ $latestGame ? 'Selesai' : ($latestPreTest ? 'Aktif' : 'Menunggu') }}
+                            </span>
                         </div>
-                        <h3 class="font-bold text-xs text-[#132628]">3. Aktivitas Game</h3>
-                        <p class="text-[11px] text-[#4a6366] mt-1">Mini game "Hancurkan Stres" selama 30–60 detik.</p>
-                        @if ($latestPreTest)
+                        <h3 class="font-bold text-xs text-[#132628]">2. Aktivitas Game</h3>
+                        @if ($latestGame)
+                            <p class="text-[11px] text-[#e8501a] font-bold mt-1">Skor: {{ number_format($latestGame->score) }} Poin</p>
+                            <a href="{{ route('game.play') }}" class="text-[11px] text-[#4a6366] underline mt-1.5 block hover:text-[#132628]">Main Ulang &rarr;</a>
+                        @elseif ($latestPreTest)
+                            <p class="text-[11px] text-[#4a6366] mt-1">Mini game "Hancurkan Stres" selama 30–60 detik.</p>
                             <a href="{{ route('game.play') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Buka Game &rarr;</a>
+                        @else
+                            <p class="text-[11px] text-[#4a6366] mt-1">Terbuka setelah kuesioner awal selesai.</p>
                         @endif
                     </div>
 
-                    <!-- Step 4 -->
+                    <!-- Step 3: Kartu Terima Kasih -->
+                    <div class="p-4 rounded-xl border {{ $latestThankYou ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestGame ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="w-7 h-7 rounded-full {{ $latestThankYou ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestGame ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
+                                {{ $latestThankYou ? '✓' : '3' }}
+                            </span>
+                            <span class="text-[10px] font-mono font-bold {{ $latestThankYou ? 'text-[#0b6b63]' : ($latestGame ? 'text-[#0b6b63]' : 'text-[#4a6366]') }} uppercase">
+                                {{ $latestThankYou ? 'Selesai' : ($latestGame ? 'Aktif' : 'Menunggu') }}
+                            </span>
+                        </div>
+                        <h3 class="font-bold text-xs text-[#132628]">3. Kartu Terima Kasih</h3>
+                        @if ($latestThankYou)
+                            <p class="text-[11px] text-[#0b6b63] font-semibold mt-1 truncate" title="{{ $latestThankYou->recipient_name }}: {{ $latestThankYou->message }}">
+                                Untuk: {{ $latestThankYou->recipient_name }}
+                            </p>
+                            <a href="{{ route('thank-you.create') }}" class="text-[11px] text-[#4a6366] underline mt-1.5 block hover:text-[#132628]">Tulis Lagi &rarr;</a>
+                        @elseif ($latestGame)
+                            <p class="text-[11px] text-[#4a6366] mt-1">Kirim pesan apresiasi singkat untuk rekan sejawat.</p>
+                            <a href="{{ route('thank-you.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Tulis Kartu &rarr;</a>
+                        @else
+                            <p class="text-[11px] text-[#4a6366] mt-1">Terbuka setelah aktivitas game selesai.</p>
+                        @endif
+                    </div>
+
+                    <!-- Step 4: Post-test -->
                     <div class="p-4 rounded-xl border {{ $latestPostTest ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestGame ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-7 h-7 rounded-full {{ $latestPostTest ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestGame ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
@@ -116,14 +182,14 @@
                             <p class="text-[11px] text-[#0b6b63] font-semibold mt-1">Skor: {{ $latestPostTest->percentage }}% ({{ $latestPostTest->category }})</p>
                             <a href="{{ route('post-test.result', $latestPostTest->id) }}" class="text-[11px] text-[#0b6b63] underline font-bold mt-1.5 block">Lihat Komparasi &rarr;</a>
                         @elseif ($latestGame)
-                            <p class="text-[11px] text-[#4a6366] mt-1">Evaluasi perubahan perasaan setelah bermain game.</p>
+                            <p class="text-[11px] text-[#4a6366] mt-1">Evaluasi perubahan perasaan setelah intervensi.</p>
                             <a href="{{ route('post-test.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Mulai Post-Test &rarr;</a>
                         @else
-                            <p class="text-[11px] text-[#4a6366] mt-1">Terbuka setelah menyelesaikan aktivitas game.</p>
+                            <p class="text-[11px] text-[#4a6366] mt-1">Terbuka setelah menyelesaikan tahap sebelumnya.</p>
                         @endif
                     </div>
 
-                    <!-- Step 5 -->
+                    <!-- Step 5: Laporan Data -->
                     <div class="p-4 rounded-xl border {{ $latestPostTest ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60' }} relative">
                         <div class="flex items-center justify-between mb-2">
                             <span class="w-7 h-7 rounded-full {{ $latestPostTest ? 'bg-[#dbeeeb] text-[#0b6b63]' : 'bg-white border border-[#d2dedc] text-[#4a6366]' }} text-xs font-bold flex items-center justify-center">

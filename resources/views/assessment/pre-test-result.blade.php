@@ -5,25 +5,25 @@
             <!-- Stepper Indicator -->
             <div class="mb-8 bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs font-medium text-[#4a6366] overflow-x-auto gap-2 pb-1">
-                    <!-- Step 1: Login -->
-                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">1. Masuk</span>
-                        <span class="sm:hidden">1</span>
-                    </div>
-                    <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
-
-                    <!-- Step 2: Pre-test (Completed) -->
+                    <!-- Step 1: Pre-test (Completed) -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span>2. Pre-Test</span>
+                        <span>1. Pre-Test</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]/40"></div>
 
-                    <!-- Step 3: Game (Next Active) -->
+                    <!-- Step 2: Game (Next Active) -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
-                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">3</span>
-                        <span class="hidden sm:inline">3. Game Stres</span>
+                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">2</span>
+                        <span class="hidden sm:inline">2. Game Katarsis</span>
+                        <span class="sm:hidden">2</span>
+                    </div>
+                    <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
+
+                    <!-- Step 3: Kartu Apresiasi -->
+                    <div class="flex items-center gap-2 shrink-0 opacity-60">
+                        <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">3</span>
+                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
                         <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
@@ -45,20 +45,23 @@
                 </div>
             </div>
 
-            <!-- Success Alert Banner -->
-            <div class="mb-6 p-4 rounded-2xl bg-[#dbeeeb] border border-[#b2ded8] text-[#0b6b63] flex items-center justify-between gap-3 shadow-xs">
+            <!-- Success Alert & Immediate Next Step Banner -->
+            <div class="mb-6 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-[#0b6b63] to-[#08524c] text-white flex flex-col sm:flex-row items-center justify-between gap-4 shadow-md">
                 <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-[#0b6b63] text-white flex items-center justify-center font-bold text-sm shrink-0">
+                    <div class="w-10 h-10 rounded-full bg-white/20 text-white flex items-center justify-center font-bold text-lg shrink-0">
                         ✓
                     </div>
                     <div>
-                        <h4 class="font-bold text-sm">Kuesioner Awal (Pre-test) Berhasil Dihitung!</h4>
-                        <p class="text-xs text-[#0b6b63]/80">Hasil persentase skor awal Anda telah tersimpan di sistem.</p>
+                        <h4 class="font-bold text-sm sm:text-base">Pre-Test Selesai! Skor: {{ number_format($assessment->percentage, 1) }}% ({{ $assessment->category }})</h4>
+                        <p class="text-xs text-white/80">Data telah tersimpan. Silakan lanjutkan ke Tahap 2: Mini Game Katarsis.</p>
                     </div>
                 </div>
-                <span class="text-xs font-mono text-[#0b6b63] hidden sm:inline">
-                    {{ $assessment->completed_at?->format('d/m/Y H:i') }}
-                </span>
+                <a
+                    href="{{ route('game.play') }}"
+                    class="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-white text-[#0b6b63] hover:bg-[#dbeeeb] font-bold text-sm shadow-sm transition active:scale-[0.98]"
+                >
+                    <span>Lanjut ke Game Stres &rarr;</span>
+                </a>
             </div>
 
             <!-- Main Score Card -->
@@ -155,14 +158,14 @@
                 </div>
             </div>
 
-            <!-- NEXT STEP CALL TO ACTION (STEP 3: GAME) -->
+            <!-- NEXT STEP CALL TO ACTION (STEP 2: GAME) -->
             <div class="bg-gradient-to-br from-[#0b6b63] to-[#08524c] rounded-2xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
                 <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div class="space-y-2">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide uppercase">
-                            <span>🎮 Langkah Ke-3</span>
+                            <span>🎮 Langkah Ke-2: Katarsis</span>
                         </div>
                         <h3 class="font-display text-xl sm:text-2xl font-bold">
                             Waktunya Main Mini Game: "Hancurkan Stres"

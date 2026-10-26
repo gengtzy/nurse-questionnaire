@@ -5,25 +5,25 @@
             <!-- Stepper Indicator Alur 5 Langkah -->
             <div class="mb-8 bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs font-medium text-[#4a6366] overflow-x-auto gap-2 pb-1">
-                    <!-- Step 1: Login -->
-                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">1. Masuk</span>
-                        <span class="sm:hidden">1</span>
-                    </div>
-                    <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]/30"></div>
-
-                    <!-- Step 2: Pre-test (Active) -->
+                    <!-- Step 1: Pre-test (Active) -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
-                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">2</span>
-                        <span>2. Pre-Test</span>
+                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">1</span>
+                        <span>1. Pre-Test</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
 
-                    <!-- Step 3: Game -->
+                    <!-- Step 2: Game -->
+                    <div class="flex items-center gap-2 shrink-0 opacity-60">
+                        <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">2</span>
+                        <span class="hidden sm:inline">2. Game Katarsis</span>
+                        <span class="sm:hidden">2</span>
+                    </div>
+                    <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
+
+                    <!-- Step 3: Kartu Apresiasi -->
                     <div class="flex items-center gap-2 shrink-0 opacity-60">
                         <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">3</span>
-                        <span class="hidden sm:inline">3. Game Stres</span>
+                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
                         <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
 
-                    <!-- Step 5: Kirim & Rekap -->
+                    <!-- Step 5: Kirim Hasil -->
                     <div class="flex items-center gap-2 shrink-0 opacity-60">
                         <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">5</span>
                         <span class="hidden sm:inline">5. Kirim Hasil</span>

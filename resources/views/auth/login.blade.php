@@ -2,6 +2,9 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
         <!-- Eyebrow & Brand Header -->
         <div class="text-center mb-6">
+            <div class="flex justify-center mb-3">
+                <img src="{{ asset('images/logo_welas_asih.png') }}" alt="Logo RSUD Welas Asih" class="w-20 h-20 object-contain drop-shadow-sm">
+            </div>
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold tracking-wide uppercase mb-3 border border-[#b2ded8]">
                 <span class="w-2 h-2 rounded-full bg-[#0b6b63] animate-pulse"></span>
                 <span>Ruang Umar Bin Khattab 2 · RSUD Welas Asih</span>
