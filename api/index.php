@@ -8,6 +8,10 @@
 $_SERVER['SCRIPT_NAME'] = '/index.php';
 $_SERVER['SCRIPT_FILENAME'] = realpath(__DIR__ . '/../public/index.php');
 
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 $tmpStorage = '/tmp/storage';
 $subDirs = [
     $tmpStorage . '/framework/views',
