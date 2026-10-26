@@ -7,4 +7,5 @@ it('returns a successful response on portal page', function () {
     $response->assertSee('Portal Layanan Keperawatan');
     $response->assertSee('Aplikasi Nurse Recharge');
     $response->assertSee('Aplikasi Supervisi');
+    $response->assertSee('https://super-studio-1.ai.studio/');
 });

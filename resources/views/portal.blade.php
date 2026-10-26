@@ -21,7 +21,7 @@
                 Portal Layanan Keperawatan
             </h1>
             <p class="text-sm sm:text-base text-[#4a6366] mt-3 leading-relaxed max-w-2xl mx-auto">
-                Pusat layanan terpadu keperawatan RSUD Welas Asih. Silakan pilih sistem aplikasi yang ingin Anda akses untuk evaluasi kesejahteraan tenaga medis atau penjaminan mutu supervisi klinis.
+                Pusat layanan terpadu keperawatan RSUD Welas Asih. Silakan klik kartu aplikasi yang ingin Anda tuju untuk membuka sistem.
             </p>
 
             @auth
@@ -36,11 +36,14 @@
             @endauth
         </div>
 
-        <!-- 2 Selection Cards Grid -->
+        <!-- 2 Selection Cards Grid (Fully Clickable Cards) -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch max-w-5xl mx-auto">
 
             <!-- CARD 1: Aplikasi Nurse Recharge (SIMONA) -->
-            <div class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#0b6b63] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <a
+                href="{{ route('login') }}"
+                class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#0b6b63] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer block no-underline text-inherit"
+            >
                 <!-- Top Accent Line -->
                 <div class="absolute top-0 inset-x-8 h-1.5 bg-gradient-to-r from-[#0b6b63] to-[#14b8a6] rounded-t-3xl"></div>
 
@@ -107,22 +110,26 @@
                     </div>
                 </div>
 
-                <!-- Action Button -->
+                <!-- Action Button Container -->
                 <div class="pt-2">
-                    <a
-                        href="{{ route('login') }}"
-                        class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.99] cursor-pointer"
+                    <div
+                        class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0b6b63] group-hover:bg-[#08524c] text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-all"
                     >
                         <span>Masuk ke Nurse Recharge</span>
                         <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                         </svg>
-                    </a>
+                    </div>
                 </div>
-            </div>
+            </a>
 
             <!-- CARD 2: Aplikasi Supervisi (Super PRO) -->
-            <div class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#0284c7] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+            <a
+                href="{{ config('services.supervisi.url', 'https://super-studio-1.ai.studio/') }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#0284c7] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer block no-underline text-inherit"
+            >
                 <!-- Top Accent Line -->
                 <div class="absolute top-0 inset-x-8 h-1.5 bg-gradient-to-r from-[#0284c7] to-[#0ea5e9] rounded-t-3xl"></div>
 
@@ -193,38 +200,18 @@
                     </div>
                 </div>
 
-                <!-- Action Button -->
+                <!-- Action Button Container -->
                 <div class="pt-2">
-                    @php
-                        $supervisiUrl = config('services.supervisi.url', env('SUPERVISI_APP_URL', ''));
-                    @endphp
-
-                    @if(!empty($supervisiUrl))
-                        <a
-                            href="{{ $supervisiUrl }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.99] cursor-pointer"
-                        >
-                            <span>Buka Aplikasi Supervisi</span>
-                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                            </svg>
-                        </a>
-                    @else
-                        <button
-                            type="button"
-                            onclick="openSupervisiModal()"
-                            class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all active:scale-[0.99] cursor-pointer"
-                        >
-                            <span>Buka Aplikasi Supervisi</span>
-                            <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
-                        </button>
-                    @endif
+                    <div
+                        class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0284c7] group-hover:bg-[#0369a1] text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-all"
+                    >
+                        <span>Buka Aplikasi Supervisi</span>
+                        <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Footer Notice -->
@@ -233,102 +220,4 @@
             <p class="font-mono text-[11px] text-[#9db4b2]">RSUD Welas Asih Provinsi Jawa Barat · Sistem Informasi Manajemen Terpadu</p>
         </div>
     </div>
-
-    <!-- Modal Informasi & Preview Aplikasi Supervisi (Super PRO) -->
-    <div id="supervisiModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <!-- Backdrop -->
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity" onclick="closeSupervisiModal()"></div>
-
-        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-3xl bg-white text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg border border-[#d2dedc]">
-                <!-- Header -->
-                <div class="bg-gradient-to-r from-[#0284c7] to-[#0369a1] px-6 py-5 text-white">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-2.5">
-                            <span class="p-2 rounded-xl bg-white/10 backdrop-blur-xs">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                                </svg>
-                            </span>
-                            <div>
-                                <h3 class="text-lg font-bold" id="modal-title">Aplikasi Supervisi (Super PRO)</h3>
-                                <p class="text-xs text-sky-100">RSUD Welas Asih Provinsi Jawa Barat</p>
-                            </div>
-                        </div>
-                        <button type="button" onclick="closeSupervisiModal()" class="text-white/80 hover:text-white rounded-lg p-1.5 focus:outline-none">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Body -->
-                <div class="px-6 py-5 space-y-4">
-                    <div class="p-3.5 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-between text-xs text-sky-900">
-                        <div>
-                            <span class="font-bold block">Ruang Abdurahman Bin Auf 2</span>
-                            <span class="text-sky-700">Kepala Ruangan: Acep Sudiana, S.Kep., Ners</span>
-                        </div>
-                        <span class="px-2 py-1 rounded-full bg-sky-200 text-sky-800 font-bold text-[10px] uppercase">
-                            Aktif
-                        </span>
-                    </div>
-
-                    <div class="text-xs text-[#4a6366] space-y-2 leading-relaxed">
-                        <p>
-                            Aplikasi <strong>Super PRO</strong> merupakan modul sistem pengawasan klinis keperawatan mandiri yang memfasilitasi:
-                        </p>
-                        <ul class="list-disc list-inside space-y-1 pl-1 text-[#132628]">
-                            <li><strong>Jadwal & Pengingat Supervisi:</strong> Notifikasi otomatis jadwal harian & mingguan.</li>
-                            <li><strong>Supervisi Pre & Post Conference:</strong> Evaluasi timbang terima dan pembagian asuhan pasien (SBAR).</li>
-                            <li><strong>Audit Kepatuhan 72 SOP:</strong> Instrumen digital pengukur kepatuhan tindakan klinis.</li>
-                            <li><strong>Integrasi Google Workspace:</strong> Rekapitulasi otomatis Google Sheets & kalender Google.</li>
-                        </ul>
-                    </div>
-
-                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-[11px] text-amber-800 flex items-start gap-2">
-                        <span class="text-amber-600 font-bold text-sm">💡</span>
-                        <span>
-                            Untuk mengarahkan tombol ini ke domain/URL hosting spesifik dari Aplikasi Supervisi, Anda dapat menambahkan variabel <code>SUPERVISI_APP_URL=https://alamat-supervisi.com</code> pada konfigurasi <code>.env</code> / Environment Variables di Vercel.
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Footer -->
-                <div class="bg-[#f9fbfa] px-6 py-4 flex flex-col sm:flex-row-reverse gap-2 border-t border-[#d2dedc]">
-                    <button
-                        type="button"
-                        onclick="closeSupervisiModal()"
-                        class="w-full sm:w-auto inline-flex justify-center rounded-xl bg-[#0284c7] px-4 py-2.5 text-xs font-semibold text-white shadow-xs hover:bg-[#0369a1] transition"
-                    >
-                        Tutup Informasi
-                    </button>
-                    <a
-                        href="{{ route('login') }}"
-                        class="w-full sm:w-auto inline-flex justify-center rounded-xl bg-white border border-[#d2dedc] px-4 py-2.5 text-xs font-semibold text-[#132628] hover:bg-[#f1f5f4] transition"
-                    >
-                        Buka Nurse Recharge Saja
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openSupervisiModal() {
-            document.getElementById('supervisiModal').classList.remove('hidden');
-        }
-
-        function closeSupervisiModal() {
-            document.getElementById('supervisiModal').classList.add('hidden');
-        }
-
-        // Close on escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeSupervisiModal();
-            }
-        });
-    </script>
 </x-guest-layout>
