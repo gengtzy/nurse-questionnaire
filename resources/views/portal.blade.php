@@ -71,7 +71,7 @@
                                 Aplikasi Nurse Recharge
                             </h2>
                             <p class="text-xs sm:text-sm font-medium text-[#0b6b63]">
-                                SIMONA · Self-Assessment & Mental Recharge
+                                Self-Assessment & Mental Recharge Program
                             </p>
                         </div>
                     </div>

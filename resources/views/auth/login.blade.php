@@ -8,7 +8,7 @@
                 </svg>
                 <span>Pilihan Portal Aplikasi</span>
             </a>
-            <span class="text-[11px] text-[#4a6366] font-mono">SIMONA v1.0</span>
+            <span class="text-[11px] text-[#4a6366] font-mono">Nurse Recharge v1.0</span>
         </div>
 
         <!-- Eyebrow & Brand Header -->
