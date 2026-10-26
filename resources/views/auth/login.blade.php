@@ -110,7 +110,7 @@
                         </button>
                     </div>
 
-                    Dynamic Helper & Quick Fill Buttons
+                    <!-- Dynamic Helper & Quick Fill Buttons -->
                     <!-- <div class="mt-2.5 p-3 rounded-xl bg-[#f1f5f4] border border-[#d2dedc] space-y-2">
                         <div class="flex items-center justify-between text-xs text-[#4a6366]">
                             <span class="font-medium flex items-center gap-1.5">
