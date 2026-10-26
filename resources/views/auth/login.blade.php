@@ -119,7 +119,7 @@
                             </span>
                             <span id="targetDashboardHint" class="text-[11px] font-semibold text-[#0b6b63]">Dashboard Kuesioner</span>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
+                        <!-- <div class="grid grid-cols-2 gap-2 text-xs">
                             <button
                                 type="button"
                                 id="btnFillPerawat"
@@ -140,7 +140,7 @@
                                 <span>👑 Karu:</span>
                                 <span class="underline">karu123</span>
                             </button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
