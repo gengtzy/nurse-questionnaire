@@ -66,14 +66,14 @@ class UserSeeder extends Seeder
         }
 
         // 3. User Test (Khusus Pengujian Pengiriman Email Asli)
-        User::updateOrCreate(
-            ['name' => 'Testuserperawat'],
-            [
-                'role' => 'Perawat',
-                'email' => 'agengpujipangestu3@gmail.com',
-                'room' => 'Ruang Umar Bin Khattab 2',
-                'password' => $nursePassword,
-            ]
-        );
+        // User::updateOrCreate(
+        //     ['name' => 'Testuserperawat'],
+        //     [
+        //         'role' => 'Perawat',
+        //         'email' => 'agengpujipangestu3@gmail.com',
+        //         'room' => 'Ruang Umar Bin Khattab 2',
+        //         'password' => $nursePassword,
+        //     ]
+        // );
     }
 }
