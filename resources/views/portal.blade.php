@@ -123,78 +123,75 @@
                 </div>
             </a>
 
-            <!-- CARD 2: Aplikasi Supervisi (Super PRO) -->
+            <!-- CARD 2: Supervisi Keperawatan Ruang UBK 2 -->
             <a
-                href="{{ config('services.supervisi.url', 'https://super-studio-1.ai.studio/') }}"
+                href="{{ config('services.supervisi.url', 'https://supervisi-keperawatan-ruang-ubk-2-1.ai.studio/') }}"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#0284c7] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer block no-underline text-inherit"
+                class="group relative flex flex-col justify-between bg-white rounded-3xl border-2 border-[#d2dedc] p-6 sm:p-8 hover:border-[#047857] hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer block no-underline text-inherit"
             >
                 <!-- Top Accent Line -->
-                <div class="absolute top-0 inset-x-8 h-1.5 bg-gradient-to-r from-[#0284c7] to-[#0ea5e9] rounded-t-3xl"></div>
+                <div class="absolute top-0 inset-x-8 h-1.5 bg-gradient-to-r from-[#047857] to-[#10b981] rounded-t-3xl"></div>
 
                 <div>
                     <!-- Badge Header -->
                     <div class="flex items-center justify-between gap-2 mb-4">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sky-50 text-sky-700 text-[11px] font-bold tracking-wide uppercase border border-sky-200">
-                            <span class="px-1.5 py-0.5 rounded bg-sky-600 text-white text-[9px] font-black">PRO</span>
-                            <span>Supervisi Klinis</span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[11px] font-bold tracking-wide uppercase border border-emerald-200">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span>Supervisi Klinis Terpadu</span>
                         </span>
-                        <span class="text-[11px] font-medium text-[#4a6366] bg-[#f1f5f4] px-2.5 py-1 rounded-full border border-[#d2dedc]">
-                            Ruang Abdurahman Bin Auf 2
+                        <span class="text-[11px] font-semibold text-emerald-900 bg-emerald-100/70 px-2.5 py-1 rounded-full border border-emerald-200">
+                            Ruang UBK 2
                         </span>
                     </div>
 
                     <!-- Icon & Title -->
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-14 h-14 rounded-2xl bg-sky-50 border border-sky-200 flex items-center justify-center text-sky-600 shrink-0 group-hover:scale-110 transition-transform">
-                            <!-- Shield & Checkmark SVG Icon -->
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#047857] shrink-0 group-hover:scale-110 transition-transform shadow-xs">
+                            <!-- Stethoscope / Clinical Supervision Icon -->
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/>
                             </svg>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h2 class="text-xl sm:text-2xl font-bold text-[#132628] group-hover:text-sky-700 transition-colors">
-                                    Aplikasi Supervisi
-                                </h2>
-                                <span class="px-2 py-0.5 rounded-md bg-sky-100 text-sky-800 text-xs font-extrabold">Super PRO</span>
-                            </div>
-                            <p class="text-xs sm:text-sm font-medium text-sky-700">
-                                Sistem Manajemen & Penjaminan Mutu Keperawatan
+                            <h2 class="text-xl sm:text-2xl font-bold text-[#132628] group-hover:text-[#047857] transition-colors leading-tight">
+                                Supervisi Keperawatan
+                            </h2>
+                            <p class="text-xs sm:text-sm font-semibold text-[#047857]">
+                                Ruang UBK 2 · Mutu Asuhan & Keselamatan Pasien
                             </p>
                         </div>
                     </div>
 
                     <!-- Description -->
                     <p class="text-xs sm:text-sm text-[#4a6366] leading-relaxed mb-6">
-                        Platform digital pelaksanaan dan pemantauan supervisi klinis keperawatan berstandar RSUD Welas Asih untuk Kepala Ruangan (Karu) dan Ketua Tim (Katim).
+                        Menjamin mutu asuhan, keselamatan pasien (IPSG), serta kepatuhan Standar Prosedur Operasional (SPO) melalui bimbingan reflektif klinis, perekaman suara, dan pengesahan digital resmi.
                     </p>
 
                     <!-- Feature List -->
-                    <div class="space-y-3 mb-6 bg-sky-50/50 p-4 rounded-2xl border border-sky-100">
+                    <div class="space-y-3 mb-6 bg-[#f0fdf4]/70 p-4 rounded-2xl border border-emerald-100">
                         <div class="flex items-start gap-2.5 text-xs text-[#132628]">
-                            <span class="text-sky-600 font-bold shrink-0 mt-0.5">✓</span>
+                            <span class="text-emerald-700 font-bold shrink-0 mt-0.5">✓</span>
                             <div>
-                                <strong class="text-sky-800">Supervisi Rutin Mingguan:</strong> Jadwal terstruktur wajib 1x/minggu oleh Karu & Katim dengan alur bertahap.
+                                <strong class="text-emerald-900">Bimbingan Reflektif & Voice Note:</strong> Evaluasi bimbingan klinis terpadu dilengkapi rekaman suara (Voice Note) perawat.
                             </div>
                         </div>
                         <div class="flex items-start gap-2.5 text-xs text-[#132628]">
-                            <span class="text-sky-600 font-bold shrink-0 mt-0.5">✓</span>
+                            <span class="text-emerald-700 font-bold shrink-0 mt-0.5">✓</span>
                             <div>
-                                <strong class="text-sky-800">Pre & Post Conference:</strong> Slot rutin (07:10 Shift Pagi & 14:00 Menjelang Operan SBAR) untuk evaluasi timbang terima.
+                                <strong class="text-emerald-900">Berita Acara & TTD Digital:</strong> Pengesahan resmi instrumen supervisi dengan tanda tangan digital perawat & supervisor.
                             </div>
                         </div>
                         <div class="flex items-start gap-2.5 text-xs text-[#132628]">
-                            <span class="text-sky-600 font-bold shrink-0 mt-0.5">✓</span>
+                            <span class="text-emerald-700 font-bold shrink-0 mt-0.5">✓</span>
                             <div>
-                                <strong class="text-sky-800">Daftar Tilik Klinis (72 Tindakan SOP):</strong> Audit kepatuhan SOP (Tekanan Darah, Infus, NGT, dll) dengan detail skor.
+                                <strong class="text-emerald-900">Instrumen Observasi SPO Ruang UBK 2:</strong> Pengujian kepatuhan berkala (Medikasi IV 7 Benar, Bedside Handover SBAR, Kateter, Kebersihan Tangan, dll).
                             </div>
                         </div>
                         <div class="flex items-start gap-2.5 text-xs text-[#132628]">
-                            <span class="text-sky-600 font-bold shrink-0 mt-0.5">✓</span>
+                            <span class="text-emerald-700 font-bold shrink-0 mt-0.5">✓</span>
                             <div>
-                                <strong class="text-sky-800">Integrasi Google Workspace:</strong> Sinkronisasi Google Calendar, laporan Google Sheets, dan arsip PDF di Google Drive.
+                                <strong class="text-emerald-900">Struktur Tenaga Terverifikasi:</strong> 1 Kepala Ruangan, 2 Kepala Tim, dan 22 Perawat Pelaksana (Total 25 Staf Keperawatan UBK 2).
                             </div>
                         </div>
                     </div>
@@ -203,9 +200,9 @@
                 <!-- Action Button Container -->
                 <div class="pt-2">
                     <div
-                        class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#0284c7] group-hover:bg-[#0369a1] text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-all"
+                        class="w-full inline-flex items-center justify-center gap-2 py-3.5 px-5 rounded-2xl bg-[#047857] group-hover:bg-[#065f46] text-white font-semibold text-sm shadow-md group-hover:shadow-lg transition-all"
                     >
-                        <span>Buka Aplikasi Supervisi</span>
+                        <span>Buka Supervisi Keperawatan</span>
                         <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                         </svg>

@@ -36,7 +36,7 @@ return [
     ],
 
     'supervisi' => [
-        'url' => env('SUPERVISI_APP_URL', 'https://super-studio-1.ai.studio/'),
+        'url' => env('SUPERVISI_APP_URL', 'https://supervisi-keperawatan-ruang-ubk-2-1.ai.studio/'),
     ],
 
 ];
