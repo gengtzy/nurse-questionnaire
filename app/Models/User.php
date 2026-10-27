@@ -81,4 +81,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(ThankYouCard::class)->latestOfMany();
     }
+
+    public function interventions(): HasMany
+    {
+        return $this->hasMany(Intervention::class);
+    }
+
+    public function latestIntervention(): HasOne
+    {
+        return $this->hasOne(Intervention::class)->latestOfMany();
+    }
 }

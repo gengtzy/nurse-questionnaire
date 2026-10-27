@@ -50,8 +50,8 @@
                 </div>
             </div>
 
-            <!-- 4 Research / Monitoring KPI Stat Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 5 Research / Monitoring KPI Stat Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 <!-- Stat 1: Sesi Evaluasi & Perawat -->
                 <div class="bg-white border border-[#d2dedc] rounded-2xl p-5 shadow-xs">
                     <span class="text-xs font-mono uppercase tracking-wider text-[#4a6366] block mb-1">Total Sesi Evaluasi</span>
@@ -88,11 +88,25 @@
                         <span class="text-xs text-[#4a6366]">sesi evaluasi</span>
                     </div>
                     <p class="text-xs text-[#4a6366] mt-3">
-                        <strong class="text-[#0b6b63]">{{ $stats['improved_count'] }} sesi</strong> mengalami penurunan beban stres kerja.
+                        <strong class="text-[#0b6b63]">{{ $stats['improved_count'] }} sesi</strong> penurunan beban stres kerja.
                     </p>
                 </div>
 
-                <!-- Stat 4: Avg Game Score -->
+                <!-- Stat 4: Intervensi Butterfly Hug -->
+                <div class="bg-white border border-[#d2dedc] rounded-2xl p-5 shadow-xs">
+                    <span class="text-xs font-mono uppercase tracking-wider text-[#4a6366] block mb-1">Butterfly Hug 🦋</span>
+                    <div class="flex items-baseline gap-2">
+                        <span class="font-mono text-3xl font-bold text-[#0b6b63]">
+                            {{ $stats['avg_tension_diff'] > 0 ? '-'.$stats['avg_tension_diff'] : $stats['avg_tension_diff'] }}
+                        </span>
+                        <span class="text-xs text-[#4a6366]">poin tegang</span>
+                    </div>
+                    <p class="text-xs text-[#4a6366] mt-3">
+                        Rerata reduksi dari <strong class="text-[#0b6b63]">{{ $stats['total_interventions'] }} sesi</strong> relaksasi.
+                    </p>
+                </div>
+
+                <!-- Stat 5: Avg Game Score -->
                 <div class="bg-white border border-[#d2dedc] rounded-2xl p-5 shadow-xs">
                     <span class="text-xs font-mono uppercase tracking-wider text-[#4a6366] block mb-1">Rerata Skor Katarsis</span>
                     <div class="flex items-baseline gap-2">
@@ -281,11 +295,12 @@
                                 <th class="py-3 px-4 font-bold min-w-[200px]">Nama Perawat</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[130px] text-center">Sesi Pengisian</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Pre-Test</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[140px]">Intervensi Butterfly Hug</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[130px]">Sesi Mini Game</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[190px]">Kartu Terima Kasih</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Post-Test</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Selisih (&Delta;)</th>
                                 <th class="py-3 px-4 font-bold min-w-[160px]">Rincian Dimensi (EE &bull; DP &bull; PA)</th>
-                                <th class="py-3 px-3.5 font-bold min-w-[130px]">Sesi Mini Game</th>
-                                <th class="py-3 px-3.5 font-bold min-w-[190px]">Kartu Terima Kasih</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[120px] text-center">Waktu Selesai</th>
                             </tr>
                         </thead>
@@ -333,6 +348,65 @@
                                             </div>
                                         </template>
                                         <template x-if="!r.has_pre">
+                                            <span class="text-[#9db4b2] font-mono">-</span>
+                                        </template>
+                                    </td>
+
+                                    <!-- Butterfly Hug Intervention -->
+                                    <td class="py-3 px-3.5">
+                                        <template x-if="r.has_intervention">
+                                            <div class="text-[11px] space-y-0.5">
+                                                <div class="font-bold flex items-center gap-1.5 text-[#132628]">
+                                                    <span class="text-xs">🦋</span>
+                                                    <span class="font-mono text-xs" x-text="r.intervention_before + ' → ' + r.intervention_after"></span>
+                                                    <template x-if="r.intervention_diff > 0">
+                                                        <span class="text-emerald-700 font-bold font-mono text-[10px] bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200" x-text="'-' + r.intervention_diff + ' pt'"></span>
+                                                    </template>
+                                                    <template x-if="r.intervention_diff === 0">
+                                                        <span class="text-amber-700 font-mono text-[10px] bg-amber-50 px-1 py-0.2 rounded border border-amber-200">0 pt</span>
+                                                    </template>
+                                                    <template x-if="r.intervention_diff < 0">
+                                                        <span class="text-red-700 font-mono text-[10px] bg-red-50 px-1 py-0.2 rounded border border-red-200" x-text="'+' + Math.abs(r.intervention_diff) + ' pt'"></span>
+                                                    </template>
+                                                </div>
+                                                <div class="text-[#4a6366] text-[10px] font-mono">
+                                                    <span x-text="r.intervention_duration + 's'"></span> &bull; <span x-text="(r.intervention_taps || 0) + ' tepukan'"></span>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template x-if="!r.has_intervention">
+                                            <span class="text-[#9db4b2] font-mono">-</span>
+                                        </template>
+                                    </td>
+
+                                    <!-- Mini Game Info -->
+                                    <td class="py-3 px-3.5">
+                                        <template x-if="r.has_game">
+                                            <div class="text-[11px]">
+                                                <div class="font-bold text-[#e8501a]" x-text="r.game_score + ' Poin'"></div>
+                                                <div class="text-[#4a6366] text-[10px]">
+                                                    <span x-text="r.game_smashed + ' beban'"></span> &bull; <span x-text="r.game_duration + 's'"></span>
+                                                </div>
+                                                <span class="text-[9px] font-bold text-[#0b6b63]" x-text="r.game_boss ? 'Boss Kalah 💥' : 'Selesai'"></span>
+                                            </div>
+                                        </template>
+                                        <template x-if="!r.has_game">
+                                            <span class="text-[#9db4b2] font-mono">-</span>
+                                        </template>
+                                    </td>
+
+                                    <!-- Kartu Terima Kasih (Rekan) -->
+                                    <td class="py-3 px-3.5">
+                                        <template x-if="r.has_thank_you">
+                                            <div class="text-[11px] space-y-1">
+                                                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#dbeeeb] text-[#0b6b63] font-bold text-[10px] border border-[#b2ded8]">
+                                                    <span>💌 Untuk:</span>
+                                                    <span class="truncate max-w-[140px]" x-text="r.thank_you_recipient"></span>
+                                                </div>
+                                                <div class="text-[#4a6366] text-[10px] leading-tight italic line-clamp-2" :title="r.thank_you_message" x-text="'“' + r.thank_you_message + '”'"></div>
+                                            </div>
+                                        </template>
+                                        <template x-if="!r.has_thank_you">
                                             <span class="text-[#9db4b2] font-mono">-</span>
                                         </template>
                                     </td>
@@ -390,38 +464,6 @@
                                         </template>
                                     </td>
 
-                                    <!-- Mini Game Info -->
-                                    <td class="py-3 px-3.5">
-                                        <template x-if="r.has_game">
-                                            <div class="text-[11px]">
-                                                <div class="font-bold text-[#e8501a]" x-text="r.game_score + ' Poin'"></div>
-                                                <div class="text-[#4a6366] text-[10px]">
-                                                    <span x-text="r.game_smashed + ' beban'"></span> &bull; <span x-text="r.game_duration + 's'"></span>
-                                                </div>
-                                                <span class="text-[9px] font-bold text-[#0b6b63]" x-text="r.game_boss ? 'Boss Kalah 💥' : 'Selesai'"></span>
-                                            </div>
-                                        </template>
-                                        <template x-if="!r.has_game">
-                                            <span class="text-[#9db4b2] font-mono">-</span>
-                                        </template>
-                                    </td>
-
-                                    <!-- Kartu Terima Kasih (Rekan) -->
-                                    <td class="py-3 px-3.5">
-                                        <template x-if="r.has_thank_you">
-                                            <div class="text-[11px] space-y-1">
-                                                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#dbeeeb] text-[#0b6b63] font-bold text-[10px] border border-[#b2ded8]">
-                                                    <span>💌 Untuk:</span>
-                                                    <span class="truncate max-w-[140px]" x-text="r.thank_you_recipient"></span>
-                                                </div>
-                                                <div class="text-[#4a6366] text-[10px] leading-tight italic line-clamp-2" :title="r.thank_you_message" x-text="'“' + r.thank_you_message + '”'"></div>
-                                            </div>
-                                        </template>
-                                        <template x-if="!r.has_thank_you">
-                                            <span class="text-[#9db4b2] font-mono">-</span>
-                                        </template>
-                                    </td>
-
                                     <!-- Completed At (WIB) -->
                                     <td class="py-3 px-3.5 text-center text-[11px] font-mono text-[#132628]" x-text="r.completed_at || '-'"></td>
                                 </tr>
@@ -429,7 +471,7 @@
 
                             <!-- Empty Search Result -->
                             <tr x-show="filteredRecords.length === 0">
-                                <td colspan="10" class="py-10 text-center text-[#4a6366]">
+                                <td colspan="11" class="py-10 text-center text-[#4a6366]">
                                     <div class="text-3xl mb-2">🔍</div>
                                     <div class="text-sm font-semibold text-[#132628]">Tidak ada sesi pengisian yang sesuai filter</div>
                                     <p class="text-xs text-[#4a6366] mt-1">Coba sesuaikan kata kunci pencarian atau ubah rentang tanggal.</p>

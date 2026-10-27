@@ -158,29 +158,29 @@
                 </div>
             </div>
 
-            <!-- NEXT STEP CALL TO ACTION (STEP 2: GAME) -->
+            <!-- NEXT STEP CALL TO ACTION (STEP 2: INTERVENSI BUTTERFLY HUG) -->
             <div class="bg-gradient-to-br from-[#0b6b63] to-[#08524c] rounded-2xl p-6 sm:p-8 text-white shadow-md relative overflow-hidden">
                 <div class="absolute -right-8 -bottom-8 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none"></div>
 
                 <div class="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                     <div class="space-y-2">
                         <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold tracking-wide uppercase">
-                            <span>🎮 Langkah Ke-2: Katarsis</span>
+                            <span>🦋 Langkah Ke-2: Intervensi Relaksasi</span>
                         </div>
                         <h3 class="font-display text-xl sm:text-2xl font-bold">
-                            Waktunya Main Mini Game: "Hancurkan Stres"
+                            Lanjut ke Intervensi: "Butterfly Hug"
                         </h3>
                         <p class="text-white/80 text-xs sm:text-sm max-w-lg leading-relaxed">
-                            Lepaskan beban pikiran selama 30–60 detik! Ketuk dan hancurkan beban kerja yang melayang (laporan, lembur, infus macet) dan kalahkan Si Burnout.
+                            Lakukan latihan stimulasi bilateral dan pernapasan ritmis selama 1–3 menit untuk menurunkan ketegangan fisik dan menenangkan saraf sebelum melanjutkan ke aktivitas game.
                         </p>
                     </div>
 
                     <div class="shrink-0">
                         <a
-                            href="{{ route('game.play') }}"
+                            href="{{ route('intervention.create') }}"
                             class="inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-white text-[#0b6b63] font-bold text-sm shadow-md hover:bg-[#dbeeeb] transition active:scale-[0.98] cursor-pointer"
                         >
-                            <span>Mulai Main Game</span>
+                            <span>Mulai Butterfly Hug 🦋</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                             </svg>

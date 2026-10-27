@@ -13,34 +13,34 @@
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 2: Game -->
+                    <!-- Step 2: Butterfly Hug -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">2. Game Stres</span>
+                        <span class="hidden sm:inline">2. Butterfly Hug</span>
                         <span class="sm:hidden">2</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 3: Kartu Terima Kasih -->
+                    <!-- Step 3: Game Stres -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
+                        <span class="hidden sm:inline">3. Game Stres</span>
                         <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 4: Post-test (Active) -->
-                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
-                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">4</span>
-                        <span>4. Post-Test</span>
+                    <!-- Step 4: Kartu Terima Kasih -->
+                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
+                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
+                        <span class="hidden sm:inline">4. Kartu Apresiasi</span>
+                        <span class="sm:hidden">4</span>
                     </div>
-                    <div class="w-6 sm:w-12 h-0.5 bg-[#d2dedc]"></div>
+                    <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 5: Kirim Hasil -->
-                    <div class="flex items-center gap-2 shrink-0 opacity-60">
-                        <span class="w-6 h-6 rounded-full bg-[#f1f5f4] border border-[#d2dedc] text-[#4a6366] flex items-center justify-center text-xs">5</span>
-                        <span class="hidden sm:inline">5. Kirim Hasil</span>
-                        <span class="sm:hidden">5</span>
+                    <!-- Step 5: Post-test (Active) -->
+                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
+                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">5</span>
+                        <span>5. Post-Test</span>
                     </div>
                 </div>
             </div>

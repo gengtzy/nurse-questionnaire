@@ -33,10 +33,16 @@ class AssessmentController extends Controller
         // If user already completed pre-test and didn't explicitly request to retake:
         // Automatically advance them to the active next stage (Game) or their result, so they never get trapped in an empty form!
         if ($existingAssessment && ! $request->has('retake')) {
+            $intervention = $user->interventions()->latest()->first();
+            if (! $intervention) {
+                return redirect()->route('intervention.create')
+                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Intervensi Butterfly Hug.');
+            }
+
             $gameLog = GameLog::where('user_id', $user->id)->latest()->first();
             if (! $gameLog) {
                 return redirect()->route('game.play')
-                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Game Katarsis.');
+                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal & Intervensi. Silakan lanjut ke Tahap 3: Game Katarsis.');
             }
 
             return redirect()->route('pre-test.result', $existingAssessment->id)

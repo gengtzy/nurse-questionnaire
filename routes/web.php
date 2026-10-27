@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\InterventionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ThankYouCardController;
 use Illuminate\Support\Facades\Route;
@@ -23,19 +24,24 @@ Route::middleware('auth')->group(function () {
         }
 
         $latestPreTest = $user->assessments()->where('type', 'pre_test')->latest()->first();
+        $latestIntervention = $user->interventions()->latest()->first();
         $latestPostTest = $user->assessments()->where('type', 'post_test')->latest()->first();
         $latestGame = $user->gameLogs()->latest()->first();
         $latestThankYou = $user->thankYouCards()->latest()->first();
 
-        return view('dashboard', compact('user', 'latestPreTest', 'latestPostTest', 'latestGame', 'latestThankYou'));
+        return view('dashboard', compact('user', 'latestPreTest', 'latestIntervention', 'latestPostTest', 'latestGame', 'latestThankYou'));
     })->name('dashboard');
 
-    // Pre-test Routes (Step 2)
+    // Pre-test Routes (Step 1)
     Route::get('/assessment/pre-test', [AssessmentController::class, 'createPreTest'])->name('pre-test.create');
     Route::post('/assessment/pre-test', [AssessmentController::class, 'storePreTest'])->name('pre-test.store');
     Route::get('/assessment/pre-test/{assessment}/result', [AssessmentController::class, 'showPreTestResult'])->name('pre-test.result');
 
-    // Game Routes (Step 3)
+    // Intervention Routes (Step 2: Butterfly Hug)
+    Route::get('/intervention', [InterventionController::class, 'create'])->name('intervention.create');
+    Route::post('/intervention', [InterventionController::class, 'store'])->name('intervention.store');
+
+    // Game Routes (Step 3: Katarsis)
     Route::get('/game/play', [GameController::class, 'play'])->name('game.play');
     Route::post('/game/log', [GameController::class, 'storeLog'])->name('game.log');
 

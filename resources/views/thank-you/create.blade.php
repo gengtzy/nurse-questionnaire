@@ -6,21 +6,21 @@
             <div class="bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs mb-3">
                     <span class="font-bold text-[#0b6b63] uppercase tracking-wider font-mono">Tahap Apresiasi Rekan Sejawat</span>
-                    <span class="text-[#4a6366] font-mono">Langkah 3 dari 5</span>
+                    <span class="text-[#4a6366] font-mono">Langkah 4 dari 5</span>
                 </div>
                 <div class="grid grid-cols-5 gap-2">
                     <div class="h-2 rounded-full bg-[#0b6b63]"></div>
                     <div class="h-2 rounded-full bg-[#0b6b63]"></div>
+                    <div class="h-2 rounded-full bg-[#0b6b63]"></div>
                     <div class="h-2 rounded-full bg-[#0b6b63] animate-pulse"></div>
-                    <div class="h-2 rounded-full bg-[#d2dedc]"></div>
                     <div class="h-2 rounded-full bg-[#d2dedc]"></div>
                 </div>
                 <div class="flex justify-between text-[11px] text-[#4a6366] mt-2 font-medium overflow-x-auto gap-2">
                     <span class="text-[#0b6b63] font-bold shrink-0">✓ 1. Pre-Test</span>
-                    <span class="text-[#0b6b63] font-bold shrink-0">✓ 2. Game Katarsis</span>
-                    <span class="text-[#0b6b63] font-bold shrink-0">★ 3. Kartu Apresiasi</span>
-                    <span class="shrink-0">4. Post-Test</span>
-                    <span class="shrink-0">5. Kirim Hasil</span>
+                    <span class="text-[#0b6b63] font-bold shrink-0">✓ 2. Butterfly Hug</span>
+                    <span class="text-[#0b6b63] font-bold shrink-0">✓ 3. Game Stres</span>
+                    <span class="text-[#0b6b63] font-bold shrink-0">★ 4. Kartu Apresiasi</span>
+                    <span class="shrink-0">5. Post-Test</span>
                 </div>
             </div>
 

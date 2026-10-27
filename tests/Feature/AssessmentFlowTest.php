@@ -54,7 +54,29 @@ class AssessmentFlowTest extends TestCase
         $this->assertNotNull($preTest);
         $preTestResp->assertRedirect(route('pre-test.result', $preTest->id));
 
-        // Step 2: Game Play page & Log submission
+        // Step 2: Butterfly Hug Intervention
+        $interventionPageResp = $this->actingAs($nurse)->get('/intervention');
+        $interventionPageResp->assertStatus(200);
+        $interventionPageResp->assertSee('Butterfly Hug');
+
+        $interventionStoreResp = $this->actingAs($nurse)->post('/intervention', [
+            'tension_before' => 8,
+            'tension_after' => 4,
+            'duration_seconds' => 120,
+            'tempo_ms' => 1600,
+            'taps_count' => 75,
+        ]);
+        $interventionStoreResp->assertRedirect(route('game.play'));
+        $this->assertDatabaseHas('interventions', [
+            'user_id' => $nurse->id,
+            'type' => 'butterfly_hug',
+            'tension_before' => 8,
+            'tension_after' => 4,
+            'tension_diff' => 4,
+            'duration_seconds' => 120,
+        ]);
+
+        // Step 3: Game Play page & Log submission
         $gamePageResp = $this->actingAs($nurse)->get('/game/play');
         $gamePageResp->assertStatus(200);
 
@@ -76,7 +98,7 @@ class AssessmentFlowTest extends TestCase
         $gamePageAfterResp->assertSee('Sesi game telah tercatat');
         $gamePageAfterResp->assertSee(route('thank-you.create'));
 
-        // Step 3: Thank You Card
+        // Step 4: Thank You Card
         $thankYouResp = $this->actingAs($nurse)->post('/thank-you', [
             'recipient_name' => 'Ns. Erni Gumilar',
             'message' => 'Terima kasih atas kerja samanya hari ini.',

@@ -29,6 +29,7 @@
         /* Group Super Headers */
         .group-identity { background-color: #132628; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-pre { background-color: #0b6b63; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
+        .group-butterfly { background-color: #1a5650; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-game { background-color: #e8501a; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-thankyou { background-color: #08524c; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
         .group-post { background-color: #0b6b63; color: #ffffff; font-weight: bold; text-align: center; font-size: 10pt; }
@@ -68,20 +69,20 @@
     <table>
         <!-- Hospital Title Block -->
         <tr>
-            <td colspan="30" class="title-main">RSUD WELAS ASIH · RUANG UMAR BIN KHATTAB 2</td>
+            <td colspan="35" class="title-main">RSUD WELAS ASIH · RUANG UMAR BIN KHATTAB 2</td>
         </tr>
         <tr>
-            <td colspan="30" class="title-sub">REKAPITULASI MONITORING BURNOUT PERAWAT & AKTIVITAS RELAKSASI MINI GAME</td>
+            <td colspan="35" class="title-sub">REKAPITULASI MONITORING BURNOUT PERAWAT & AKTIVITAS RELAKSASI INTERVENSI</td>
         </tr>
         <tr>
-            <td colspan="30" class="title-meta">
+            <td colspan="35" class="title-meta">
                 <strong>Periode Laporan:</strong> {{ $periodLabel }} &nbsp;|&nbsp; 
                 <strong>Waktu Unduh:</strong> {{ $exportDate }} &nbsp;|&nbsp; 
                 <strong>Kepala Ruangan:</strong> Oom Umriah,S.Kep.,Ners
             </td>
         </tr>
         <tr>
-            <td colspan="30" style="border:none; height: 12px;"></td>
+            <td colspan="35" style="border:none; height: 12px;"></td>
         </tr>
 
         <!-- Group Super-Headers -->
@@ -89,10 +90,11 @@
             <tr>
                 <th colspan="5" class="group-identity">1. IDENTITAS & SESI PENGISIAN</th>
                 <th colspan="6" class="group-pre">2. EVALUASI PRE-TEST (SEBELUM)</th>
-                <th colspan="5" class="group-game">3. AKTIVITAS MINI GAME KATARSIS</th>
-                <th colspan="2" class="group-thankyou">4. KARTU TERIMA KASIH</th>
-                <th colspan="6" class="group-post">5. EVALUASI POST-TEST (SESUDAH)</th>
-                <th colspan="5" class="group-delta">6. KOMPARASI (&Delta;)</th>
+                <th colspan="5" class="group-butterfly">3. INTERVENSI BUTTERFLY HUG</th>
+                <th colspan="5" class="group-game">4. AKTIVITAS MINI GAME KATARSIS</th>
+                <th colspan="2" class="group-thankyou">5. KARTU TERIMA KASIH</th>
+                <th colspan="6" class="group-post">6. EVALUASI POST-TEST (SESUDAH)</th>
+                <th colspan="5" class="group-delta">7. KOMPARASI (&Delta;)</th>
                 <th class="group-meta">WAKTU</th>
             </tr>
 
@@ -111,6 +113,13 @@
                 <th class="sub-header" style="width: 65px;">EE (/54)</th>
                 <th class="sub-header" style="width: 65px;">DP (/30)</th>
                 <th class="sub-header" style="width: 65px;">PA (/48)</th>
+
+                <!-- Butterfly Hug -->
+                <th class="sub-header" style="width: 75px;">Tegang Awal</th>
+                <th class="sub-header" style="width: 75px;">Tegang Akhir</th>
+                <th class="sub-header" style="width: 75px;">&Delta; Tegang</th>
+                <th class="sub-header" style="width: 75px;">Durasi (s)</th>
+                <th class="sub-header" style="width: 75px;">Tepukan</th>
 
                 <!-- Game -->
                 <th class="sub-header" style="width: 75px;">Durasi (s)</th>
@@ -185,6 +194,13 @@
                     <td class="num-int">{{ $r['pre_dp'] ?? '' }}</td>
                     <td class="num-int">{{ $r['pre_pa'] ?? '' }}</td>
 
+                    <!-- Butterfly Hug -->
+                    <td class="num-int">{{ $r['intervention_before'] ?? '' }}</td>
+                    <td class="num-int">{{ $r['intervention_after'] ?? '' }}</td>
+                    <td class="num-int {{ isset($r['intervention_diff']) && $r['intervention_diff'] > 0 ? 'delta-improved' : '' }}">{{ $r['intervention_diff'] ?? '' }}</td>
+                    <td class="num-int">{{ $r['intervention_duration'] ?? '' }}</td>
+                    <td class="num-int">{{ $r['intervention_taps'] ?? '' }}</td>
+
                     <!-- Game -->
                     <td class="num-int">{{ $r['game_duration'] ?? '' }}</td>
                     <td class="num-int">{{ $r['game_score'] ?? '' }}</td>
@@ -232,10 +248,17 @@
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(J{{ $startRow }}:J{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(K{{ $startRow }}:K{{ $endRow }})</td>
 
-                <!-- Game Mean -->
+                <!-- Butterfly Hug Mean -->
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(L{{ $startRow }}:L{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(M{{ $startRow }}:M{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(N{{ $startRow }}:N{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold; background-color: #dff0e5; color: #2f7d52;">=AVERAGE(N{{ $startRow }}:N{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(O{{ $startRow }}:O{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(P{{ $startRow }}:P{{ $endRow }})</td>
+
+                <!-- Game Mean -->
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(Q{{ $startRow }}:Q{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(R{{ $startRow }}:R{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(S{{ $startRow }}:S{{ $endRow }})</td>
                 <td class="text-center">-</td>
                 <td class="text-center">-</td>
 
@@ -244,19 +267,19 @@
                 <td class="text-center">-</td>
 
                 <!-- Post Mean -->
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(S{{ $startRow }}:S{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(T{{ $startRow }}:T{{ $endRow }})</td>
-                <td class="text-center">-</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(V{{ $startRow }}:V{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold;">=AVERAGE(W{{ $startRow }}:W{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(X{{ $startRow }}:X{{ $endRow }})</td>
-
-                <!-- Delta Mean -->
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(Y{{ $startRow }}:Y{{ $endRow }})</td>
-                <td class="num-dec" style="font-weight: bold; background-color: #dff0e5; color: #2f7d52;">=AVERAGE(Z{{ $startRow }}:Z{{ $endRow }})</td>
+                <td class="text-center">-</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(AA{{ $startRow }}:AA{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(AB{{ $startRow }}:AB{{ $endRow }})</td>
                 <td class="num-dec" style="font-weight: bold;">=AVERAGE(AC{{ $startRow }}:AC{{ $endRow }})</td>
+
+                <!-- Delta Mean -->
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AD{{ $startRow }}:AD{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold; background-color: #dff0e5; color: #2f7d52;">=AVERAGE(AE{{ $startRow }}:AE{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AF{{ $startRow }}:AF{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AG{{ $startRow }}:AG{{ $endRow }})</td>
+                <td class="num-dec" style="font-weight: bold;">=AVERAGE(AH{{ $startRow }}:AH{{ $endRow }})</td>
                 <td class="text-center" style="font-size: 8pt; color: #555;">Formula Excel Aktif</td>
             </tr>
         </tbody>

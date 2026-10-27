@@ -136,6 +136,11 @@ class AdminController extends Controller
                 'Pre_EE_Kelelahan_Emosional',
                 'Pre_DP_Depersonalisasi',
                 'Pre_PA_Pencapaian_Diri',
+                'Intervensi_Tegang_Sebelum',
+                'Intervensi_Tegang_Sesudah',
+                'Intervensi_Penurunan_Tegang',
+                'Intervensi_Durasi_Detik',
+                'Intervensi_Tepukan',
                 'Game_Durasi_Detik',
                 'Game_Skor_Poin',
                 'Game_Beban_Hancur',
@@ -174,6 +179,11 @@ class AdminController extends Controller
                     $r['pre_ee'] ?? '',
                     $r['pre_dp'] ?? '',
                     $r['pre_pa'] ?? '',
+                    $r['intervention_before'] ?? '',
+                    $r['intervention_after'] ?? '',
+                    $r['intervention_diff'] ?? '',
+                    $r['intervention_duration'] ?? '',
+                    $r['intervention_taps'] ?? '',
                     $r['game_duration'] ?? '',
                     $r['game_score'] ?? '',
                     $r['game_smashed'] ?? '',
@@ -213,6 +223,7 @@ class AdminController extends Controller
         $users = User::where('role', '!=', 'Kepala Ruangan')
             ->with([
                 'assessments' => fn ($q) => $q->where('status', 'completed')->orderBy('completed_at', 'asc'),
+                'interventions' => fn ($q) => $q->orderBy('created_at', 'asc'),
                 'gameLogs' => fn ($q) => $q->orderBy('created_at', 'asc'),
                 'thankYouCards' => fn ($q) => $q->orderBy('created_at', 'asc'),
             ])
@@ -225,10 +236,11 @@ class AdminController extends Controller
             $assessments = $user->assessments;
             $preTests = $assessments->where('type', 'pre_test')->values();
             $postTests = $assessments->where('type', 'post_test')->values();
+            $interventions = $user->interventions;
             $gameLogs = $user->gameLogs;
             $thankYouCards = $user->thankYouCards;
 
-            $totalSessions = max($preTests->count(), $postTests->count());
+            $totalSessions = max($preTests->count(), $postTests->count(), $interventions->count());
 
             if ($totalSessions === 0) {
                 // Nurse has not submitted anything yet
@@ -245,6 +257,7 @@ class AdminController extends Controller
                         'is_complete' => false,
                         'has_pre' => false,
                         'has_post' => false,
+                        'has_intervention' => false,
                         'has_game' => false,
                         'has_thank_you' => false,
                         'thank_you_recipient' => null,
@@ -256,6 +269,14 @@ class AdminController extends Controller
                         'pre_ee' => null,
                         'pre_dp' => null,
                         'pre_pa' => null,
+
+                        'intervention_type' => null,
+                        'intervention_before' => null,
+                        'intervention_after' => null,
+                        'intervention_diff' => null,
+                        'intervention_duration' => null,
+                        'intervention_tempo' => null,
+                        'intervention_taps' => null,
 
                         'game_duration' => null,
                         'game_score' => null,
@@ -303,7 +324,21 @@ class AdminController extends Controller
                     }
                 }
 
-                // Match game log between preTest and postTest
+                // Match intervention between preTest and postTest
+                $intervention = null;
+                if ($postTest && $postTime) {
+                    $minTime = $preTime ?? $postTime->copy()->subHours(2);
+                    $maxTime = $postTime->copy()->addMinutes(15);
+                    $intervention = $interventions
+                        ->filter(fn($iv) => $iv->created_at && $iv->created_at->gte($minTime) && $iv->created_at->lte($maxTime))
+                        ->last() ?? $interventions->get($i);
+                } elseif ($preTest && $preTime) {
+                    $intervention = $interventions->filter(fn($iv) => $iv->created_at && $iv->created_at->gte($preTime))->last() ?? $interventions->get($i);
+                } else {
+                    $intervention = $interventions->get($i);
+                }
+
+                // Match game log between intervention/preTest and postTest
                 $gameLog = null;
                 if ($postTest && $postTime) {
                     $minTime = $preTime ?? $postTime->copy()->subHours(2);
@@ -329,7 +364,7 @@ class AdminController extends Controller
                     $thankYouCard = $thankYouCards->get($i);
                 }
 
-                $sessionCompletedCarbon = $postTime ?? $preTime;
+                $sessionCompletedCarbon = $postTime ?? $preTime ?? ($intervention ? $intervention->created_at : null);
 
                 // Check date range filter
                 if ($startCarbon && $sessionCompletedCarbon && $sessionCompletedCarbon->lt($startCarbon)) {
@@ -382,6 +417,7 @@ class AdminController extends Controller
                     'is_complete' => $isComplete,
                     'has_pre' => $preTest !== null,
                     'has_post' => $postTest !== null,
+                    'has_intervention' => $intervention !== null,
                     'has_game' => $gameLog !== null,
                     'has_thank_you' => $thankYouCard !== null,
 
@@ -392,6 +428,15 @@ class AdminController extends Controller
                     'pre_ee' => $preTest?->ee_score,
                     'pre_dp' => $preTest?->dp_score,
                     'pre_pa' => $preTest?->pa_score,
+
+                    // Intervention Butterfly Hug
+                    'intervention_type' => $intervention?->type,
+                    'intervention_before' => $intervention?->tension_before,
+                    'intervention_after' => $intervention?->tension_after,
+                    'intervention_diff' => $intervention?->tension_diff,
+                    'intervention_duration' => $intervention?->duration_seconds,
+                    'intervention_tempo' => $intervention?->tempo_ms,
+                    'intervention_taps' => $intervention?->taps_count,
 
                     // Game
                     'game_duration' => $gameLog?->duration_seconds,
@@ -449,6 +494,8 @@ class AdminController extends Controller
         $preOnlyCount = 0;
         $emptyCount = 0;
         $thankYouCount = 0;
+        $interventionCount = 0;
+        $sumTensionDiff = 0;
 
         $sumPrePct = 0;
         $sumPostPct = 0;
@@ -477,6 +524,11 @@ class AdminController extends Controller
                 $emptyCount++;
             }
 
+            if (!empty($r['has_intervention']) && $r['intervention_diff'] !== null) {
+                $interventionCount++;
+                $sumTensionDiff += $r['intervention_diff'];
+            }
+
             if ($r['has_game'] && $r['game_score'] !== null) {
                 $gamePlayerCount++;
                 $sumGameScore += $r['game_score'];
@@ -491,6 +543,7 @@ class AdminController extends Controller
         $avgPostPct = $completeCount > 0 ? round($sumPostPct / $completeCount, 2) : 0;
         $avgDeltaPct = $completeCount > 0 ? round($sumDeltaPct / $completeCount, 2) : 0;
         $avgGameScore = $gamePlayerCount > 0 ? round($sumGameScore / $gamePlayerCount) : 0;
+        $avgTensionDiff = $interventionCount > 0 ? round($sumTensionDiff / $interventionCount, 1) : 0;
 
         return [
             'total_sessions' => $totalSessions,
@@ -505,6 +558,8 @@ class AdminController extends Controller
             'improved_percentage' => $completeCount > 0 ? round(($improvedCount / $completeCount) * 100, 1) : 0,
             'avg_game_score' => $avgGameScore,
             'total_thank_you_cards' => $thankYouCount,
+            'total_interventions' => $interventionCount,
+            'avg_tension_diff' => $avgTensionDiff,
         ];
     }
 }
