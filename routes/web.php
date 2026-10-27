@@ -9,8 +9,13 @@ use App\Http\Controllers\ThankYouCardController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('portal');
-})->name('portal');
+    if (auth()->check()) {
+        return auth()->user()->role === 'Kepala Ruangan'
+            ? redirect()->route('admin.rekap')
+            : redirect()->route('dashboard');
+    }
+    return redirect()->route('login');
+});
 
 Route::middleware('auth')->group(function () {
     // Kepala Ruangan Monitoring & Rekapitulasi Dashboard
