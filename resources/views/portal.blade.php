@@ -141,7 +141,7 @@
                             <span>Supervisi Klinis Terpadu</span>
                         </span>
                         <span class="text-[11px] font-semibold text-emerald-900 bg-emerald-100/70 px-2.5 py-1 rounded-full border border-emerald-200">
-                            Ruang UBK 2
+                            Ruang Umar Bin Khattab 2
                         </span>
                     </div>
 
@@ -158,7 +158,7 @@
                                 Supervisi Keperawatan
                             </h2>
                             <p class="text-xs sm:text-sm font-semibold text-[#047857]">
-                                Ruang UBK 2 · Mutu Asuhan & Keselamatan Pasien
+                                Mutu Asuhan & Keselamatan Pasien
                             </p>
                         </div>
                     </div>
