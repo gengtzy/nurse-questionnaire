@@ -109,6 +109,67 @@ class ThankYouCardTest extends TestCase
         ]);
     }
 
+    public function test_recipient_nurse_can_mark_single_message_as_read(): void
+    {
+        $sender = $this->createNurseUser('Ira Gusyanda, A.Md.Kep');
+        $recipient = $this->createNurseUser('Elis Sari Ningrum, A.Md.Kep');
+
+        $card = ThankYouCard::create([
+            'user_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'recipient_name' => $recipient->name,
+            'message' => 'Terima kasih atas bantuannya tadi.',
+            'is_read' => false,
+        ]);
+
+        $response = $this->actingAs($recipient)->postJson("/thank-you/{$card->id}/mark-read");
+        $response->assertStatus(200);
+        $response->assertJson(['success' => true, 'unread_count' => 0]);
+
+        $this->assertDatabaseHas('thank_you_cards', [
+            'id' => $card->id,
+            'is_read' => true,
+        ]);
+    }
+
+    public function test_recipient_nurse_can_reply_to_message_and_create_new_card(): void
+    {
+        $sender = $this->createNurseUser('Ira Gusyanda, A.Md.Kep');
+        $recipient = $this->createNurseUser('Elis Sari Ningrum, A.Md.Kep');
+
+        // Sender sends card to recipient
+        ThankYouCard::create([
+            'user_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'recipient_name' => $recipient->name,
+            'message' => 'Terima kasih sudah kompak selama shift.',
+            'is_read' => false,
+        ]);
+
+        // Recipient replies back to sender
+        $replyResponse = $this->actingAs($recipient)->postJson('/thank-you/reply', [
+            'recipient_id' => $sender->id,
+            'message' => 'Sama-sama, senang bisa saling bantu dan jaga shift bareng!',
+        ]);
+
+        $replyResponse->assertStatus(200);
+        $replyResponse->assertJson(['success' => true]);
+
+        // Check new card created with recipient = sender
+        $this->assertDatabaseHas('thank_you_cards', [
+            'user_id' => $recipient->id,
+            'recipient_id' => $sender->id,
+            'recipient_name' => $sender->name,
+            'message' => 'Sama-sama, senang bisa saling bantu dan jaga shift bareng!',
+            'is_read' => false,
+        ]);
+
+        // Sender can now see the reply in their dashboard
+        $senderDash = $this->actingAs($sender)->get('/dashboard');
+        $senderDash->assertStatus(200);
+        $senderDash->assertSee('Sama-sama, senang bisa saling bantu dan jaga shift bareng!');
+    }
+
     public function test_karu_rekap_dashboard_does_not_contain_pesan_column(): void
     {
         $karu = $this->createKaruUser();

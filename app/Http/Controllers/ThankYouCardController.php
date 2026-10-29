@@ -85,6 +85,18 @@ class ThankYouCardController extends Controller
     }
 
     /**
+     * Standard reply appreciation message options.
+     */
+    public const PRESET_REPLY_MESSAGES = [
+        'Sama-sama, senang bisa saling bantu dan jaga shift bareng!',
+        'Terima kasih kembali, tetap semangat dan jaga kesehatan ya!',
+        'Terima kasih sudah kompak dan saling dukung selama shift.',
+        'Terima kasih sudah tenang dan sabar menghadapi pasien tadi.',
+        'Terima kasih sudah mengingatkan saya untuk minum dan istirahat.',
+        'Kerja kamu hari ini juga sangat luar biasa bagi pasien kita!',
+    ];
+
+    /**
      * Mark all received thank you cards as read.
      */
     public function markAsRead(Request $request): JsonResponse
@@ -99,6 +111,68 @@ class ThankYouCardController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Semua pesan ditandai telah dibaca.',
+        ]);
+    }
+
+    /**
+     * Mark a single thank you card as read.
+     */
+    public function markSingleAsRead(ThankYouCard $card): JsonResponse
+    {
+        $user = Auth::user();
+
+        if ($card->recipient_id === $user->id && ! $card->is_read) {
+            $card->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+        }
+
+        $unreadCount = $user->receivedThankYouCards()->where('is_read', false)->count();
+
+        return response()->json([
+            'success' => true,
+            'unread_count' => $unreadCount,
+        ]);
+    }
+
+    /**
+     * Send a reply appreciation message to the sender.
+     */
+    public function reply(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'recipient_id' => ['required', 'exists:users,id'],
+            'message' => ['required', 'string', 'max:500'],
+        ], [
+            'recipient_id.required' => 'Penerima tidak valid.',
+            'recipient_id.exists' => 'Penerima tidak ditemukan di sistem.',
+            'message.required' => 'Pesan balasan wajib diisi.',
+            'message.max' => 'Pesan balasan maksimal 500 karakter.',
+        ]);
+
+        $recipient = User::where('id', $validated['recipient_id'])
+            ->where('role', '!=', 'Kepala Ruangan')
+            ->firstOrFail();
+
+        $sender = Auth::user();
+
+        $newCard = $sender->thankYouCards()->create([
+            'recipient_id' => $recipient->id,
+            'recipient_name' => $recipient->name,
+            'message' => trim($validated['message']),
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => "Pesan balasan berhasil dikirim ke {$recipient->name}!",
+            'card' => [
+                'id' => $newCard->id,
+                'recipient_name' => $recipient->name,
+                'message' => $newCard->message,
+                'created_at' => $newCard->created_at->setTimezone('Asia/Jakarta')->format('d M Y, H:i'),
+            ],
         ]);
     }
 }

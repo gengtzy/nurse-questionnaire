@@ -61,7 +61,9 @@ Route::middleware('auth')->group(function () {
     // Thank You Card Routes (Tahap Apresiasi Rekan)
     Route::get('/thank-you', [ThankYouCardController::class, 'create'])->name('thank-you.create');
     Route::post('/thank-you', [ThankYouCardController::class, 'store'])->name('thank-you.store');
+    Route::post('/thank-you/reply', [ThankYouCardController::class, 'reply'])->name('thank-you.reply');
     Route::post('/thank-you/mark-as-read', [ThankYouCardController::class, 'markAsRead'])->name('thank-you.mark-as-read');
+    Route::post('/thank-you/{card}/mark-read', [ThankYouCardController::class, 'markSingleAsRead'])->name('thank-you.mark-single-read');
 
     // Post-test Routes (Step 4)
     Route::get('/assessment/post-test', [AssessmentController::class, 'createPostTest'])->name('post-test.create');
