@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Assessment;
 use App\Models\ThankYouCard;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -27,9 +28,21 @@ class ThankYouCardController extends Controller
     /**
      * Show the Thank You Card creation form.
      */
-    public function create(): View
+    public function create(): View|RedirectResponse
     {
         $user = Auth::user();
+
+        $latestPreTest = Assessment::where('user_id', $user->id)
+            ->where('type', 'pre_test')
+            ->where('status', 'completed')
+            ->latest()
+            ->first();
+
+        // Perawat dengan burnout tinggi tidak dapat lanjut ke kirim pesan (mentok di peringatan)
+        if ($latestPreTest && $latestPreTest->category === 'Tinggi') {
+            return redirect()->route('intervention.create')
+                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
+        }
 
         // Get colleague nurses in UBK 2 (excluding Karu and self)
         $colleagues = User::where('id', '!=', $user->id)

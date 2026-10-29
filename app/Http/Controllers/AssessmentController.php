@@ -77,6 +77,17 @@ class AssessmentController extends Controller
             'between' => ':attribute harus bernilai antara 0 sampai 6.',
         ], $attributes);
 
+        $latestPreTest = Assessment::where('user_id', Auth::id())
+            ->where('type', 'pre_test')
+            ->where('status', 'completed')
+            ->latest()
+            ->first();
+
+        if ($latestPreTest && $latestPreTest->category === 'Tinggi') {
+            return redirect()->route('intervention.create')
+                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
+        }
+
         $answers = $validated['answers'];
 
         $eeScore = 0; // max 54
@@ -182,6 +193,12 @@ class AssessmentController extends Controller
                 ->with('info', 'Silakan selesaikan Kuesioner Awal (Pre-test) terlebih dahulu.');
         }
 
+        // Perawat dengan burnout tinggi tidak dapat lanjut ke Post-Test (mentok di peringatan)
+        if ($latestPreTest->category === 'Tinggi') {
+            return redirect()->route('intervention.create')
+                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
+        }
+
         $latestGame = GameLog::where('user_id', $user->id)->latest()->first();
 
         $existingPostTest = Assessment::where('user_id', $user->id)
@@ -225,6 +242,17 @@ class AssessmentController extends Controller
             'required' => ':attribute wajib dijawab sebelum melanjutkan.',
             'between' => ':attribute harus bernilai antara 0 sampai 6.',
         ], $attributes);
+
+        $latestPreTest = Assessment::where('user_id', Auth::id())
+            ->where('type', 'pre_test')
+            ->where('status', 'completed')
+            ->latest()
+            ->first();
+
+        if ($latestPreTest && $latestPreTest->category === 'Tinggi') {
+            return redirect()->route('intervention.create')
+                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
+        }
 
         $answers = $validated['answers'];
 

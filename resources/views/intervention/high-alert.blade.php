@@ -22,21 +22,21 @@
             <div class="bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs mb-3">
                     <span class="font-bold text-[#b3261e] uppercase tracking-wider font-mono">Tahap 2: Peringatan Klinis &amp; Konseling (Burnout Tinggi)</span>
-                    <span class="text-[#4a6366] font-mono">Langkah 2 dari 5</span>
+                    <span class="text-[#b3261e] font-mono font-bold">⛔ Evaluasi Dihentikan untuk Tindakan Klinis</span>
                 </div>
                 <div class="grid grid-cols-5 gap-2">
                     <div class="h-2 rounded-full bg-[#0b6b63]"></div>
-                    <div class="h-2 rounded-full bg-[#b3261e] animate-pulse"></div>
-                    <div class="h-2 rounded-full bg-[#d2dedc]"></div>
-                    <div class="h-2 rounded-full bg-[#d2dedc]"></div>
-                    <div class="h-2 rounded-full bg-[#d2dedc]"></div>
+                    <div class="h-2 rounded-full bg-[#b3261e]"></div>
+                    <div class="h-2 rounded-full bg-[#e2e8f0]"></div>
+                    <div class="h-2 rounded-full bg-[#e2e8f0]"></div>
+                    <div class="h-2 rounded-full bg-[#e2e8f0]"></div>
                 </div>
                 <div class="flex justify-between text-[11px] text-[#4a6366] mt-2 font-medium overflow-x-auto gap-2">
                     <span class="text-[#0b6b63] font-bold shrink-0">✓ 1. Pre-Test</span>
-                    <span class="text-[#b3261e] font-bold shrink-0">★ 2. Peringatan Klinis</span>
-                    <span class="shrink-0">3. Game Katarsis</span>
-                    <span class="shrink-0">4. Kirim Pesan</span>
-                    <span class="shrink-0">5. Post-Test</span>
+                    <span class="text-[#b3261e] font-bold shrink-0">🛑 2. Peringatan Klinis</span>
+                    <span class="text-gray-400 line-through shrink-0" title="Tidak dapat dilanjutkan">3. Game Katarsis</span>
+                    <span class="text-gray-400 line-through shrink-0" title="Tidak dapat dilanjutkan">4. Kirim Pesan</span>
+                    <span class="text-gray-400 line-through shrink-0" title="Tidak dapat dilanjutkan">5. Post-Test</span>
                 </div>
             </div>
 
@@ -132,31 +132,45 @@
                         </a>
                     </div>
 
-                    <!-- Confirmation Form & Next Step -->
-                    <form method="POST" action="{{ route('intervention.store') }}" class="pt-2">
-                        @csrf
-                        <input type="hidden" name="type" value="counseling_alert">
-                        <input type="hidden" name="tension_before" value="8">
-                        <input type="hidden" name="tension_after" value="6">
-                        <input type="hidden" name="duration_seconds" value="60">
-                        <input type="hidden" name="notes" value="Rujukan Konseling Psikoterapi RSUD Welas Asih (Skor Burnout Tinggi)">
+                    <!-- Stop Evaluation Notice (Perawat Tidak Dapat Lanjut ke Step Selanjutnya) -->
+                    <div class="p-5 rounded-2xl bg-red-50 border-2 border-red-200 space-y-3">
+                        <div class="flex items-center gap-2 text-sm font-bold text-[#b3261e]">
+                            <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>Evaluasi Dihentikan: Anda Diwajibkan Mengambil Jeda Istirahat &amp; Konseling</span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-red-950 leading-relaxed">
+                            Berdasarkan protokol keselamatan pasien dan perlindungan kesehatan kerja perawat, dengan tingkat kelelahan <strong>TINGGI</strong>, Anda <strong>tidak diperkenankan melanjutkan ke aktivitas Game Katarsis, Kirim Pesan, maupun Post-Test</strong>. 
+                        </p>
+                        <p class="text-xs text-red-800 leading-relaxed">
+                            Sistem telah mencatat rekomendasi rujukan ini untuk koordinasi bersama Kepala Ruangan UBK 2 demi penyesuaian beban kerja Anda.
+                        </p>
 
-                        <div class="flex flex-col sm:flex-row items-center gap-3">
-                            <button
-                                type="submit"
-                                class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-sm shadow-md transition active:scale-[0.98]"
+                        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                            <a
+                                href="https://wa.me/?text=Halo%20Tim%20Konseling%20RSUD%20Welas%20Asih,%20saya%20perawat%20Ruang%20UBK%202%20ingin%20berkonsultasi%20terkait%20hasil%20burnout%20tinggi."
+                                target="_blank"
+                                class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#047857] hover:bg-[#065f46] text-white font-bold text-xs shadow-md transition text-center inline-flex items-center justify-center gap-2"
                             >
-                                Saya Mengerti &amp; Lanjut ke Game Katarsis &rarr;
-                            </button>
+                                <span>💬 Hubungi Tim Konseling (WhatsApp)</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
+                            <a
+                                href="{{ route('dashboard') }}"
+                                class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition text-center"
+                            >
+                                Kembali ke Dashboard
+                            </a>
                             <button
                                 type="button"
                                 id="toggleSoundBtn"
-                                class="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition"
+                                class="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-red-200 bg-red-100/70 hover:bg-red-200/70 text-xs font-semibold text-red-800 transition"
                             >
                                 🔊 Bunyikan Contoh Sirene Alarm
                             </button>
                         </div>
-                    </form>
+                    </div>
 
                 </div>
             </div>

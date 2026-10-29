@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Assessment;
 use App\Models\GameLog;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -14,7 +15,7 @@ class GameController extends Controller
     /**
      * Display the stress-relief mini game page.
      */
-    public function play(): View
+    public function play(): View|RedirectResponse
     {
         $user = Auth::user();
 
@@ -24,6 +25,12 @@ class GameController extends Controller
             ->where('status', 'completed')
             ->latest()
             ->first();
+
+        // Perawat dengan burnout tinggi tidak dapat lanjut ke game (mentok di peringatan)
+        if ($latestPreTest && $latestPreTest->category === 'Tinggi') {
+            return redirect()->route('intervention.create')
+                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
+        }
 
         // Get best game score and total games played
         $bestScore = (int) (GameLog::where('user_id', $user->id)->max('score') ?? 0);

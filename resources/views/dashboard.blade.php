@@ -33,6 +33,16 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
                             </a>
+                        @elseif (($latestPreTest->category ?? '') === 'Tinggi')
+                            <a
+                                href="{{ route('intervention.create') }}"
+                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#b3261e] hover:bg-[#961f18] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                            >
+                                <span>Lihat Peringatan Klinis &amp; Konseling 🔔</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                </svg>
+                            </a>
                         @elseif (! $latestIntervention)
                             <a
                                 href="{{ route('intervention.create') }}"
@@ -40,8 +50,6 @@
                             >
                                 @if (($latestPreTest->category ?? '') === 'Rendah')
                                     <span>Lanjut Tahap 2: Relaksasi EFT 🌿</span>
-                                @elseif (($latestPreTest->category ?? '') === 'Tinggi')
-                                    <span>Lanjut Tahap 2: Peringatan &amp; Konseling 🔔</span>
                                 @else
                                     <span>Lanjut Tahap 2: Butterfly Hug 🦋</span>
                                 @endif
@@ -104,12 +112,14 @@
                     <span class="text-xs font-mono text-[#0b6b63] font-bold bg-[#dbeeeb] px-3 py-1 rounded-full">
                         @if (! $latestPreTest)
                             Tahap 1: Pre-test Aktif
+                        @elseif ($latestPreTest->category === 'Tinggi')
+                            <span class="text-[#b3261e]">Sesi Dihentikan: Rujukan Konseling 🛑</span>
                         @elseif (! $latestIntervention)
-                            Tahap 2: Butterfly Hug Aktif
+                            Tahap 2: Intervensi Aktif
                         @elseif (! $latestGame)
                             Tahap 3: Game Katarsis Aktif
                         @elseif (! $latestThankYou)
-                            Tahap 4: Kartu Apresiasi Aktif
+                            Tahap 4: Kirim Pesan Aktif
                         @elseif (! $latestPostTest)
                             Tahap 5: Post-test Aktif
                         @else
@@ -175,17 +185,20 @@
                     </div>
 
                     <!-- Step 3: Mini Game -->
-                    <div class="p-4 rounded-xl border {{ $latestGame ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestIntervention ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
+                    @php $isHighBurnout = ($latestPreTest && $latestPreTest->category === 'Tinggi'); @endphp
+                    <div class="p-4 rounded-xl border {{ $isHighBurnout ? 'border-red-200 bg-red-50/50 opacity-60' : ($latestGame ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestIntervention ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60')) }} relative">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="w-7 h-7 rounded-full {{ $latestGame ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestIntervention ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
-                                {{ $latestGame ? '✓' : '3' }}
+                            <span class="w-7 h-7 rounded-full {{ $isHighBurnout ? 'bg-red-100 text-[#b3261e]' : ($latestGame ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestIntervention ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]')) }} text-xs font-bold flex items-center justify-center">
+                                {{ $isHighBurnout ? '⛔' : ($latestGame ? '✓' : '3') }}
                             </span>
-                            <span class="text-[10px] font-mono font-bold {{ $latestGame ? 'text-[#0b6b63]' : ($latestIntervention ? 'text-[#0b6b63]' : 'text-[#4a6366]') }} uppercase">
-                                {{ $latestGame ? 'Selesai' : ($latestIntervention ? 'Aktif' : 'Menunggu') }}
+                            <span class="text-[10px] font-mono font-bold {{ $isHighBurnout ? 'text-[#b3261e]' : ($latestGame ? 'text-[#0b6b63]' : ($latestIntervention ? 'text-[#0b6b63]' : 'text-[#4a6366]')) }} uppercase">
+                                {{ $isHighBurnout ? 'Dihentikan' : ($latestGame ? 'Selesai' : ($latestIntervention ? 'Aktif' : 'Menunggu')) }}
                             </span>
                         </div>
                         <h3 class="font-bold text-xs text-[#132628]">3. Aktivitas Game</h3>
-                        @if ($latestGame)
+                        @if ($isHighBurnout)
+                            <p class="text-[11px] text-[#b3261e] mt-1">Tidak dapat diakses karena dialihkan ke rujukan konseling.</p>
+                        @elseif ($latestGame)
                             <p class="text-[11px] text-[#e8501a] font-bold mt-1">Skor: {{ number_format($latestGame->score) }} Poin</p>
                             <a href="{{ route('game.play') }}" class="text-[11px] text-[#4a6366] underline mt-1.5 block hover:text-[#132628]">Main Ulang &rarr;</a>
                         @elseif ($latestIntervention)
@@ -197,17 +210,19 @@
                     </div>
 
                     <!-- Step 4: Kartu Terima Kasih -->
-                    <div class="p-4 rounded-xl border {{ $latestThankYou ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestGame ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
+                    <div class="p-4 rounded-xl border {{ $isHighBurnout ? 'border-red-200 bg-red-50/50 opacity-60' : ($latestThankYou ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestGame ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60')) }} relative">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="w-7 h-7 rounded-full {{ $latestThankYou ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestGame ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
-                                {{ $latestThankYou ? '✓' : '4' }}
+                            <span class="w-7 h-7 rounded-full {{ $isHighBurnout ? 'bg-red-100 text-[#b3261e]' : ($latestThankYou ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestGame ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]')) }} text-xs font-bold flex items-center justify-center">
+                                {{ $isHighBurnout ? '⛔' : ($latestThankYou ? '✓' : '4') }}
                             </span>
-                            <span class="text-[10px] font-mono font-bold {{ $latestThankYou ? 'text-[#0b6b63]' : ($latestGame ? 'text-[#0b6b63]' : 'text-[#4a6366]') }} uppercase">
-                                {{ $latestThankYou ? 'Selesai' : ($latestGame ? 'Aktif' : 'Menunggu') }}
+                            <span class="text-[10px] font-mono font-bold {{ $isHighBurnout ? 'text-[#b3261e]' : ($latestThankYou ? 'text-[#0b6b63]' : ($latestGame ? 'text-[#0b6b63]' : 'text-[#4a6366]')) }} uppercase">
+                                {{ $isHighBurnout ? 'Dihentikan' : ($latestThankYou ? 'Selesai' : ($latestGame ? 'Aktif' : 'Menunggu')) }}
                             </span>
                         </div>
                         <h3 class="font-bold text-xs text-[#132628]">4. Kartu Terima Kasih</h3>
-                        @if ($latestThankYou)
+                        @if ($isHighBurnout)
+                            <p class="text-[11px] text-[#b3261e] mt-1">Tidak dapat diakses karena dialihkan ke rujukan konseling.</p>
+                        @elseif ($latestThankYou)
                             <p class="text-[11px] text-[#0b6b63] font-semibold mt-1 truncate" title="{{ $latestThankYou->recipient_name }}: {{ $latestThankYou->message }}">
                                 Untuk: {{ $latestThankYou->recipient_name }}
                             </p>
@@ -221,17 +236,19 @@
                     </div>
 
                     <!-- Step 5: Post-test & Evaluasi -->
-                    <div class="p-4 rounded-xl border {{ $latestPostTest ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestThankYou ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60') }} relative">
+                    <div class="p-4 rounded-xl border {{ $isHighBurnout ? 'border-red-200 bg-red-50/50 opacity-60' : ($latestPostTest ? 'border-[#0b6b63]/30 bg-[#f9fbfa]' : ($latestThankYou ? 'border-[#0b6b63] bg-[#dbeeeb]/20 ring-2 ring-[#0b6b63]/20' : 'border-[#d2dedc] bg-[#f1f5f4]/50 opacity-60')) }} relative">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="w-7 h-7 rounded-full {{ $latestPostTest ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestThankYou ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]') }} text-xs font-bold flex items-center justify-center">
-                                {{ $latestPostTest ? '✓' : '5' }}
+                            <span class="w-7 h-7 rounded-full {{ $isHighBurnout ? 'bg-red-100 text-[#b3261e]' : ($latestPostTest ? 'bg-[#dbeeeb] text-[#0b6b63]' : ($latestThankYou ? 'bg-[#0b6b63] text-white animate-pulse' : 'bg-white border border-[#d2dedc] text-[#4a6366]')) }} text-xs font-bold flex items-center justify-center">
+                                {{ $isHighBurnout ? '⛔' : ($latestPostTest ? '✓' : '5') }}
                             </span>
-                            <span class="text-[10px] font-mono font-bold {{ $latestPostTest ? 'text-[#0b6b63]' : ($latestThankYou ? 'text-[#0b6b63]' : 'text-[#4a6366]') }} uppercase">
-                                {{ $latestPostTest ? 'Selesai' : ($latestThankYou ? 'Aktif' : 'Menunggu') }}
+                            <span class="text-[10px] font-mono font-bold {{ $isHighBurnout ? 'text-[#b3261e]' : ($latestPostTest ? 'text-[#0b6b63]' : ($latestThankYou ? 'text-[#0b6b63]' : 'text-[#4a6366]')) }} uppercase">
+                                {{ $isHighBurnout ? 'Dihentikan' : ($latestPostTest ? 'Selesai' : ($latestThankYou ? 'Aktif' : 'Menunggu')) }}
                             </span>
                         </div>
                         <h3 class="font-bold text-xs text-[#132628]">5. Kuesioner Akhir</h3>
-                        @if ($latestPostTest)
+                        @if ($isHighBurnout)
+                            <p class="text-[11px] text-[#b3261e] mt-1">Tidak dapat diakses karena dialihkan ke rujukan konseling.</p>
+                        @elseif ($latestPostTest)
                             <p class="text-[11px] text-[#0b6b63] font-semibold mt-1">Skor: {{ $latestPostTest->percentage }}% ({{ $latestPostTest->category }})</p>
                             <a href="{{ route('post-test.result', $latestPostTest->id) }}" class="text-[11px] text-[#0b6b63] underline font-bold mt-1.5 block">Lihat Komparasi &rarr;</a>
                         @elseif ($latestThankYou)

@@ -102,4 +102,40 @@ class InterventionBranchingTest extends TestCase
             'tension_after' => 2,
         ]);
     }
+
+    public function test_high_burnout_nurse_is_halted_at_warning_and_cannot_proceed_to_next_steps(): void
+    {
+        $nurse = $this->createNurse();
+
+        $preTest = Assessment::create([
+            'user_id' => $nurse->id,
+            'type' => 'pre_test',
+            'status' => 'completed',
+            'total_score' => 110,
+            'percentage' => 83.33,
+            'category' => 'Tinggi',
+            'created_at' => now(),
+        ]);
+
+        // Viewing intervention creates counseling_alert record automatically
+        $response = $this->actingAs($nurse)->get('/intervention');
+        $response->assertStatus(200);
+        $response->assertSee('Evaluasi Dihentikan');
+        $response->assertDontSee('Lanjut ke Game Katarsis');
+
+        $this->assertDatabaseHas('interventions', [
+            'user_id' => $nurse->id,
+            'type' => 'counseling_alert',
+        ]);
+
+        // Attempting to visit Game, Thank You Card, or Post-Test redirects back to warning
+        $gameResp = $this->actingAs($nurse)->get('/game/play');
+        $gameResp->assertRedirect(route('intervention.create'));
+
+        $thankYouResp = $this->actingAs($nurse)->get('/thank-you');
+        $thankYouResp->assertRedirect(route('intervention.create'));
+
+        $postTestResp = $this->actingAs($nurse)->get('/assessment/post-test');
+        $postTestResp->assertRedirect(route('intervention.create'));
+    }
 }

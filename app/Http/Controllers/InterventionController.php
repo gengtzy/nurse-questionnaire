@@ -53,6 +53,23 @@ class InterventionController extends Controller
         }
 
         if ($category === 'Tinggi') {
+            // Catat rujukan intervensi peringatan klinis secara otomatis agar muncul di tabel monitoring Karu
+            $existingAlert = $user->interventions()
+                ->where('type', 'counseling_alert')
+                ->where('created_at', '>=', $latestPreTest->created_at)
+                ->first();
+
+            if (! $existingAlert) {
+                $latestIntervention = $user->interventions()->create([
+                    'type' => 'counseling_alert',
+                    'tension_before' => 9,
+                    'tension_after' => 8,
+                    'duration_seconds' => 60,
+                    'notes' => 'Rujukan Konseling Psikoterapi RSUD Welas Asih (Skor Burnout Tinggi)',
+                ]);
+                $totalSessions = $user->interventions()->count();
+            }
+
             return view('intervention.high-alert', [
                 'user' => $user,
                 'latestPreTest' => $latestPreTest,
