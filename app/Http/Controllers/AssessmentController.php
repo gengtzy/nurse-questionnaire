@@ -36,7 +36,7 @@ class AssessmentController extends Controller
             $intervention = $user->interventions()->latest()->first();
             if (! $intervention) {
                 return redirect()->route('intervention.create')
-                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Intervensi Butterfly Hug.');
+                    ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Intervensi Relaksasi.');
             }
 
             $gameLog = GameLog::where('user_id', $user->id)->latest()->first();

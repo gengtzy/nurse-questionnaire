@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Assessment;
 use App\Models\GameLog;
+use App\Models\Intervention;
 use App\Models\ThankYouCard;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -47,7 +48,7 @@ class ThankYouCardTest extends TestCase
         $response = $this->actingAs($nurse1)->get('/thank-you');
 
         $response->assertStatus(200);
-        $response->assertSee('Kartu terima kasih untuk rekan');
+        $response->assertSee('Kirim Pesan Apresiasi untuk Rekan');
         $response->assertSee('Terima kasih sudah membantu saya hari ini.');
         $response->assertSee('Terima kasih sudah tenang dan sabar menghadapi pasien tadi.');
         $response->assertSee('Terima kasih sudah menggantikan saya saat saya butuh jeda.');
@@ -58,10 +59,11 @@ class ThankYouCardTest extends TestCase
 
     public function test_submitting_thank_you_card_stores_in_database_and_redirects_to_post_test(): void
     {
-        $nurse = $this->createNurseUser('Testuserperawat');
+        $nurse1 = $this->createNurseUser('Ira Gusyanda, A.Md.Kep');
+        $nurse2 = $this->createNurseUser('Elis Sari Ningrum, A.Md.Kep');
 
-        $response = $this->actingAs($nurse)->post('/thank-you', [
-            'recipient_name' => 'Elis Sari Ningrum, A.Md.Kep',
+        $response = $this->actingAs($nurse1)->post('/thank-you', [
+            'recipient_id' => $nurse2->id,
             'message' => 'Terima kasih sudah tenang dan sabar menghadapi pasien tadi.',
         ]);
 
@@ -69,13 +71,45 @@ class ThankYouCardTest extends TestCase
         $response->assertSessionHas('success');
 
         $this->assertDatabaseHas('thank_you_cards', [
-            'user_id' => $nurse->id,
+            'user_id' => $nurse1->id,
+            'recipient_id' => $nurse2->id,
             'recipient_name' => 'Elis Sari Ningrum, A.Md.Kep',
             'message' => 'Terima kasih sudah tenang dan sabar menghadapi pasien tadi.',
+            'is_read' => false,
         ]);
     }
 
-    public function test_karu_can_see_thank_you_card_in_rekap_dashboard_and_csv(): void
+    public function test_recipient_nurse_sees_inbox_and_can_mark_as_read(): void
+    {
+        $sender = $this->createNurseUser('Ira Gusyanda, A.Md.Kep');
+        $recipient = $this->createNurseUser('Elis Sari Ningrum, A.Md.Kep');
+
+        $card = ThankYouCard::create([
+            'user_id' => $sender->id,
+            'recipient_id' => $recipient->id,
+            'recipient_name' => $recipient->name,
+            'message' => 'Semangat dinas sore ya rekan!',
+            'is_read' => false,
+        ]);
+
+        // Recipient views dashboard and navbar contains inbox modal
+        $response = $this->actingAs($recipient)->get('/dashboard');
+        $response->assertStatus(200);
+        $response->assertSee('Semangat dinas sore ya rekan!');
+        $response->assertSee('Ira Gusyanda, A.Md.Kep');
+
+        // Mark as read
+        $markResponse = $this->actingAs($recipient)->postJson('/thank-you/mark-as-read');
+        $markResponse->assertStatus(200);
+        $markResponse->assertJson(['success' => true]);
+
+        $this->assertDatabaseHas('thank_you_cards', [
+            'id' => $card->id,
+            'is_read' => true,
+        ]);
+    }
+
+    public function test_karu_rekap_dashboard_does_not_contain_pesan_column(): void
     {
         $karu = $this->createKaruUser();
         $nurse = $this->createNurseUser('Rully Nasrulloh S, S.Kep.,Ners');
@@ -90,20 +124,30 @@ class ThankYouCardTest extends TestCase
             'created_at' => now()->subMinutes(30),
         ]);
 
+        Intervention::create([
+            'user_id' => $nurse->id,
+            'type' => 'butterfly_hug',
+            'duration_seconds' => 180,
+            'taps_count' => 180,
+            'tension_before' => 7,
+            'tension_after' => 3,
+            'created_at' => now()->subMinutes(25),
+        ]);
+
         GameLog::create([
             'user_id' => $nurse->id,
             'score' => 1500,
             'items_smashed' => 40,
             'duration_seconds' => 30,
             'boss_defeated' => true,
-            'created_at' => now()->subMinutes(25),
+            'created_at' => now()->subMinutes(20),
         ]);
 
         ThankYouCard::create([
             'user_id' => $nurse->id,
             'recipient_name' => 'Wendi Sunjana, S.Kep.,Ners',
             'message' => 'Kerja kamu hari ini sangat berarti bagi pasien kita.',
-            'created_at' => now()->subMinutes(20),
+            'created_at' => now()->subMinutes(15),
         ]);
 
         Assessment::create([
@@ -113,28 +157,27 @@ class ThankYouCardTest extends TestCase
             'total_score' => 45,
             'percentage' => 34.09,
             'category' => 'Rendah',
-            'created_at' => now()->subMinutes(15),
+            'created_at' => now()->subMinutes(10),
         ]);
 
-        // Rekap HTML view
+        // Rekap HTML view: column 'Kartu Terima Kasih' was removed as requested
         $response = $this->actingAs($karu)->get('/admin/rekap-data');
         $response->assertStatus(200);
-        $response->assertSee('Kartu Terima Kasih');
-        $response->assertSee('Wendi Sunjana, S.Kep.,Ners');
+        $response->assertDontSee('Kartu Terima Kasih');
+        $response->assertSee('Intervensi Relaksasi');
 
-        // CSV export
+        // CSV export: no Thank You Card column
         $csvResponse = $this->actingAs($karu)->get('/admin/rekap-data/export?format=csv');
         $csvResponse->assertStatus(200);
         $csvContent = $csvResponse->streamedContent();
-        $this->assertStringContainsString('Kartu_Terima_Kasih_Penerima', $csvContent);
-        $this->assertStringContainsString('Wendi Sunjana, S.Kep.,Ners', $csvContent);
-        $this->assertStringContainsString('Kerja kamu hari ini sangat berarti bagi pasien kita.', $csvContent);
+        $this->assertStringNotContainsString('Kartu_Terima_Kasih_Penerima', $csvContent);
+        $this->assertStringContainsString('Intervensi_Tipe', $csvContent);
 
-        // Excel export
+        // Excel export: no Thank You Card column
         $excelResponse = $this->actingAs($karu)->get('/admin/rekap-data/export?format=excel');
         $excelResponse->assertStatus(200);
         $excelContent = $excelResponse->getContent();
-        $this->assertStringContainsString('KARTU TERIMA KASIH', $excelContent);
-        $this->assertStringContainsString('Wendi Sunjana, S.Kep.,Ners', $excelContent);
+        $this->assertStringNotContainsString('KARTU TERIMA KASIH', $excelContent);
+        $this->assertStringContainsString('INTERVENSI', $excelContent);
     }
 }

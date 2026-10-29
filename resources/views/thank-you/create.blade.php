@@ -17,9 +17,9 @@
                 </div>
                 <div class="flex justify-between text-[11px] text-[#4a6366] mt-2 font-medium overflow-x-auto gap-2">
                     <span class="text-[#0b6b63] font-bold shrink-0">✓ 1. Pre-Test</span>
-                    <span class="text-[#0b6b63] font-bold shrink-0">✓ 2. Butterfly Hug</span>
+                    <span class="text-[#0b6b63] font-bold shrink-0">✓ 2. Intervensi</span>
                     <span class="text-[#0b6b63] font-bold shrink-0">✓ 3. Game Stres</span>
-                    <span class="text-[#0b6b63] font-bold shrink-0">★ 4. Kartu Apresiasi</span>
+                    <span class="text-[#0b6b63] font-bold shrink-0">★ 4. Kirim Pesan</span>
                     <span class="shrink-0">5. Post-Test</span>
                 </div>
             </div>
@@ -32,10 +32,10 @@
                     </div>
                     <div>
                         <h1 class="font-display text-xl sm:text-2xl font-bold text-[#132628]">
-                            Kartu terima kasih untuk rekan
+                            Kirim Pesan Apresiasi untuk Rekan
                         </h1>
                         <p class="text-xs sm:text-sm text-[#4a6366] mt-0.5">
-                            Pilih pesan singkat, lalu salin dan kirim ke rekan lewat aplikasi pesan Anda.
+                            Pilih rekan perawat dan pesan positif. Pesan akan langsung terkirim ke kotak pesan akun rekan Anda.
                         </p>
                     </div>
                 </div>
@@ -57,38 +57,40 @@
                 <form method="POST" action="{{ route('thank-you.store') }}" class="space-y-5" id="thankYouForm">
                     @csrf
 
-                    <!-- Nama Rekan -->
+                    <!-- Pilih Nama Rekan (Dropdown Select Nama-nama Perawat Selain Karu) -->
                     <div>
-                        <label for="kName" class="block text-xs sm:text-sm font-semibold text-[#132628] mb-1.5">
-                            Nama rekan
+                        <label for="kRecipient" class="block text-xs sm:text-sm font-semibold text-[#132628] mb-1.5">
+                            Pilih Rekan Perawat Penerima
                         </label>
                         <div class="relative">
-                            <input
-                                type="text"
-                                id="kName"
-                                name="recipient_name"
-                                maxlength="60"
+                            <select
+                                id="kRecipient"
+                                name="recipient_id"
                                 required
-                                list="colleaguesList"
-                                placeholder="Contoh: Ns. Hendra atau pilih dari daftar..."
-                                value="{{ old('recipient_name') }}"
-                                class="w-full rounded-xl border border-[#d2dedc] bg-[#f9fbfa] px-3.5 py-3 text-sm text-[#132628] placeholder-[#9db4b2] focus:border-[#0b6b63] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0b6b63]/20 transition"
+                                class="w-full appearance-none rounded-xl border border-[#d2dedc] bg-[#f9fbfa] px-3.5 py-3 pr-10 text-sm text-[#132628] focus:border-[#0b6b63] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0b6b63]/20 transition"
                             >
-                            <datalist id="colleaguesList">
+                                <option value="">-- Pilih Rekan Perawat (Ruang UBK 2) --</option>
                                 @foreach ($colleagues as $c)
-                                    <option value="{{ $c->name }}">{{ $c->role }}</option>
+                                    <option value="{{ $c->id }}" data-name="{{ $c->name }}" {{ old('recipient_id') == $c->id ? 'selected' : '' }}>
+                                        {{ $c->name }} ({{ $c->role }})
+                                    </option>
                                 @endforeach
-                            </datalist>
+                            </select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-[#4a6366]">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </div>
                         </div>
                         <p class="text-[11px] text-[#4a6366] mt-1">
-                            Ketik nama atau pilih perawat sejawat dari daftar Ruang UBK 2.
+                            Pilih nama rekan sejawat di Ruang UBK 2 yang ingin Anda beri apresiasi.
                         </p>
                     </div>
 
-                    <!-- Pilihan Pesan (SS 2) -->
+                    <!-- Pilihan Pesan -->
                     <div>
                         <label for="kMsg" class="block text-xs sm:text-sm font-semibold text-[#132628] mb-1.5">
-                            Pesan
+                            Pilihan Pesan Apresiasi
                         </label>
                         <div class="relative">
                             <select
@@ -111,7 +113,7 @@
                         <div id="customMsgWrapper" class="mt-2.5 hidden">
                             <textarea
                                 id="customMsgInput"
-                                rows="2"
+                                rows="3"
                                 placeholder="Tuliskan apresiasi tulus Anda untuk rekan..."
                                 class="w-full rounded-xl border border-[#d2dedc] bg-[#f9fbfa] px-3.5 py-2.5 text-sm text-[#132628] focus:border-[#0b6b63] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#0b6b63]/20 transition"
                             ></textarea>
@@ -123,50 +125,34 @@
 
                     <!-- Pratinjau Pesan -->
                     <div>
-                        <div class="flex items-center justify-between mb-1.5">
-                            <label for="kPrev" class="block text-xs sm:text-sm font-semibold text-[#132628]">
-                                Pratinjau
-                            </label>
-                            <span id="copyStatusBadge" class="text-xs font-semibold text-[#2f7d52] transition-opacity duration-300 opacity-0">
-                                ✓ Pesan tersalin ke clipboard!
-                            </span>
+                        <label for="kPrev" class="block text-xs sm:text-sm font-semibold text-[#132628] mb-1.5">
+                            Pratinjau Pesan yang Akan Terkirim
+                        </label>
+                        <div class="p-4 rounded-xl border border-[#b2ded8] bg-[#dbeeeb]/30 text-sm text-[#132628] space-y-1.5 font-medium">
+                            <div class="text-xs text-[#0b6b63] font-semibold" id="prevTo">
+                                Kepada: [Pilih Rekan Perawat]
+                            </div>
+                            <div class="italic text-[#132628]" id="prevContent">
+                                “{{ $messages[0] }}”
+                            </div>
+                            <div class="text-[11px] text-[#4a6366] text-right pt-1 border-t border-[#b2ded8]/40">
+                                Dari: <strong>{{ $user->name }}</strong>
+                            </div>
                         </div>
-                        <div class="relative">
-                            <textarea
-                                id="kPrev"
-                                readonly
-                                rows="3"
-                                class="w-full rounded-xl border border-[#b2ded8] bg-[#dbeeeb]/30 px-4 py-3 text-sm font-medium text-[#132628] select-all cursor-pointer focus:outline-none"
-                            ></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Tombol Salin Pesan (Sesuai SS 1) -->
-                    <div>
-                        <button
-                            id="kCopy"
-                            type="button"
-                            class="inline-flex items-center gap-2 py-2.5 px-4 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-xs font-semibold shadow-xs transition active:scale-[0.98] cursor-pointer"
-                        >
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/>
-                            </svg>
-                            <span>Salin pesan</span>
-                        </button>
-                        <p class="text-[11px] text-[#4a6366] mt-2">
-                            Salin pesan ini dan kirimkan ke rekan Anda lewat WhatsApp, Telegram, atau aplikasi pesan lainnya saat senggang.
+                        <p class="text-[11px] text-[#4a6366] mt-1.5">
+                            Pesan ini akan otomatis muncul pada <strong>Kotak Pesan</strong> di navbar akun rekan perawat yang Anda pilih.
                         </p>
                     </div>
 
                     <hr class="border-[#d2dedc]/80 my-4">
 
-                    <!-- Submit & Proceed Button -->
+                    <!-- Submit Button: Kirim Pesan Langsung ke Akun Penerima -->
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
                         <button
                             type="submit"
                             class="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3.5 px-6 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-sm shadow-md transition active:scale-[0.98] cursor-pointer"
                         >
-                            <span>Simpan & Lanjut ke Kuesioner Akhir (Post-Test)</span>
+                            <span>Kirim Pesan &amp; Lanjut ke Post-Test 💌</span>
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                             </svg>
@@ -182,102 +168,49 @@
                 </form>
             </div>
 
-            <!-- Context Box -->
-            <div class="p-4 rounded-xl bg-[#f1f5f4] border border-[#d2dedc] text-xs text-[#4a6366] space-y-1">
-                <p class="font-semibold text-[#132628] flex items-center gap-1.5">
-                    <span>💡 Mengapa Saling Mengapresiasi Penting?</span>
-                </p>
-                <p>
-                    Dukungan sosial antar perawat terbukti klinis menjadi faktor pelindung terkuat (protective factor) terhadap kelelahan emosional (Emotional Exhaustion) dalam shift dinas rawat inap.
-                </p>
-            </div>
-
         </div>
     </div>
 
-    <!-- Live Preview & Clipboard Script -->
+    <!-- Dynamic Script for Message Preview -->
     <script>
-        (function() {
-            var kName = document.getElementById('kName');
-            var kMsg = document.getElementById('kMsg');
-            var kPrev = document.getElementById('kPrev');
-            var kCopy = document.getElementById('kCopy');
-            var actualMessage = document.getElementById('actualMessage');
-            var customMsgWrapper = document.getElementById('customMsgWrapper');
-            var customMsgInput = document.getElementById('customMsgInput');
-            var statusBadge = document.getElementById('copyStatusBadge');
+    (function () {
+        const kRecipient = document.getElementById('kRecipient');
+        const kMsg = document.getElementById('kMsg');
+        const customWrapper = document.getElementById('customMsgWrapper');
+        const customInput = document.getElementById('customMsgInput');
+        const actualMessage = document.getElementById('actualMessage');
+        const prevTo = document.getElementById('prevTo');
+        const prevContent = document.getElementById('prevContent');
 
-            function getSelectedMessage() {
-                if (kMsg.value === 'custom') {
-                    return customMsgInput.value.trim() || 'Terima kasih atas kerja samanya hari ini.';
-                }
-                return kMsg.value;
+        function updatePreview() {
+            // Recipient
+            const selectedOpt = kRecipient.options[kRecipient.selectedIndex];
+            if (selectedOpt && selectedOpt.value) {
+                const name = selectedOpt.getAttribute('data-name') || selectedOpt.text;
+                prevTo.textContent = `Kepada: ${name}`;
+            } else {
+                prevTo.textContent = `Kepada: [Pilih Rekan Perawat]`;
             }
 
-            function updatePreview() {
-                var name = kName.value.trim();
-                var msg = getSelectedMessage();
-                actualMessage.value = msg;
-
-                if (name) {
-                    kPrev.value = name + ", " + msg.charAt(0).toLowerCase() + msg.slice(1);
-                } else {
-                    kPrev.value = msg;
-                }
+            // Message
+            let text = '';
+            if (kMsg.value === 'custom') {
+                customWrapper.classList.remove('hidden');
+                text = customInput.value.trim() || 'Tuliskan pesan apresiasi Anda...';
+            } else {
+                customWrapper.classList.add('hidden');
+                text = kMsg.value;
             }
 
-            kName.addEventListener('input', updatePreview);
+            actualMessage.value = text;
+            prevContent.textContent = `“${text}”`;
+        }
 
-            kMsg.addEventListener('change', function() {
-                if (kMsg.value === 'custom') {
-                    customMsgWrapper.classList.remove('hidden');
-                    customMsgInput.focus();
-                } else {
-                    customMsgWrapper.classList.add('hidden');
-                }
-                updatePreview();
-            });
+        kRecipient.addEventListener('change', updatePreview);
+        kMsg.addEventListener('change', updatePreview);
+        customInput.addEventListener('input', updatePreview);
 
-            customMsgInput.addEventListener('input', updatePreview);
-
-            // Copy to clipboard with toast notification
-            kCopy.addEventListener('click', function() {
-                var textToCopy = kPrev.value;
-                if (!textToCopy) return;
-
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(textToCopy).then(function() {
-                        showCopySuccess();
-                    }).catch(function() {
-                        fallbackCopy();
-                    });
-                } else {
-                    fallbackCopy();
-                }
-            });
-
-            function fallbackCopy() {
-                kPrev.focus();
-                kPrev.select();
-                try {
-                    document.execCommand('copy');
-                    showCopySuccess();
-                } catch (e) {
-                    alert('Silakan salin teks dari kotak pratinjau secara manual.');
-                }
-            }
-
-            function showCopySuccess() {
-                statusBadge.classList.remove('opacity-0');
-                kCopy.classList.add('ring-2', 'ring-[#2f7d52]');
-                setTimeout(function() {
-                    statusBadge.classList.add('opacity-0');
-                    kCopy.classList.remove('ring-2', 'ring-[#2f7d52]');
-                }, 2500);
-            }
-
-            // Initial render
-            updatePreview();
-        })();
+        updatePreview();
+    })();
     </script>
 </x-app-layout>

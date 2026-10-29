@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="py-6 sm:py-10">
-        <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             <!-- 5 Steps Progress Tracker -->
             <div class="bg-white border border-[#d2dedc] rounded-2xl p-4 sm:p-5 shadow-xs">
                 <div class="flex items-center justify-between text-xs mb-3">
-                    <span class="font-bold text-[#0b6b63] uppercase tracking-wider font-mono">Tahap 2: Intervensi Relaksasi Klinis</span>
+                    <span class="font-bold text-[#0b6b63] uppercase tracking-wider font-mono">Tahap 2: Intervensi Relaksasi Butterfly Hug (Burnout Sedang)</span>
                     <span class="text-[#4a6366] font-mono">Langkah 2 dari 5</span>
                 </div>
                 <div class="grid grid-cols-5 gap-2">
@@ -19,553 +19,624 @@
                     <span class="text-[#0b6b63] font-bold shrink-0">✓ 1. Pre-Test</span>
                     <span class="text-[#0b6b63] font-bold shrink-0">★ 2. Butterfly Hug</span>
                     <span class="shrink-0">3. Game Katarsis</span>
-                    <span class="shrink-0">4. Apresiasi</span>
+                    <span class="shrink-0">4. Kirim Pesan</span>
                     <span class="shrink-0">5. Post-Test</span>
                 </div>
             </div>
 
-            <!-- Header Info -->
-            <div class="text-center space-y-2">
-                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold uppercase tracking-wide border border-[#b2ded8]">
-                    <span>🦋 Relaksasi Burnout Perawat</span>
-                </div>
-                <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-[#132628]">
-                    Butterfly Hug (Pelukan Kupu-Kupu)
-                </h1>
-                <p class="text-xs sm:text-sm text-[#4a6366] max-w-lg mx-auto leading-relaxed">
-                    Tepuk dada bagian atas secara bergantian, kiri dan kanan, sambil mengatur ritme napas. Sangat efektif meredakan ketegangan fisik dan beban mental di sela giliran jaga.
-                </p>
-            </div>
-
-            @if (session('info'))
-                <div class="p-3.5 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs">
-                    {{ session('info') }}
-                </div>
-            @endif
-
-            @if (session('success'))
-                <div class="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs">
-                    {{ session('success') }}
-                </div>
-            @endif
-
-            <!-- Interactive Stage Card -->
-            <div class="bg-white border border-[#d2dedc] rounded-3xl p-6 sm:p-8 shadow-xs flex flex-col items-center gap-5 relative overflow-hidden">
-                <!-- Butterfly Canvas / SVG Stage -->
-                <div class="relative w-full max-w-[320px] aspect-[320/260]">
-                    <svg viewBox="0 0 320 260" class="w-full h-full overflow-visible" role="img" aria-label="Kupu-kupu dengan sayap kiri dan kanan yang menyala bergantian mengikuti tepukan">
-                        <!-- Breathing Guide Ring -->
-                        <circle
-                            id="ring"
-                            cx="160"
-                            cy="130"
-                            r="116"
-                            class="fill-[#dbeeeb]/50 transition-transform duration-[4000ms] ease-in-out"
-                            style="transform-origin: center; transform: scale(0.78);"
-                        />
-
-                        <!-- Left Wing -->
-                        <g id="wingL" class="wing transition-all duration-300 ease-out" style="transform-origin: center;">
-                            <path d="M156 122 C122 42 34 30 34 100 C34 150 108 160 156 132 Z" class="fill-[#0b6b63]/25 stroke-[#0b6b63] stroke-2 transition-all duration-300" />
-                            <path d="M156 138 C122 168 66 226 104 236 C140 244 156 192 156 150 Z" class="fill-[#0b6b63]/25 stroke-[#0b6b63] stroke-2 transition-all duration-300" />
-                        </g>
-
-                        <!-- Right Wing -->
-                        <g id="wingR" class="wing transition-all duration-300 ease-out" style="transform-origin: center;">
-                            <g transform="translate(320 0) scale(-1 1)">
-                                <path d="M156 122 C122 42 34 30 34 100 C34 150 108 160 156 132 Z" class="fill-[#0b6b63]/25 stroke-[#0b6b63] stroke-2 transition-all duration-300" />
-                                <path d="M156 138 C122 168 66 226 104 236 C140 244 156 192 156 150 Z" class="fill-[#0b6b63]/25 stroke-[#0b6b63] stroke-2 transition-all duration-300" />
-                            </g>
-                        </g>
-
-                        <!-- Butterfly Body -->
-                        <rect x="157" y="104" width="6" height="74" rx="3" class="fill-[#132628]" />
-                        <path d="M159 104 C154 86 144 78 136 76 M161 104 C166 86 176 78 184 76" class="stroke-[#132628] stroke-[3] stroke-linecap-round fill-none" />
-                    </svg>
-                </div>
-
-                <!-- Guidance Cues -->
-                <div class="text-center min-h-[60px]" aria-live="polite">
-                    <p id="phase" class="font-display font-bold text-2xl text-[#132628]">Siap Dimulai</p>
-                    <p id="sub" class="text-xs text-[#4a6366] font-mono mt-1">Atur durasi dan irama, lalu tekan Mulai.</p>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full h-2 rounded-full bg-[#f1f5f4] overflow-hidden border border-[#d2dedc]/60">
-                    <div id="progress" class="h-full w-0 bg-gradient-to-r from-[#0b6b63] to-[#14b8a6] transition-all duration-75"></div>
-                </div>
-
-                <!-- Controls Form -->
-                <div class="w-full space-y-4 pt-2">
-                    <!-- Durasi -->
-                    <div>
-                        <span class="block text-[11px] font-bold uppercase tracking-wider text-[#4a6366] mb-2">Pilih Durasi Sesi:</span>
-                        <div class="grid grid-cols-3 gap-2 text-xs">
-                            <label class="dur-label cursor-pointer text-center py-2.5 px-3 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] font-semibold text-[#132628] transition hover:border-[#0b6b63]">
-                                <input type="radio" name="dur" value="60" class="sr-only">
-                                <span>1 Menit</span>
-                            </label>
-                            <label class="dur-label cursor-pointer text-center py-2.5 px-3 rounded-xl border-2 border-[#0b6b63] bg-[#dbeeeb] font-bold text-[#0b6b63] transition shadow-xs">
-                                <input type="radio" name="dur" value="120" checked class="sr-only">
-                                <span>2 Menit</span>
-                            </label>
-                            <label class="dur-label cursor-pointer text-center py-2.5 px-3 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] font-semibold text-[#132628] transition hover:border-[#0b6b63]">
-                                <input type="radio" name="dur" value="180" class="sr-only">
-                                <span>3 Menit</span>
-                            </label>
-                        </div>
+            <!-- Hero Section -->
+            <div class="bg-white border border-[#d2dedc] rounded-3xl p-6 sm:p-8 shadow-xs relative overflow-hidden">
+                <div class="space-y-2.5 max-w-2xl">
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dbeeeb] text-[#0b6b63] text-xs font-semibold uppercase tracking-wide border border-[#b2ded8]">
+                        <span>🦋 Stimulasi Bilateral Terpadu</span>
                     </div>
-
-                    <!-- Irama Tepukan -->
-                    <div>
-                        <span class="block text-[11px] font-bold uppercase tracking-wider text-[#4a6366] mb-2">Irama Ketukan:</span>
-                        <div class="grid grid-cols-2 gap-2 text-xs">
-                            <label class="tempo-label cursor-pointer text-center py-2 px-3 rounded-xl border-2 border-[#0b6b63] bg-[#dbeeeb] font-bold text-[#0b6b63] transition shadow-xs">
-                                <input type="radio" name="tempo" value="1600" checked class="sr-only">
-                                <span>Lambat (1.6 detik)</span>
-                            </label>
-                            <label class="tempo-label cursor-pointer text-center py-2 px-3 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] font-semibold text-[#132628] transition hover:border-[#0b6b63]">
-                                <input type="radio" name="tempo" value="1000" class="sr-only">
-                                <span>Sedang (1.0 detik)</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- Audio Toggle -->
-                    <div class="flex items-center justify-between text-xs pt-1">
-                        <label class="inline-flex items-center gap-2 cursor-pointer text-[#132628] font-medium">
-                            <input type="checkbox" id="sound" checked class="rounded border-[#d2dedc] text-[#0b6b63] focus:ring-[#0b6b63]">
-                            <span>Bunyi ritmis lembut kiri dan kanan (Audio Stereo)</span>
-                        </label>
-                    </div>
-
-                    <!-- Action Button -->
-                    <div class="pt-2">
-                        <button
-                            id="go"
-                            type="button"
-                            class="w-full py-4 px-6 rounded-2xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-base shadow-md hover:shadow-lg transition active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
-                        >
-                            <span id="goText">Mulai Sesi Butterfly Hug</span>
-                            <span class="text-xl">🦋</span>
-                        </button>
-                    </div>
+                    <h1 class="font-display text-2xl sm:text-3xl font-extrabold text-[#132628]">
+                        Panduan Relaksasi Butterfly Hug 3 Menit
+                    </h1>
+                    <p class="text-xs sm:text-sm text-[#4a6366] leading-relaxed">
+                        Tujuh langkah gerakan berilustrasi, dilanjutkan dengan sesi terpandu 180 ketukan bertempo tenang dan musik pad relaksasi untuk memulihkan ketenangan sistem saraf.
+                    </p>
                 </div>
             </div>
 
-            <!-- Tension Check-in Scale (Sebelum & Sesudah) -->
-            <div class="bg-white border border-[#d2dedc] rounded-2xl p-6 sm:p-7 shadow-xs space-y-5">
-                <div class="flex items-center justify-between border-b border-[#d2dedc] pb-3">
-                    <h2 class="font-display text-base sm:text-lg font-bold text-[#132628]">
-                        Evaluasi Tingkat Ketegangan Tubuh
+            <!-- 7 Langkah Gerakan Kartun Berilustrasi (File 2) -->
+            <div class="bg-white border border-[#d2dedc] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+                <div>
+                    <h2 class="font-display text-xl font-bold text-[#132628]">
+                        Cara Melakukan Gerakan dengan Benar
                     </h2>
-                    <span class="text-[11px] font-mono text-[#0b6b63] bg-[#dbeeeb] px-2.5 py-0.5 rounded-full font-bold">
-                        Skala 0–10
-                    </span>
+                    <p class="text-xs sm:text-sm text-[#4a6366] mt-0.5">
+                        Pelajari 7 langkah posisi tubuh berikut sebelum memulai sesi terpandu.
+                    </p>
                 </div>
 
-                <div class="space-y-4">
-                    <!-- Sebelum -->
-                    <div>
-                        <div class="flex justify-between items-center text-xs font-bold text-[#132628] mb-1.5">
-                            <label for="before">1. Sebelum Sesi Dimulai:</label>
-                            <output id="beforeOut" class="font-mono text-base font-bold text-[#0b6b63]">6</output>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="stepsGrid">
+                    <!-- Kartu 1: Duduk Nyaman -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <line x1="14" y1="188" x2="186" y2="188" stroke="#4a6366" stroke-width="1.5" stroke-dasharray="4 4"/>
+                                <rect fill="#fff" stroke="#4a6366" stroke-width="2" x="46" y="70" width="9" height="72" rx="4"/>
+                                <rect fill="#fff" stroke="#4a6366" stroke-width="2" x="52" y="140" width="80" height="10" rx="4"/>
+                                <rect fill="#fff" stroke="#4a6366" stroke-width="2" x="58" y="150" width="7" height="38"/>
+                                <rect fill="#fff" stroke="#4a6366" stroke-width="2" x="118" y="150" width="7" height="38"/>
+                                <rect fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" x="60" y="84" width="36" height="60" rx="17"/>
+                                <rect fill="#b9c7cc" stroke="#c79e80" stroke-width="1.5" x="68" y="132" width="74" height="19" rx="9"/>
+                                <rect fill="#b9c7cc" stroke="#c79e80" stroke-width="1.5" x="128" y="142" width="17" height="42" rx="8"/>
+                                <circle fill="#f0cfb5" stroke="#c79e80" stroke-width="1.5" cx="80" cy="56" r="22"/>
+                                <path d="M58 56 C54 30 80 28 96 40 C86 40 70 42 66 58 Z" fill="#3a2e2a"/>
+                                <text x="108" y="28" font-size="10" font-weight="bold" fill="#13242b">Punggung tegak</text>
+                                <text x="122" y="88" font-size="10" font-weight="bold" fill="#13242b">Bahu rileks</text>
+                            </svg>
                         </div>
-                        <input
-                            type="range"
-                            id="before"
-                            min="0"
-                            max="10"
-                            step="1"
-                            value="6"
-                            class="w-full accent-[#0b6b63] cursor-pointer"
-                        >
-                        <div class="flex justify-between text-[11px] text-[#4a6366] mt-0.5 font-mono">
-                            <span>0 (Sangat Santai)</span>
-                            <span>10 (Sangat Tegang/Penuh)</span>
-                        </div>
-                    </div>
-
-                    <!-- Sesudah -->
-                    <div>
-                        <div class="flex justify-between items-center text-xs font-bold text-[#132628] mb-1.5">
-                            <label for="after">2. Sesudah Sesi Selesai:</label>
-                            <output id="afterOut" class="font-mono text-base font-bold text-[#0b6b63]">6</output>
-                        </div>
-                        <input
-                            type="range"
-                            id="after"
-                            min="0"
-                            max="10"
-                            step="1"
-                            value="6"
-                            class="w-full accent-[#0b6b63] cursor-pointer"
-                        >
-                        <div class="flex justify-between text-[11px] text-[#4a6366] mt-0.5 font-mono">
-                            <span>0 (Sangat Santai)</span>
-                            <span>10 (Sangat Tegang/Penuh)</span>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">1</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Duduk Nyaman</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Duduk tegak, kaki rata di lantai, bahu turun dan rileks. Cari posisi yang tenang.</p>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Dynamic Evaluation Result Box -->
-                    <div class="p-3.5 rounded-xl bg-[#f9fbfa] border border-[#d2dedc] text-xs text-[#132628]">
-                        <p id="result" class="font-semibold text-center text-[#4a6366]">
-                            Geser skala sebelum mulai, lalu sesuaikan lagi setelah sesi selesai.
+                    <!-- Kartu 2: Silangkan Lengan -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <path fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" d="M26 200 C26 156 48 132 80 126 L120 126 C152 132 174 156 174 200 Z"/>
+                                <circle fill="#f0cfb5" stroke="#c79e80" stroke-width="1.5" cx="100" cy="72" r="33"/>
+                                <path d="M64 76 C56 34 84 22 102 24 C128 26 145 46 136 76 C131 56 117 46 100 46 C84 46 70 56 64 76 Z" fill="#3a2e2a"/>
+                                <!-- Crossed Arms -->
+                                <path d="M50 142 L44 182" stroke="#0c6a6a" stroke-width="22" stroke-linecap="round"/>
+                                <path d="M150 142 L156 182" stroke="#0c6a6a" stroke-width="22" stroke-linecap="round"/>
+                                <path d="M44 182 L124 142" stroke="#f0cfb5" stroke-width="14" stroke-linecap="round"/>
+                                <path d="M156 182 L76 142" stroke="#f0cfb5" stroke-width="14" stroke-linecap="round"/>
+                                <text x="100" y="24" text-anchor="middle" font-size="10" font-weight="bold" fill="#13242b">Silangkan kedua lengan</text>
+                            </svg>
+                        </div>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">2</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Silangkan Lengan</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Silangkan kedua lengan di depan dada, tangan kanan di dada kiri dan sebaliknya.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 3: Posisi Tangan -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <path fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" d="M0 200 L0 82 C40 64 76 68 100 72 C124 68 160 64 200 82 L200 200Z"/>
+                                <circle cx="100" cy="148" r="14" fill="none" stroke="#0c6a6a" stroke-width="2" stroke-dasharray="3 4"/>
+                                <text x="100" y="26" text-anchor="middle" font-size="9" font-weight="bold" fill="#13242b">Ujung jari ke leher</text>
+                                <text x="100" y="190" text-anchor="middle" font-size="8.5" font-weight="bold" fill="#0c6a6a">Ibu jari silang = badan kupu-kupu</text>
+                            </svg>
+                        </div>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">3</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Atur Posisi Tangan</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Letakkan tangan di bawah tulang selangka, silangkan kedua ibu jari membentuk badan kupu-kupu.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 4: Pejamkan Mata -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <path fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" d="M26 200 C26 156 48 132 80 126 L120 126 C152 132 174 156 174 200 Z"/>
+                                <circle fill="#f0cfb5" stroke="#c79e80" stroke-width="1.5" cx="100" cy="72" r="33"/>
+                                <!-- Closed Eyes -->
+                                <path d="M81 76 Q88 83 95 76" stroke="#13242b" stroke-width="2.5" fill="none"/>
+                                <path d="M105 76 Q112 83 119 76" stroke="#13242b" stroke-width="2.5" fill="none"/>
+                                <path d="M91 92 Q100 100 109 92" stroke="#13242b" stroke-width="2" fill="none"/>
+                                <text x="100" y="24" text-anchor="middle" font-size="9" font-weight="bold" fill="#13242b">Mata terpejam, wajah rileks</text>
+                            </svg>
+                        </div>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">4</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Pejamkan Mata</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Pejamkan mata atau arahkan tatapan lembut ke lantai untuk mereduksi rangsangan visual luar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 5: Ketuk Bergantian -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <circle cx="130" cy="139" r="16" fill="none" stroke="#0c6a6a" stroke-width="2" opacity="0.8"/>
+                                <circle cx="70" cy="139" r="16" fill="none" stroke="#0c6a6a" stroke-width="2" opacity="0.5"/>
+                                <circle cx="162" cy="118" r="9" fill="#0c6a6a"/><text x="162" y="122" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">1</text>
+                                <circle cx="38" cy="118" r="9" fill="#0c6a6a"/><text x="38" y="122" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">2</text>
+                                <text x="100" y="24" text-anchor="middle" font-size="9" font-weight="bold" fill="#13242b">Kanan, Kiri: 1 ketukan per detik</text>
+                            </svg>
+                        </div>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">5</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Ketuk Bergantian</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Ketuk lembut dengan ujung jari: kanan, kiri, kanan, kiri, sekitar 1 ketukan per detik seperti menepuk bahu bayi.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kartu 6: Atur Napas -->
+                    <div class="rounded-2xl border border-[#d2dedc] bg-[#f9fbfa] overflow-hidden flex flex-col">
+                        <div class="bg-[#eef3f4] p-4 flex items-center justify-center">
+                            <svg viewBox="0 0 200 200" class="w-36 h-36">
+                                <rect fill="#e3ecee" width="200" height="200"/>
+                                <path fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" d="M26 200 C26 156 48 132 80 126 L120 126 C152 132 174 156 174 200 Z"/>
+                                <circle fill="#f0cfb5" stroke="#c79e80" stroke-width="1.5" cx="100" cy="72" r="33"/>
+                                <ellipse cx="100" cy="96" rx="4.5" ry="3.5" fill="#13242b"/>
+                                <text x="18" y="48" font-size="9" font-weight="bold" fill="#0c6a6a">Tarik hidung &uarr;</text>
+                                <text x="130" y="48" font-size="9" font-weight="bold" fill="#0c6a6a">Hembus mulut &darr;</text>
+                            </svg>
+                        </div>
+                        <div class="p-3.5 flex gap-3 items-start flex-1">
+                            <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs font-bold shrink-0">6</span>
+                            <div>
+                                <h3 class="text-xs font-bold text-[#132628]">Atur Napas</h3>
+                                <p class="text-[11px] text-[#4a6366] mt-0.5">Tarik napas lembut lewat hidung, hembuskan perlahan lewat mulut sambil terus mengetuk teratur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catatan Medis Keamanan -->
+                <div class="p-4 rounded-2xl bg-[#fff8e6] border border-[#f2b705]/40 text-xs text-[#6b4a00] flex items-center gap-3">
+                    <span class="text-base shrink-0">💡</span>
+                    <span><strong>Catatan:</strong> Bila merasa pusing, sesak, atau muncul perasaan terlalu berat, segera hentikan ketukan, tarik napas dalam secara bebas, dan istirahatlah sejenak.</span>
+                </div>
+            </div>
+
+            <!-- SESI 3 MENIT TERPANDU (Interactive Stage) -->
+            <div class="bg-white border border-[#d2dedc] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6" id="sesiStage">
+                <div>
+                    <h2 class="font-display text-xl font-bold text-[#132628]">
+                        Sesi Latihan Butterfly Hug (3 Menit)
+                    </h2>
+                    <p class="text-xs sm:text-sm text-[#4a6366] mt-0.5">
+                        Target 180 tepukan ritmis (1 ketukan per detik) disertai audio penenang dan aba-aba napas.
+                    </p>
+                </div>
+
+                <!-- SETUP STAGE -->
+                <div id="hugSetup" class="space-y-5 p-5 rounded-2xl bg-[#f9fbfa] border border-[#d2dedc]">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="bTension" class="text-xs font-bold text-[#132628]">
+                                Tingkat ketegangan tubuh saat ini:
+                            </label>
+                            <span class="text-xs font-mono font-bold text-[#0b6b63]" id="bValDisplay">Skala: 6 / 10</span>
+                        </div>
+                        <input type="range" id="bTension" min="0" max="10" value="6" class="w-full accent-[#0b6b63]">
+                        <div class="flex justify-between text-[11px] text-[#4a6366]">
+                            <span>0 Santai</span>
+                            <span class="font-bold text-[#0b6b63]" id="bVal">6</span>
+                            <span>10 Sangat Tegang</span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Options -->
+                    <div class="pt-2 border-t border-[#d2dedc] flex flex-wrap items-center justify-between gap-4 text-xs text-[#132628]">
+                        <label class="flex items-center gap-2 cursor-pointer font-medium">
+                            <input type="checkbox" id="musCheck" checked class="w-4 h-4 rounded text-[#0b6b63] accent-[#0b6b63]">
+                            <span>Musik Relaksasi Ambient Pad</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer font-medium">
+                            <input type="checkbox" id="sndCheck" checked class="w-4 h-4 rounded text-[#0b6b63] accent-[#0b6b63]">
+                            <span>Bunyi Ketukan (Tick Sound)</span>
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[#4a6366]">Volume:</span>
+                            <input type="range" id="musVol" min="0" max="100" value="35" class="w-20 accent-[#0b6b63]">
+                        </div>
+                    </div>
+
+                    <button id="btnStart" type="button" class="w-full sm:w-auto px-8 py-3 rounded-xl bg-[#0b6b63] text-white font-bold text-sm hover:bg-[#08524c] transition shadow-md active:scale-[0.98]">
+                        Mulai Sesi 3 Menit 🦋
+                    </button>
+                </div>
+
+                <!-- RUNNING STAGE -->
+                <div id="hugRun" class="space-y-6 text-center hidden">
+                    <!-- Timer & Progress -->
+                    <div class="space-y-2">
+                        <div class="font-mono text-5xl sm:text-6xl font-extrabold text-[#0b6b63]" id="clockDisplay">
+                            03:00
+                        </div>
+                        <div class="w-full max-w-md mx-auto bg-[#d2dedc] h-2.5 rounded-full overflow-hidden">
+                            <div id="progBar" class="bg-[#0b6b63] h-full transition-all duration-100" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Animated Tapping Figure SVG -->
+                    <div class="w-48 h-48 mx-auto relative bg-[#eef3f4] rounded-full p-2 border-4 border-white shadow-md flex items-center justify-center">
+                        <svg viewBox="0 0 200 200" class="w-full h-full">
+                            <circle cx="100" cy="100" r="95" fill="#e3ecee"/>
+                            <!-- Scrub & Skin -->
+                            <path fill="#d3ebea" stroke="#0c6a6a" stroke-width="2" d="M26 200 C26 156 48 132 80 126 L120 126 C152 132 174 156 174 200 Z"/>
+                            <circle fill="#f0cfb5" stroke="#c79e80" stroke-width="1.5" cx="100" cy="72" r="33"/>
+                            <!-- Crossed Arms -->
+                            <path d="M50 142 L44 182" stroke="#0c6a6a" stroke-width="22" stroke-linecap="round"/>
+                            <path d="M150 142 L156 182" stroke="#0c6a6a" stroke-width="22" stroke-linecap="round"/>
+                            <path d="M44 182 L124 142" stroke="#f0cfb5" stroke-width="14" stroke-linecap="round"/>
+                            <path d="M156 182 L76 142" stroke="#f0cfb5" stroke-width="14" stroke-linecap="round"/>
+                            <!-- Glowing Tapping Rings -->
+                            <circle id="hr" cx="130" cy="139" r="18" fill="#0b6b63" opacity="0.15" stroke="#0b6b63" stroke-width="2" class="transition-all duration-150"/>
+                            <circle id="hl" cx="70" cy="139" r="18" fill="#0b6b63" opacity="0.15" stroke="#0b6b63" stroke-width="2" class="transition-all duration-150"/>
+                        </svg>
+                    </div>
+
+                    <!-- Phase Text & Breath Cue -->
+                    <div class="space-y-1">
+                        <h3 class="font-display text-2xl font-bold text-[#132628]" id="phaseDisplay">
+                            Siapkan Posisi Tangan
+                        </h3>
+                        <p class="text-xs sm:text-sm text-[#0b6b63] font-semibold" id="cueDisplay">
+                            Silangkan lengan, tangan di bawah tulang selangka.
                         </p>
                     </div>
 
-                    <!-- Save & Next Step Form (Form submission) -->
-                    <form id="interventionForm" method="POST" action="{{ route('intervention.store') }}" class="pt-2">
-                        @csrf
-                        <input type="hidden" name="tension_before" id="form_before" value="6">
-                        <input type="hidden" name="tension_after" id="form_after" value="6">
-                        <input type="hidden" name="duration_seconds" id="form_dur" value="120">
-                        <input type="hidden" name="tempo_ms" id="form_tempo" value="1600">
-                        <input type="hidden" name="taps_count" id="form_taps" value="0">
-                        <input type="hidden" name="notes" id="form_notes" value="">
+                    <!-- Tap Counters -->
+                    <div class="grid grid-cols-2 gap-4 max-w-xs mx-auto">
+                        <div class="p-3 rounded-2xl bg-[#f9fbfa] border border-[#d2dedc]">
+                            <strong class="font-mono text-2xl text-[#0b6b63]" id="tapCount">0</strong>
+                            <span class="block text-[11px] text-[#4a6366]">Tepukan Selesai</span>
+                        </div>
+                        <div class="p-3 rounded-2xl bg-[#f9fbfa] border border-[#d2dedc]">
+                            <strong class="font-mono text-2xl text-[#132628]">180</strong>
+                            <span class="block text-[11px] text-[#4a6366]">Target Sesi</span>
+                        </div>
+                    </div>
 
-                        <button
-                            type="submit"
-                            id="btnSaveNext"
-                            class="w-full py-3.5 px-6 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-sm shadow-sm transition active:scale-[0.99] cursor-pointer flex items-center justify-center gap-2"
-                        >
-                            <span>Simpan Sesi & Lanjut ke Tahap 3: Game Katarsis</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                            </svg>
+                    <!-- Action Controls -->
+                    <div class="flex items-center justify-center gap-3 pt-2">
+                        <button id="btnStop" type="button" class="px-5 py-2.5 rounded-xl border border-red-200 bg-red-50 hover:bg-red-100 text-red-700 font-semibold text-xs transition">
+                            Hentikan Sesi
                         </button>
+                        <button id="btnMusicToggle" type="button" class="px-5 py-2.5 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition">
+                            Musik: Aktif
+                        </button>
+                    </div>
+                </div>
+
+                <!-- END STAGE -->
+                <div id="hugEnd" class="space-y-5 p-5 rounded-2xl bg-[#f9fbfa] border border-[#d2dedc] hidden">
+                    <div class="text-center space-y-1">
+                        <div class="w-12 h-12 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-2xl mx-auto flex items-center justify-center">
+                            ✓
+                        </div>
+                        <h3 class="font-display text-xl font-bold text-[#132628]" id="endTitle">
+                            Sesi Selesai!
+                        </h3>
+                        <p class="text-xs text-[#4a6366]">
+                            Bagaimana tingkat ketegangan tubuh dan pikiran Anda sekarang?
+                        </p>
+                    </div>
+
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <label for="aTension" class="text-xs font-bold text-[#132628]">
+                                Tingkat ketegangan setelah sesi:
+                            </label>
+                            <span class="text-xs font-mono font-bold text-[#0b6b63]" id="aValDisplay">Skala: 3 / 10</span>
+                        </div>
+                        <input type="range" id="aTension" min="0" max="10" value="3" class="w-full accent-[#0b6b63]">
+                        <div class="flex justify-between text-[11px] text-[#4a6366]">
+                            <span>0 Tenang</span>
+                            <span class="font-bold text-[#0b6b63]" id="aVal">3</span>
+                            <span>10 Sangat Tegang</span>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Result Callout -->
+                    <div class="p-4 rounded-xl bg-white border border-[#d2dedc] text-xs text-[#132628] flex items-center justify-between gap-4">
+                        <div>
+                            <span class="text-[#4a6366] block">Evaluasi Relaksasi:</span>
+                            <strong class="text-sm text-[#0b6b63]" id="hugResult">Ketegangan Anda turun 3 poin.</strong>
+                            <p class="text-[11px] text-[#4a6366] mt-0.5">Tepukan selesai: <strong id="tapsDone">180</strong> dari 180.</p>
+                        </div>
+                        <div class="flex items-center gap-2 text-center shrink-0">
+                            <div class="bg-[#f1f5f4] p-2 rounded-lg">
+                                <span class="text-[10px] text-[#4a6366] block">Sebelum</span>
+                                <strong class="text-sm text-[#132628]" id="endBScore">6</strong>
+                            </div>
+                            <span class="text-[#0b6b63] font-bold">&rarr;</span>
+                            <div class="bg-[#dbeeeb] p-2 rounded-lg">
+                                <span class="text-[10px] text-[#0b6b63] block">Sesudah</span>
+                                <strong class="text-sm text-[#0b6b63]" id="endAScore">3</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Submission Form -->
+                    <form method="POST" action="{{ route('intervention.store') }}" id="formHug" class="pt-2">
+                        @csrf
+                        <input type="hidden" name="type" value="butterfly_hug">
+                        <input type="hidden" name="tension_before" id="hugInputBefore" value="6">
+                        <input type="hidden" name="tension_after" id="hugInputAfter" value="3">
+                        <input type="hidden" name="duration_seconds" id="hugInputDuration" value="180">
+                        <input type="hidden" name="taps_count" id="hugInputTaps" value="180">
+
+                        <div class="flex flex-col sm:flex-row items-center gap-3">
+                            <button type="submit" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-sm shadow-md transition active:scale-[0.98]">
+                                Simpan &amp; Lanjut ke Game Stres &rarr;
+                            </button>
+                            <button type="button" id="btnRestart" class="w-full sm:w-auto px-4 py-3 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition">
+                                Ulangi Sesi
+                            </button>
+                        </div>
                     </form>
                 </div>
-            </div>
-
-            <!-- Cara Melakukannya Card -->
-            <div class="bg-white border border-[#d2dedc] rounded-2xl p-6 sm:p-7 shadow-xs space-y-4">
-                <h2 class="font-display text-base sm:text-lg font-bold text-[#132628] border-b border-[#d2dedc] pb-2.5">
-                    Panduan Praktik Butterfly Hug
-                </h2>
-                <ol class="space-y-3 text-xs sm:text-sm text-[#132628]">
-                    <li class="flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">1</span>
-                        <div>
-                            <strong>Duduk atau berdiri dengan nyaman:</strong>
-                            <span class="text-[#4a6366] block text-xs mt-0.5">Turunkan bahu, tegakkan punggung tanpa dipaksa. Mata boleh terpejam atau menatap lembut ke layar.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">2</span>
-                        <div>
-                            <strong>Silangkan kedua lengan di depan dada:</strong>
-                            <span class="text-[#4a6366] block text-xs mt-0.5">Letakkan ujung jari kedua tangan tepat di bawah tulang selangka. Kaitkan kedua ibu jari sehingga membentuk sayap kupu-kupu.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">3</span>
-                        <div>
-                            <strong>Tepuk bergantian, kiri lalu kanan:</strong>
-                            <span class="text-[#4a6366] block text-xs mt-0.5">Ikuti ritme sayap yang menyala di layar. Tepukan ringan dan teratur, seperti sedang menenangkan bayi.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">4</span>
-                        <div>
-                            <strong>Atur ritme pernapasan:</strong>
-                            <span class="text-[#4a6366] block text-xs mt-0.5">Tarik napas lewat hidung selama 4 hitungan, lalu hembuskan perlahan lewat mulut selama 6 hitungan.</span>
-                        </div>
-                    </li>
-                    <li class="flex items-start gap-3">
-                        <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">5</span>
-                        <div>
-                            <strong>Lepaskan dan rasakan perubahan:</strong>
-                            <span class="text-[#4a6366] block text-xs mt-0.5">Setelah sesi selesai, turunkan tangan, ambil satu napas lega, lalu nilai penurunan ketegangan tubuh Anda.</span>
-                        </div>
-                    </li>
-                </ol>
-
-                <p class="text-[11px] text-[#4a6366] border-t border-[#d2dedc] pt-3 leading-relaxed">
-                    💡 <em>Catatan:</em> Teknik ini merupakan stimulasi bilateral yang terbukti secara klinis membantu sistem saraf beralih dari mode stres (simpatis) ke mode pemulihan (parasimpatis).
-                </p>
-            </div>
-
-            <!-- Back to Dashboard -->
-            <div class="text-center pt-2 pb-6">
-                <a href="{{ route('dashboard') }}" class="text-xs text-[#4a6366] hover:text-[#0b6b63] underline">
-                    &larr; Kembali ke Beranda Dashboard
-                </a>
             </div>
 
         </div>
     </div>
 
-    <!-- Script Logika Butterfly Hug -->
+    <!-- Web Audio & Butterfly Hug Script (from File 2) -->
     <script>
-        (function () {
-            var $ = function (id) { return document.getElementById(id); };
-            var wingL = $('wingL'), wingR = $('wingR'), ring = $('ring');
-            var phaseEl = $('phase'), subEl = $('sub'), prog = $('progress'), go = $('go'), goText = $('goText');
-            var before = $('before'), after = $('after');
-            var formBefore = $('form_before'), formAfter = $('form_after');
-            var formDur = $('form_dur'), formTempo = $('form_tempo'), formTaps = $('form_taps'), formNotes = $('form_notes');
-            var INHALE = 4000, EXHALE = 6000, CYCLE = INHALE + EXHALE;
-            var timer = null, t0 = 0, dur = 120000, interval = 1600;
-            var lastBeat = -1, lastPhase = '', taps = 0, ctx = null, running = false, sessionDone = false;
+    (function(){
+        const $ = id => document.getElementById(id);
+        const BLOCK = 180;
+        let st = {
+            stage: 'setup',
+            before: 6,
+            after: 3,
+            sound: true,
+            ctx: null,
+            timer: null,
+            start: 0,
+            lastBeat: -1,
+            taps: 0,
+            done: false
+        };
 
-            function val(name) {
-                var r = document.querySelector('input[name="' + name + '"]:checked');
-                return r ? parseInt(r.value, 10) : 0;
+        function formatClock(sec){
+            sec = Math.max(0, Math.ceil(sec));
+            const m = String(Math.floor(sec/60)).padStart(2,'0');
+            const s = String(sec%60).padStart(2,'0');
+            return `${m}:${s}`;
+        }
+
+        function getAudioContext(){
+            if(!st.ctx){
+                const A = window.AudioContext || window.webkitAudioContext;
+                if(A) st.ctx = new A();
             }
+            if(st.ctx && st.ctx.state === 'suspended') st.ctx.resume();
+            return st.ctx;
+        }
 
-            function fmt(ms) {
-                var s = Math.max(0, Math.ceil(ms / 1000));
-                return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
-            }
+        // Tap Tick Sound
+        function playTick(isLeft){
+            if(!st.sound || !st.ctx) return;
+            try {
+                const c = st.ctx, o = c.createOscillator(), g = c.createGain(), t = c.currentTime + 0.01;
+                o.type = 'sine';
+                o.frequency.value = isLeft ? 440 : 523;
+                g.gain.setValueAtTime(0.0001, t);
+                g.gain.exponentialRampToValueAtTime(0.06, t + 0.02);
+                g.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
+                o.connect(g); g.connect(c.destination);
+                o.start(t); o.stop(t + 0.18);
+            } catch(e){}
+        }
 
-            function tone(side) {
-                if (!$('sound').checked) return;
-                try {
-                    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    if (ctx.state === 'suspended') ctx.resume();
-                    var o = ctx.createOscillator(), g = ctx.createGain(), now = ctx.currentTime;
-                    var p = ctx.createStereoPanner ? ctx.createStereoPanner() : null;
-                    o.type = 'sine';
-                    o.frequency.value = side === 0 ? 261.6 : 329.6;
-                    g.gain.setValueAtTime(0.0001, now);
-                    g.gain.exponentialRampToValueAtTime(0.08, now + 0.03);
-                    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.4);
-                    o.connect(g);
-                    if (p) {
-                        p.pan.value = side === 0 ? -0.8 : 0.8;
-                        g.connect(p);
-                        p.connect(ctx.destination);
-                    } else {
-                        g.connect(ctx.destination);
-                    }
-                    o.start(now);
-                    o.stop(now + 0.45);
-                } catch (e) {
-                    /* audio optional */
-                }
-            }
-
-            function setRing(phase) {
-                ring.style.transitionDuration = (phase === 'in' ? INHALE : EXHALE) + 'ms';
-                ring.style.transform = 'scale(' + (phase === 'in' ? 1.05 : 0.78) + ')';
-            }
-
-            function resetWings() {
-                var pL = wingL.querySelectorAll('path');
-                var pR = wingR.querySelectorAll('path');
-                pL.forEach(function(p) { p.classList.remove('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                pR.forEach(function(p) { p.classList.remove('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                wingL.style.transform = 'scale(1)';
-                wingR.style.transform = 'scale(1)';
-            }
-
-            function tick() {
-                var el = performance.now() - t0;
-                if (el >= dur) {
-                    finish();
-                    return;
-                }
-                var beat = Math.floor(el / interval);
-                if (beat !== lastBeat) {
-                    lastBeat = beat;
-                    taps++;
-                    var side = beat % 2;
-                    var pL = wingL.querySelectorAll('path');
-                    var pR = wingR.querySelectorAll('path');
-
-                    if (side === 0) {
-                        wingL.style.transform = 'scale(1.08)';
-                        wingR.style.transform = 'scale(1)';
-                        pL.forEach(function(p) { p.classList.add('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                        pR.forEach(function(p) { p.classList.remove('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                    } else {
-                        wingL.style.transform = 'scale(1)';
-                        wingR.style.transform = 'scale(1.08)';
-                        pR.forEach(function(p) { p.classList.add('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                        pL.forEach(function(p) { p.classList.remove('fill-[#e8501a]', 'stroke-[#e8501a]', 'fill-opacity-90'); });
-                    }
-                    tone(side);
-                }
-
-                var pos = el % CYCLE, ph = pos < INHALE ? 'in' : 'out';
-                if (ph !== lastPhase) {
-                    lastPhase = ph;
-                    phaseEl.textContent = ph === 'in' ? 'Tarik Napas Pelan...' : 'Buang Napas Perlahan...';
-                    phaseEl.className = 'font-display font-bold text-2xl ' + (ph === 'in' ? 'text-[#0b6b63]' : 'text-[#e8501a]');
-                    setRing(ph);
-                }
-
-                subEl.textContent = 'Tepuk ' + (beat % 2 === 0 ? 'Kiri' : 'Kanan') + ' · Sisa ' + fmt(dur - el);
-                prog.style.width = (el / dur * 100).toFixed(1) + '%';
-            }
-
-            function start() {
-                dur = val('dur') * 1000;
-                interval = val('tempo');
-                running = true;
-                sessionDone = false;
-                lastBeat = -1;
-                lastPhase = '';
-                taps = 0;
-                t0 = performance.now();
-                goText.textContent = 'Hentikan Sesi';
-                $('result').textContent = 'Sesi sedang berjalan... Nikmati setiap tarikan napas dan ketukan lembut.';
-                tick();
-                timer = setInterval(tick, 50);
-            }
-
-            function stop(msgTitle, msgSub) {
-                clearInterval(timer);
-                timer = null;
-                running = false;
-                resetWings();
-                ring.style.transitionDuration = '4s';
-                ring.style.transform = 'scale(0.78)';
-                goText.textContent = 'Mulai Sesi Lagi';
-                phaseEl.textContent = msgTitle;
-                phaseEl.className = 'font-display font-bold text-2xl text-[#132628]';
-                subEl.textContent = msgSub;
-            }
-
-            function finish() {
-                prog.style.width = '100%';
-                stop('Sesi Butterfly Hug Selesai!', 'Turunkan tangan perlahan, ambil satu napas lega, lalu nilai kembali skala ketegangan tubuh.');
-                sessionDone = true;
-
-                // Auto lower 'after' slider by 2 points default for positive encouragement
-                var currentB = parseInt(before.value, 10);
-                var suggestedA = Math.max(0, currentB - 2);
-                after.value = suggestedA;
-                $('afterOut').textContent = suggestedA;
-
-                syncFormValues();
-                showResult();
-
-                // Save to database via background AJAX automatically
-                saveViaAjax();
-            }
-
-            function syncFormValues() {
-                formBefore.value = before.value;
-                formAfter.value = after.value;
-                formDur.value = Math.round(dur / 1000);
-                formTempo.value = interval;
-                formTaps.value = taps;
-                var b = parseInt(before.value, 10), a = parseInt(after.value, 10), d = b - a;
-                formNotes.value = 'Ketegangan sebelum: ' + b + ', sesudah: ' + a + ' (Penurunan: ' + d + ' poin). Total tepukan: ' + taps;
-            }
-
-            function showResult() {
-                var b = parseInt(before.value, 10), a = parseInt(after.value, 10), d = b - a;
-                var r = $('result');
-                syncFormValues();
-
-                if (!sessionDone) {
-                    r.textContent = 'Ketegangan awal disetel pada level ' + b + '/10. Tekan Mulai untuk latihan Butterfly Hug.';
-                    r.className = 'font-semibold text-center text-[#4a6366]';
-                    return;
-                }
-
-                if (d > 0) {
-                    r.innerHTML = '🎉 <strong>Alhamdulillah! Ketegangan turun ' + d + ' poin</strong> (dari skala ' + b + ' menjadi ' + a + '). Tubuh Anda mulai beralih ke mode relaksasi.';
-                    r.className = 'font-semibold text-center text-emerald-800 bg-emerald-50 p-2 rounded-lg border border-emerald-200';
-                } else if (d === 0) {
-                    r.textContent = 'Skala ketegangan tetap di angka ' + a + '. Anda dapat mengulang sesi dengan irama lebih lambat atau durasi lebih panjang.';
-                    r.className = 'font-semibold text-center text-amber-800 bg-amber-50 p-2 rounded-lg border border-amber-200';
-                } else {
-                    r.textContent = 'Skala tercatat di angka ' + a + '. Berhenti sejenak dan minum air bila tubuh merasa kurang nyaman.';
-                    r.className = 'font-semibold text-center text-red-800 bg-red-50 p-2 rounded-lg border border-red-200';
-                }
-            }
-
-            function saveViaAjax() {
-                syncFormValues();
-                var token = document.querySelector('input[name="_token"]')?.value || document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
-                fetch("{{ route('intervention.store') }}", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Accept": "application/json",
-                        "X-CSRF-TOKEN": token
-                    },
-                    body: JSON.stringify({
-                        tension_before: parseInt(formBefore.value, 10),
-                        tension_after: parseInt(formAfter.value, 10),
-                        duration_seconds: parseInt(formDur.value, 10),
-                        tempo_ms: parseInt(formTempo.value, 10),
-                        taps_count: parseInt(formTaps.value, 10),
-                        notes: formNotes.value
-                    })
-                }).then(function(res) {
-                    return res.json();
-                }).then(function(data) {
-                    console.log("Intervention log saved:", data);
-                }).catch(function(err) {
-                    console.warn("Could not save intervention via AJAX:", err);
+        // Completion Bell
+        function playBell(){
+            if(!st.sound || !st.ctx) return;
+            try {
+                const c = st.ctx, t = c.currentTime + 0.01;
+                [660, 880].forEach((f, i) => {
+                    const o = c.createOscillator(), g = c.createGain();
+                    o.type = 'sine'; o.frequency.value = f;
+                    g.gain.setValueAtTime(0.0001, t + i * 0.2);
+                    g.gain.exponentialRampToValueAtTime(0.12, t + i * 0.2 + 0.03);
+                    g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.2 + 0.6);
+                    o.connect(g); g.connect(c.destination);
+                    o.start(t + i * 0.2); o.stop(t + i * 0.2 + 0.65);
                 });
-            }
+            } catch(e){}
+        }
 
-            // Radio Button styling handlers
-            document.querySelectorAll('input[name="dur"]').forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    document.querySelectorAll('.dur-label').forEach(function(l) {
-                        l.className = 'dur-label cursor-pointer text-center py-2.5 px-3 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] font-semibold text-[#132628] transition hover:border-[#0b6b63]';
-                    });
-                    var parent = radio.closest('label');
-                    if (parent) {
-                        parent.className = 'dur-label cursor-pointer text-center py-2.5 px-3 rounded-xl border-2 border-[#0b6b63] bg-[#dbeeeb] font-bold text-[#0b6b63] transition shadow-xs';
-                    }
-                    formDur.value = radio.value;
+        // Ambient Pad Relaksasi
+        const music = {
+            on: true,
+            vol: 0.35,
+            playing: false,
+            master: null,
+            timer: null,
+            step: 0,
+            gen: 0,
+            extra: []
+        };
+        const CHORDS = [
+            [110, 164.81, 220, 261.63, 329.63],
+            [87.31, 130.81, 174.61, 220, 329.63],
+            [130.81, 196, 261.63, 293.66, 329.63],
+            [98, 146.83, 196, 246.94, 293.66]
+        ];
+
+        function playChord(gen){
+            if(!music.playing || gen !== music.gen || !st.ctx) return;
+            const c = st.ctx, t = c.currentTime + 0.05, ch = CHORDS[music.step++ % CHORDS.length];
+            ch.forEach(f => {
+                [-4, 4].forEach(det => {
+                    const o = c.createOscillator(), g = c.createGain();
+                    o.type = 'sine'; o.frequency.value = f; o.detune.value = det;
+                    g.gain.setValueAtTime(0.0001, t);
+                    g.gain.linearRampToValueAtTime(0.03, t + 3);
+                    g.gain.setValueAtTime(0.03, t + 5);
+                    g.gain.linearRampToValueAtTime(0.0001, t + 10);
+                    o.connect(g); g.connect(music.master);
+                    o.start(t); o.stop(t + 10.2);
                 });
             });
+        }
 
-            document.querySelectorAll('input[name="tempo"]').forEach(function(radio) {
-                radio.addEventListener('change', function() {
-                    document.querySelectorAll('.tempo-label').forEach(function(l) {
-                        l.className = 'tempo-label cursor-pointer text-center py-2 px-3 rounded-xl border border-[#d2dedc] bg-[#f9fbfa] font-semibold text-[#132628] transition hover:border-[#0b6b63]';
-                    });
-                    var parent = radio.closest('label');
-                    if (parent) {
-                        parent.className = 'tempo-label cursor-pointer text-center py-2 px-3 rounded-xl border-2 border-[#0b6b63] bg-[#dbeeeb] font-bold text-[#0b6b63] transition shadow-xs';
-                    }
-                    interval = parseInt(radio.value, 10);
-                    formTempo.value = radio.value;
-                });
-            });
+        function startMusic(){
+            if(music.playing || !music.on) return;
+            const c = getAudioContext();
+            if(!c) return;
+            try {
+                const master = c.createGain(), lp = c.createBiquadFilter();
+                master.gain.value = 0.0001;
+                lp.type = 'lowpass'; lp.frequency.value = 1400;
+                master.connect(lp); lp.connect(c.destination);
+                master.gain.setTargetAtTime(Math.max(0.0001, music.vol * 0.9), c.currentTime, 1.2);
 
-            go.addEventListener('click', function () {
-                if (running) {
-                    stop('Dihentikan', 'Tekan Mulai Sesi Lagi kapan saja Anda siap.');
-                    prog.style.width = '0%';
-                } else {
-                    prog.style.width = '0%';
-                    start();
+                music.master = master;
+                music.playing = true;
+                music.gen++;
+                const gen = music.gen;
+                playChord(gen);
+                music.timer = setInterval(() => playChord(gen), 8000);
+            } catch(e){ music.playing = false; }
+        }
+
+        function stopMusic(){
+            if(!music.playing) return;
+            music.playing = false;
+            clearInterval(music.timer);
+            music.gen++;
+            try {
+                if(music.master && st.ctx){
+                    music.master.gain.setTargetAtTime(0.0001, st.ctx.currentTime, 0.4);
                 }
-            });
+            } catch(e){}
+            music.master = null;
+        }
 
-            before.addEventListener('input', function () {
-                $('beforeOut').textContent = before.value;
-                if (!running && !sessionDone) {
-                    after.value = before.value;
-                    $('afterOut').textContent = after.value;
-                }
-                showResult();
-            });
+        function beginSession(){
+            getAudioContext();
+            if(music.on && !music.playing) startMusic();
+            st.stage = 'run';
+            st.start = performance.now();
+            st.lastBeat = -1;
+            st.taps = 0;
+            st.done = false;
 
-            after.addEventListener('input', function () {
-                $('afterOut').textContent = after.value;
-                showResult();
-            });
+            $("hugSetup").classList.add("hidden");
+            $("hugEnd").classList.add("hidden");
+            $("hugRun").classList.remove("hidden");
 
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden && running) {
-                    stop('Dijeda', 'Sesi dijeda karena halaman ditutup sementara.');
-                }
-            });
+            st.timer = setInterval(loopSession, 80);
+            loopSession();
+        }
 
-            // Initialize default display
-            showResult();
-        })();
+        function loopSession(){
+            const el = (performance.now() - st.start) / 1000;
+            if(el >= BLOCK){
+                finishSession(true);
+                return;
+            }
+            const leftSec = BLOCK - el;
+            $("clockDisplay").textContent = formatClock(leftSec);
+
+            const pct = (el / BLOCK) * 100;
+            $("progBar").style.width = pct + "%";
+
+            const beat = Math.floor(el);
+            const isLeft = (beat % 2 === 1);
+
+            if(beat !== st.lastBeat){
+                st.lastBeat = beat;
+                st.taps++;
+                $("tapCount").textContent = st.taps;
+                $("hl").setAttribute("opacity", isLeft ? "0.85" : "0.15");
+                $("hr").setAttribute("opacity", !isLeft ? "0.85" : "0.15");
+                playTick(isLeft);
+            }
+
+            $("phaseDisplay").textContent = isLeft ? "Kiri" : "Kanan";
+            $("cueDisplay").textContent = Math.floor(el / 4) % 2 === 0
+                ? "Tarik napas lembut lewat hidung, tepukan tetap teratur."
+                : "Hembuskan perlahan lewat mulut dengan tenang.";
+        }
+
+        function finishSession(isDone){
+            clearInterval(st.timer);
+            stopMusic();
+            st.done = isDone;
+            st.stage = 'end';
+            if(isDone) playBell();
+
+            $("hugRun").classList.add("hidden");
+            $("hugEnd").classList.remove("hidden");
+            $("endTitle").textContent = isDone ? "Sesi Selesai!" : "Sesi Dihentikan";
+            $("tapsDone").textContent = st.taps;
+            $("hugInputTaps").value = st.taps;
+            $("hugInputDuration").value = Math.round((performance.now() - st.start) / 1000);
+
+            calcHugResult();
+        }
+
+        function calcHugResult(){
+            const a = parseInt($("bTension").value, 10);
+            const b = parseInt($("aTension").value, 10);
+            const diff = a - b;
+            if(diff > 0){
+                $("hugResult").textContent = `Ketegangan Anda berhasil turun ${diff} poin (dari ${a} menjadi ${b}).`;
+            } else if(diff === 0){
+                $("hugResult").textContent = `Skor tetap ${a}. Relaksasi menjaga kestabilan energi Anda.`;
+            } else {
+                $("hugResult").textContent = `Skor sedikit naik. Ambil waktu istirahat dan bernapas tenang sejenak.`;
+            }
+            $("endBScore").textContent = a;
+            $("endAScore").textContent = b;
+            $("hugInputBefore").value = a;
+            $("hugInputAfter").value = b;
+        }
+
+        // Listeners
+        $("bTension").oninput = e => {
+            $("bVal").textContent = e.target.value;
+            $("bValDisplay").textContent = "Skala: " + e.target.value + " / 10";
+            $("hugInputBefore").value = e.target.value;
+        };
+
+        $("aTension").oninput = e => {
+            $("aVal").textContent = e.target.value;
+            $("aValDisplay").textContent = "Skala: " + e.target.value + " / 10";
+            $("hugInputAfter").value = e.target.value;
+            calcHugResult();
+        };
+
+        $("sndCheck").onchange = e => { st.sound = e.target.checked; };
+        $("musCheck").onchange = e => {
+            music.on = e.target.checked;
+            if(!music.on) stopMusic();
+        };
+        $("musVol").oninput = e => {
+            music.vol = parseInt(e.target.value, 10) / 100;
+        };
+
+        $("btnStart").onclick = beginSession;
+        $("btnStop").onclick = () => finishSession(false);
+        $("btnMusicToggle").onclick = e => {
+            if(music.playing){
+                stopMusic(); music.on = false;
+                e.target.textContent = "Musik: Mati";
+            } else {
+                music.on = true; startMusic();
+                e.target.textContent = "Musik: Aktif";
+            }
+        };
+
+        $("btnRestart").onclick = () => {
+            $("hugEnd").classList.add("hidden");
+            $("hugRun").classList.add("hidden");
+            $("hugSetup").classList.remove("hidden");
+        };
+    })();
     </script>
 </x-app-layout>

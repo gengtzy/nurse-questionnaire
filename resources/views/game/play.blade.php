@@ -16,7 +16,7 @@
                     <!-- Step 2: Intervensi -->
                     <div class="flex items-center gap-1.5 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">2. Butterfly Hug</span>
+                        <span class="hidden sm:inline">2. Intervensi</span>
                         <span class="sm:hidden">2</span>
                     </div>
                     <div class="w-6 sm:w-8 h-0.5 bg-[#0b6b63]"></div>

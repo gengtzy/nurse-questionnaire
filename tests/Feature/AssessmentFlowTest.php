@@ -99,14 +99,19 @@ class AssessmentFlowTest extends TestCase
         $gamePageAfterResp->assertSee(route('thank-you.create'));
 
         // Step 4: Thank You Card
+        $otherNurse = User::factory()->create([
+            'role' => 'perawat',
+            'room' => 'Ruang Umar Bin Khattab 2',
+        ]);
         $thankYouResp = $this->actingAs($nurse)->post('/thank-you', [
-            'recipient_name' => 'Ns. Erni Gumilar',
+            'recipient_id' => $otherNurse->id,
             'message' => 'Terima kasih atas kerja samanya hari ini.',
         ]);
         $thankYouResp->assertRedirect(route('post-test.create'));
         $this->assertDatabaseHas('thank_you_cards', [
             'user_id' => $nurse->id,
-            'recipient_name' => 'Ns. Erni Gumilar',
+            'recipient_id' => $otherNurse->id,
+            'recipient_name' => $otherNurse->name,
         ]);
 
         // Step 4: Post-test

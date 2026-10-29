@@ -13,34 +13,34 @@
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 2: Game -->
+                    <!-- Step 2: Intervensi -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">2. Game Katarsis</span>
+                        <span class="hidden sm:inline">2. Intervensi</span>
                         <span class="sm:hidden">2</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 3: Kartu Apresiasi -->
+                    <!-- Step 3: Game Katarsis -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span class="hidden sm:inline">3. Kartu Apresiasi</span>
+                        <span class="hidden sm:inline">3. Game Stres</span>
                         <span class="sm:hidden">3</span>
                     </div>
                     <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 4: Post-test (Done) -->
-                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
+                    <!-- Step 4: Kirim Pesan -->
+                    <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-semibold">
                         <span class="w-6 h-6 rounded-full bg-[#dbeeeb] text-[#0b6b63] flex items-center justify-center text-xs font-bold">✓</span>
-                        <span>4. Post-Test</span>
+                        <span class="hidden sm:inline">4. Kirim Pesan</span>
+                        <span class="sm:hidden">4</span>
                     </div>
-                    <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]/40"></div>
+                    <div class="w-6 sm:w-12 h-0.5 bg-[#0b6b63]"></div>
 
-                    <!-- Step 5: Kirim Hasil (Next) -->
+                    <!-- Step 5: Post-test (Done) -->
                     <div class="flex items-center gap-2 shrink-0 text-[#0b6b63] font-bold">
-                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs animate-pulse">5</span>
-                        <span class="hidden sm:inline">5. Kirim Hasil</span>
-                        <span class="sm:hidden">5</span>
+                        <span class="w-6 h-6 rounded-full bg-[#0b6b63] text-white flex items-center justify-center text-xs shadow-xs">✓</span>
+                        <span>5. Post-Test Selesai</span>
                     </div>
                 </div>
             </div>

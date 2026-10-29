@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
     // Thank You Card Routes (Tahap Apresiasi Rekan)
     Route::get('/thank-you', [ThankYouCardController::class, 'create'])->name('thank-you.create');
     Route::post('/thank-you', [ThankYouCardController::class, 'store'])->name('thank-you.store');
+    Route::post('/thank-you/mark-as-read', [ThankYouCardController::class, 'markAsRead'])->name('thank-you.mark-as-read');
 
     // Post-test Routes (Step 4)
     Route::get('/assessment/post-test', [AssessmentController::class, 'createPostTest'])->name('post-test.create');
@@ -63,10 +64,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/assessment/{assessment}/send-email', [AssessmentController::class, 'sendEmailReport'])->name('assessment.send-email');
     Route::get('/mail/preview', [AssessmentController::class, 'previewEmail'])->name('mail.preview');
 
-    // Profile Routes
+    // Profile & Password Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/profile/password', [ProfileController::class, 'editPassword'])->name('password.edit');
 });
 
 require __DIR__.'/auth.php';

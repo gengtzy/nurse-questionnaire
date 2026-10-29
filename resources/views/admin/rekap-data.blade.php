@@ -295,9 +295,8 @@
                                 <th class="py-3 px-4 font-bold min-w-[200px]">Nama Perawat</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[130px] text-center">Sesi Pengisian</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Pre-Test</th>
-                                <th class="py-3 px-3.5 font-bold min-w-[140px]">Intervensi Butterfly Hug</th>
+                                <th class="py-3 px-3.5 font-bold min-w-[180px]">Intervensi Relaksasi</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[130px]">Sesi Mini Game</th>
-                                <th class="py-3 px-3.5 font-bold min-w-[190px]">Kartu Terima Kasih</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Post-Test</th>
                                 <th class="py-3 px-3.5 font-bold min-w-[110px] text-center">Selisih (&Delta;)</th>
                                 <th class="py-3 px-4 font-bold min-w-[160px]">Rincian Dimensi (EE &bull; DP &bull; PA)</th>
@@ -352,12 +351,31 @@
                                         </template>
                                     </td>
 
-                                    <!-- Butterfly Hug Intervention -->
+                                    <!-- Intervensi Relaksasi (EFT / Butterfly Hug / Konseling) -->
                                     <td class="py-3 px-3.5">
                                         <template x-if="r.has_intervention">
-                                            <div class="text-[11px] space-y-0.5">
+                                            <div class="text-[11px] space-y-1">
+                                                <!-- Type Badge -->
+                                                <div>
+                                                    <template x-if="r.intervention_type === 'eft'">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#dbeeeb] text-[#0b6b63] border border-[#b2ded8]">
+                                                            <span>🌿 EFT Mandiri</span>
+                                                        </span>
+                                                    </template>
+                                                    <template x-if="r.intervention_type === 'counseling_alert'">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-red-50 text-red-700 border border-red-200">
+                                                            <span>🔔 Rujukan Konseling</span>
+                                                        </span>
+                                                    </template>
+                                                    <template x-if="!r.intervention_type || r.intervention_type === 'butterfly_hug'">
+                                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#eef3f4] text-[#0c6a6a] border border-[#d2dedc]">
+                                                            <span>🦋 Butterfly Hug</span>
+                                                        </span>
+                                                    </template>
+                                                </div>
+
+                                                <!-- Score Comparison -->
                                                 <div class="font-bold flex items-center gap-1.5 text-[#132628]">
-                                                    <span class="text-xs">🦋</span>
                                                     <span class="font-mono text-xs" x-text="r.intervention_before + ' → ' + r.intervention_after"></span>
                                                     <template x-if="r.intervention_diff > 0">
                                                         <span class="text-emerald-700 font-bold font-mono text-[10px] bg-emerald-50 px-1 py-0.2 rounded border border-emerald-200" x-text="'-' + r.intervention_diff + ' pt'"></span>
@@ -370,7 +388,10 @@
                                                     </template>
                                                 </div>
                                                 <div class="text-[#4a6366] text-[10px] font-mono">
-                                                    <span x-text="r.intervention_duration + 's'"></span> &bull; <span x-text="(r.intervention_taps || 0) + ' tepukan'"></span>
+                                                    <span x-text="r.intervention_duration + 's'"></span>
+                                                    <template x-if="r.intervention_taps > 0">
+                                                        <span> &bull; <span x-text="r.intervention_taps + ' tepukan'"></span></span>
+                                                    </template>
                                                 </div>
                                             </div>
                                         </template>
@@ -391,22 +412,6 @@
                                             </div>
                                         </template>
                                         <template x-if="!r.has_game">
-                                            <span class="text-[#9db4b2] font-mono">-</span>
-                                        </template>
-                                    </td>
-
-                                    <!-- Kartu Terima Kasih (Rekan) -->
-                                    <td class="py-3 px-3.5">
-                                        <template x-if="r.has_thank_you">
-                                            <div class="text-[11px] space-y-1">
-                                                <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#dbeeeb] text-[#0b6b63] font-bold text-[10px] border border-[#b2ded8]">
-                                                    <span>💌 Untuk:</span>
-                                                    <span class="truncate max-w-[140px]" x-text="r.thank_you_recipient"></span>
-                                                </div>
-                                                <div class="text-[#4a6366] text-[10px] leading-tight italic line-clamp-2" :title="r.thank_you_message" x-text="'“' + r.thank_you_message + '”'"></div>
-                                            </div>
-                                        </template>
-                                        <template x-if="!r.has_thank_you">
                                             <span class="text-[#9db4b2] font-mono">-</span>
                                         </template>
                                     </td>

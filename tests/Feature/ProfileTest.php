@@ -83,3 +83,15 @@ test('correct password must be provided to delete account', function () {
 
     $this->assertNotNull($user->fresh());
 });
+
+test('password edit page is displayed', function () {
+    $user = User::factory()->create();
+
+    $response = $this
+        ->actingAs($user)
+        ->get('/profile/password');
+
+    $response->assertOk();
+    $response->assertSee('Update Password');
+});
+

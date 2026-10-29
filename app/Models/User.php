@@ -77,9 +77,19 @@ class User extends Authenticatable
         return $this->hasMany(ThankYouCard::class);
     }
 
+    public function receivedThankYouCards(): HasMany
+    {
+        return $this->hasMany(ThankYouCard::class, 'recipient_id');
+    }
+
     public function latestThankYouCard(): HasOne
     {
         return $this->hasOne(ThankYouCard::class)->latestOfMany();
+    }
+
+    public function latestReceivedThankYouCard(): HasOne
+    {
+        return $this->hasOne(ThankYouCard::class, 'recipient_id')->latestOfMany();
     }
 
     public function interventions(): HasMany

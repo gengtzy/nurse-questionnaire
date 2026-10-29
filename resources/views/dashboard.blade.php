@@ -38,7 +38,13 @@
                                 href="{{ route('intervention.create') }}"
                                 class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
                             >
-                                <span>Lanjut Tahap 2: Butterfly Hug 🦋</span>
+                                @if (($latestPreTest->category ?? '') === 'Rendah')
+                                    <span>Lanjut Tahap 2: Relaksasi EFT 🌿</span>
+                                @elseif (($latestPreTest->category ?? '') === 'Tinggi')
+                                    <span>Lanjut Tahap 2: Peringatan &amp; Konseling 🔔</span>
+                                @else
+                                    <span>Lanjut Tahap 2: Butterfly Hug 🦋</span>
+                                @endif
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                                 </svg>
@@ -153,8 +159,16 @@
                             </p>
                             <a href="{{ route('intervention.create') }}" class="text-[11px] text-[#4a6366] underline mt-1.5 block hover:text-[#132628]">Sesi Ulang &rarr;</a>
                         @elseif ($latestPreTest)
-                            <p class="text-[11px] text-[#4a6366] mt-1">Stimulasi bilateral Butterfly Hug 1–3 menit.</p>
-                            <a href="{{ route('intervention.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Mulai Relaksasi &rarr;</a>
+                            <p class="text-[11px] text-[#4a6366] mt-1">
+                                @if ($latestPreTest->category === 'Rendah')
+                                    Relaksasi akupresur EFT mandiri.
+                                @elseif ($latestPreTest->category === 'Tinggi')
+                                    Peringatan &amp; rujukan konseling psikoterapi.
+                                @else
+                                    Stimulasi bilateral Butterfly Hug 3 menit.
+                                @endif
+                            </p>
+                            <a href="{{ route('intervention.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Mulai Intervensi &rarr;</a>
                         @else
                             <p class="text-[11px] text-[#4a6366] mt-1">Terbuka setelah kuesioner awal selesai.</p>
                         @endif
