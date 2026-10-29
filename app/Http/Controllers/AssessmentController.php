@@ -31,18 +31,28 @@ class AssessmentController extends Controller
             ->first();
 
         // If user already completed pre-test and didn't explicitly request to retake:
-        // Automatically advance them to the active next stage (Game) or their result, so they never get trapped in an empty form!
         if ($existingAssessment && ! $request->has('retake')) {
-            $intervention = $user->interventions()->latest()->first();
+            if ($existingAssessment->category === 'Tinggi') {
+                return redirect()->route('intervention.create')
+                    ->with('info', 'Anda memiliki sesi evaluasi dengan tingkat burnout tinggi. Anda dapat melihat detail peringatan atau memilih isi ulang tes.');
+            }
+
+            $intervention = $user->interventions()->where('created_at', '>=', $existingAssessment->created_at)->latest()->first();
             if (! $intervention) {
                 return redirect()->route('intervention.create')
                     ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal (Pre-test). Silakan lanjut ke Tahap 2: Intervensi Relaksasi.');
             }
 
-            $gameLog = GameLog::where('user_id', $user->id)->latest()->first();
+            $gameLog = GameLog::where('user_id', $user->id)->where('created_at', '>=', $existingAssessment->created_at)->latest()->first();
             if (! $gameLog) {
                 return redirect()->route('game.play')
                     ->with('info', 'Anda sudah menyelesaikan Kuesioner Awal & Intervensi. Silakan lanjut ke Tahap 3: Game Katarsis.');
+            }
+
+            $thankYou = ThankYouCard::where('user_id', $user->id)->where('created_at', '>=', $existingAssessment->created_at)->latest()->first();
+            if (! $thankYou) {
+                return redirect()->route('thank-you.create')
+                    ->with('info', 'Silakan lanjutkan ke Tahap 4: Kirim Pesan Apresiasi.');
             }
 
             return redirect()->route('pre-test.result', $existingAssessment->id)
@@ -76,17 +86,6 @@ class AssessmentController extends Controller
             'required' => ':attribute wajib dijawab sebelum melanjutkan.',
             'between' => ':attribute harus bernilai antara 0 sampai 6.',
         ], $attributes);
-
-        $latestPreTest = Assessment::where('user_id', Auth::id())
-            ->where('type', 'pre_test')
-            ->where('status', 'completed')
-            ->latest()
-            ->first();
-
-        if ($latestPreTest && $latestPreTest->category === 'Tinggi') {
-            return redirect()->route('intervention.create')
-                ->with('info', 'Evaluasi Anda dialihkan ke rujukan konseling karena skor burnout tinggi.');
-        }
 
         $answers = $validated['answers'];
 
@@ -207,8 +206,8 @@ class AssessmentController extends Controller
             ->latest()
             ->first();
 
-        // If post-test is already completed, redirect to the comparison result page!
-        if ($existingPostTest && ! $request->has('retake')) {
+        // If post-test is already completed for this cycle, redirect to the comparison result page!
+        if ($existingPostTest && $existingPostTest->created_at >= $latestPreTest->created_at && ! $request->has('retake')) {
             return redirect()->route('post-test.result', $existingPostTest->id)
                 ->with('info', 'Anda sudah menyelesaikan Post-test. Berikut adalah hasil evaluasi lengkap Anda.');
         }

@@ -147,18 +147,24 @@
                             Sistem telah mencatat rekomendasi rujukan ini untuk koordinasi bersama Kepala Ruangan UBK 2 demi penyesuaian beban kerja Anda.
                         </p>
 
-                        <div class="pt-2 flex flex-col sm:flex-row items-center gap-3">
+                        <div class="pt-2 flex flex-col sm:flex-row flex-wrap items-center gap-3">
+                            <a
+                                href="{{ route('pre-test.create', ['retake' => 1]) }}"
+                                class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white font-bold text-xs shadow-md transition text-center inline-flex items-center justify-center gap-1.5 active:scale-[0.98]"
+                            >
+                                <span>🔄 Isi Ulang Tes dari Tahap Awal</span>
+                            </a>
                             <a
                                 href="https://wa.me/?text=Halo%20Tim%20Konseling%20RSUD%20Welas%20Asih,%20saya%20perawat%20Ruang%20UBK%202%20ingin%20berkonsultasi%20terkait%20hasil%20burnout%20tinggi."
                                 target="_blank"
-                                class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#047857] hover:bg-[#065f46] text-white font-bold text-xs shadow-md transition text-center inline-flex items-center justify-center gap-2"
+                                class="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-[#047857] hover:bg-[#065f46] text-white font-bold text-xs shadow-md transition text-center inline-flex items-center justify-center gap-2"
                             >
                                 <span>💬 Hubungi Tim Konseling (WhatsApp)</span>
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             </a>
                             <a
                                 href="{{ route('dashboard') }}"
-                                class="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition text-center"
+                                class="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-xs font-semibold text-[#132628] transition text-center"
                             >
                                 Kembali ke Dashboard
                             </a>
@@ -167,7 +173,7 @@
                                 id="toggleSoundBtn"
                                 class="w-full sm:w-auto px-4 py-3.5 rounded-xl border border-red-200 bg-red-100/70 hover:bg-red-200/70 text-xs font-semibold text-red-800 transition"
                             >
-                                🔊 Bunyikan Contoh Sirene Alarm
+                                🔊 Bunyikan Contoh Sirene
                             </button>
                         </div>
                     </div>

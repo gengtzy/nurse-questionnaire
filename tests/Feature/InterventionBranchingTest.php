@@ -4,12 +4,19 @@ namespace Tests\Feature;
 
 use App\Models\Assessment;
 use App\Models\User;
+use Database\Seeders\QuestionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class InterventionBranchingTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(QuestionSeeder::class);
+    }
 
     protected function createNurse(string $name = 'Ns. Test'): User
     {
@@ -137,5 +144,21 @@ class InterventionBranchingTest extends TestCase
 
         $postTestResp = $this->actingAs($nurse)->get('/assessment/post-test');
         $postTestResp->assertRedirect(route('intervention.create'));
+
+        // Nurse CAN retake pre-test from the beginning
+        $retakePageResp = $this->actingAs($nurse)->get('/assessment/pre-test?retake=1');
+        $retakePageResp->assertStatus(200);
+
+        // Submitting new pre-test resets cycle (e.g. to Sedang)
+        $newAnswers = [];
+        for ($i = 1; $i <= 22; $i++) {
+            $newAnswers[$i] = 3;
+        }
+        $submitRetake = $this->actingAs($nurse)->post('/assessment/pre-test', [
+            'answers' => $newAnswers,
+        ]);
+        $latestAssessment = Assessment::where('user_id', $nurse->id)->latest('id')->first();
+        $this->assertEquals('Sedang', $latestAssessment->category);
+        $submitRetake->assertRedirect(route('pre-test.result', $latestAssessment->id));
     }
 }

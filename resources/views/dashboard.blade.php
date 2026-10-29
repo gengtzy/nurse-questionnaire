@@ -34,15 +34,24 @@
                                 </svg>
                             </a>
                         @elseif (($latestPreTest->category ?? '') === 'Tinggi')
-                            <a
-                                href="{{ route('intervention.create') }}"
-                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#b3261e] hover:bg-[#961f18] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
-                            >
-                                <span>Lihat Peringatan Klinis &amp; Konseling 🔔</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                </svg>
-                            </a>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <a
+                                    href="{{ route('intervention.create') }}"
+                                    class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#b3261e] hover:bg-[#961f18] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                                >
+                                    <span>Lihat Peringatan Klinis &amp; Konseling 🔔</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                    </svg>
+                                </a>
+                                <a
+                                    href="{{ route('pre-test.create', ['retake' => 1]) }}"
+                                    class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-[#132628] text-sm font-semibold shadow-xs transition active:scale-[0.98]"
+                                    title="Mulai ulang seluruh rangkaian evaluasi dari Kuesioner Awal"
+                                >
+                                    <span>🔄 Mulai Ulang Tes</span>
+                                </a>
+                            </div>
                         @elseif (! $latestIntervention)
                             <a
                                 href="{{ route('intervention.create') }}"
@@ -88,15 +97,24 @@
                                 </svg>
                             </a>
                         @else
-                            <a
-                                href="{{ route('post-test.result', $latestPostTest->id) }}"
-                                class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
-                            >
-                                <span>Lihat Hasil Evaluasi Lengkap 🏆</span>
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                </svg>
-                            </a>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <a
+                                    href="{{ route('post-test.result', $latestPostTest->id) }}"
+                                    class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-sm font-semibold shadow-sm transition active:scale-[0.98]"
+                                >
+                                    <span>Lihat Hasil Evaluasi Lengkap 🏆</span>
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                    </svg>
+                                </a>
+                                <a
+                                    href="{{ route('pre-test.create', ['retake' => 1]) }}"
+                                    class="inline-flex items-center gap-1.5 px-4 py-3 rounded-xl border border-[#d2dedc] bg-white hover:bg-[#f1f5f4] text-[#132628] text-sm font-semibold shadow-xs transition active:scale-[0.98]"
+                                    title="Mulai ulang seluruh rangkaian evaluasi dari Kuesioner Awal"
+                                >
+                                    <span>🔄 Isi Ulang Tes / Sesi Baru</span>
+                                </a>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -142,7 +160,11 @@
                         <h3 class="font-bold text-xs text-[#132628]">1. Kuesioner Awal</h3>
                         @if ($latestPreTest)
                             <p class="text-[11px] text-[#0b6b63] font-semibold mt-1">Skor: {{ $latestPreTest->percentage }}% ({{ $latestPreTest->category }})</p>
-                            <a href="{{ route('pre-test.result', $latestPreTest->id) }}" class="text-[11px] text-[#0b6b63] underline font-bold mt-1.5 block">Lihat Hasil &rarr;</a>
+                            <div class="flex items-center gap-2 mt-1.5 text-[11px]">
+                                <a href="{{ route('pre-test.result', $latestPreTest->id) }}" class="text-[#0b6b63] underline font-bold">Lihat Hasil &rarr;</a>
+                                <span class="text-gray-300">•</span>
+                                <a href="{{ route('pre-test.create', ['retake' => 1]) }}" class="text-[#4a6366] hover:text-[#0b6b63] underline font-medium">Isi Ulang ↻</a>
+                            </div>
                         @else
                             <p class="text-[11px] text-[#4a6366] mt-1">22 Butir instrumen MBI paten untuk mengukur skor awal.</p>
                             <a href="{{ route('pre-test.create') }}" class="text-[11px] text-[#0b6b63] font-bold mt-1.5 block hover:underline">Mulai Sekarang &rarr;</a>

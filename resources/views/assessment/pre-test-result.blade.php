@@ -306,8 +306,15 @@
                 </div>
             </div>
 
-            <!-- Back to Dashboard Link -->
-            <div class="text-center mt-6">
+            <!-- Back to Dashboard / Retake Links -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-center mt-6">
+                <a
+                    href="{{ route('pre-test.create', ['retake' => 1]) }}"
+                    class="text-xs text-[#0b6b63] hover:underline font-bold"
+                >
+                    🔄 Isi Ulang Kuesioner Awal (Pre-test)
+                </a>
+                <span class="hidden sm:inline text-gray-300">•</span>
                 <a href="{{ route('dashboard') }}" class="text-xs text-[#4a6366] hover:text-[#132628] underline">
                     Kembali ke Beranda Dashboard
                 </a>

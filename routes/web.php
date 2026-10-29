@@ -29,10 +29,18 @@ Route::middleware('auth')->group(function () {
         }
 
         $latestPreTest = $user->assessments()->where('type', 'pre_test')->latest()->first();
-        $latestIntervention = $user->interventions()->latest()->first();
-        $latestPostTest = $user->assessments()->where('type', 'post_test')->latest()->first();
-        $latestGame = $user->gameLogs()->latest()->first();
-        $latestThankYou = $user->thankYouCards()->latest()->first();
+        $latestIntervention = $latestPreTest
+            ? $user->interventions()->where('created_at', '>=', $latestPreTest->created_at)->latest()->first()
+            : null;
+        $latestPostTest = $latestPreTest
+            ? $user->assessments()->where('type', 'post_test')->where('created_at', '>=', $latestPreTest->created_at)->latest()->first()
+            : null;
+        $latestGame = $latestPreTest
+            ? $user->gameLogs()->where('created_at', '>=', $latestPreTest->created_at)->latest()->first()
+            : null;
+        $latestThankYou = $latestPreTest
+            ? $user->thankYouCards()->where('created_at', '>=', $latestPreTest->created_at)->latest()->first()
+            : null;
 
         return view('dashboard', compact('user', 'latestPreTest', 'latestIntervention', 'latestPostTest', 'latestGame', 'latestThankYou'));
     })->name('dashboard');

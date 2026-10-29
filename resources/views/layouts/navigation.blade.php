@@ -206,6 +206,7 @@
             <div
                 x-show="showInboxModal"
                 x-cloak
+                style="display: none;"
                 @keydown.escape.window="showInboxModal = false"
                 class="fixed inset-0 z-50 overflow-y-auto"
                 aria-labelledby="modal-title"

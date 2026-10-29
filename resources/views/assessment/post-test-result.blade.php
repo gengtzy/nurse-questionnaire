@@ -325,7 +325,13 @@
                 </div>
             </div>
 
-            <div class="text-center">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-center">
+                <a
+                    href="{{ route('pre-test.create', ['retake' => 1]) }}"
+                    class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#0b6b63] hover:bg-[#08524c] text-white text-xs sm:text-sm font-bold shadow-md transition active:scale-[0.98]"
+                >
+                    <span>🔄 Isi Ulang Program dari Tahap Awal</span>
+                </a>
                 <a href="{{ route('dashboard') }}" class="text-xs text-[#4a6366] hover:text-[#132628] underline">
                     Kembali ke Beranda Dashboard
                 </a>
